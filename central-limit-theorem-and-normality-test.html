@@ -16,40 +16,40 @@
 
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="Central Limit Theorem and Normality Test"/>
-    <meta property="og:description" content="."/>
+    <meta property="og:description" content="Application of Normal Test to Normal-Looking distributions. Explanation of Central Limit Theorem, application to the sum of t samples of size n of the uniform, normal and exponential distribution varying t and n."/>
     <meta property="og:site_name" content="Personal Website" />
-    <meta property="og:url" content="https://gastonamengual.github.io/central-limit-theorem-and-normality-test.html"/>
+    <meta property="og:url" content="./central-limit-theorem-and-normality-test.html"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Central Limit Theorem and Normality Test">
-    <meta name="twitter:description" content=".">
-    <meta name="twitter:url" content="https://gastonamengual.github.io/central-limit-theorem-and-normality-test.html">
+    <meta name="twitter:description" content="Application of Normal Test to Normal-Looking distributions. Explanation of Central Limit Theorem, application to the sum of t samples of size n of the uniform, normal and exponential distribution varying t and n.">
+    <meta name="twitter:url" content="./central-limit-theorem-and-normality-test.html">
 
     <!-- Feed -->
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
+    <link rel="stylesheet" type="text/css" href="./theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="./theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./theme/css/pygments-highlight-github.css">
 
     <!-- Icon -->
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
+    <script src="./theme/js/jqcloud.min.js"></script>
   </head>
 
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
+        <a href="." id="header-logo" title="Home">GA</a>
         <nav id="header-menu">
           <ul>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./pages/portfolio.html">Portfolio</a></li>
             <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
@@ -58,19 +58,18 @@
 
 
 
-    <br><br><br>
+    <br><br>
 
     <article>
       <header class="w3-container col-main">
         <h1>Central Limit Theorem and Normality Test</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2020-08-20T00:00:00+02:00">Thu 20 August 2020</time> in <a href="https://gastonamengual.github.io/category/statistics.html" title="All articles in category Statistics">Statistics</a></span>
+            <span><time datetime="2020-08-20T00:00:00+02:00">Thu 20 August 2020</time> in <a href="./category/statistics.html" title="All articles in category Statistics">Statistics</a></span>
           </div>
         </div>
       </header>
 
-      <br>
 
 
       <div class="col-main w3-container">
@@ -100,7 +99,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_1.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_1.png"></p>
 <h1>Normal Tests</h1>
 <h2>Custom Distribution: arctanh</h2>
 <h3>Normal-distribution-like probability function</h3>
@@ -120,7 +119,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_2.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_2.png"></p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">custom_distribution</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctanh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
 </code></pre></div>
@@ -134,7 +133,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_3.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_3.png"></p>
 <h3>Check if custom distribution is a probability distribution</h3>
 <p>plt.hist returns:</p>
 <ul>
@@ -164,7 +163,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_4.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_4.png"></p>
 <div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Null Hypothesis: The Custom Distribution is a Normal Distribution&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">]:</span>
     <span class="n">ps</span> <span class="o">=</span> <span class="p">[]</span>
@@ -197,7 +196,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_5.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_5.png"></p>
 <h3>Normality Test</h3>
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Salmon&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Olivedrab&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal Distribution&#39;</span><span class="p">)</span>
@@ -208,7 +207,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_6.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_6.png"></p>
 <div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Null Hypothesis: The Beta(5,5)*6-3 and the Normal Distribution are the same distribution&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">]:</span>
     <span class="n">ps</span> <span class="o">=</span> <span class="p">[]</span>
@@ -853,8 +852,8 @@
             </tr>
     </tbody></table>
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_7.png"></p>
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_8.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_7.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_8.png"></p>
 <h2>Central Limit Theorem - Normal Samples</h2>
 <style  type="text/css" >
     #T_3204292e_e33b_11ea_8a85_780cb8bb5cberow0_col0 {
@@ -1390,8 +1389,8 @@
             </tr>
     </tbody></table>
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_9.png"></p>
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_10.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_9.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_10.png"></p>
 <h2>Central Limit Theorem - Exponential Samples</h2>
 <style  type="text/css" >
     #T_325afb52_e33b_11ea_bda1_780cb8bb5cberow0_col0 {
@@ -1927,8 +1926,8 @@
             </tr>
     </tbody></table>
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_11.png"></p>
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_12.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_11.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_12.png"></p>
 <div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../Datasets/CLT/uniform_standard_sample.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;## Central Limit Theorem - Uniform Standard Samples&quot;</span><span class="p">))</span>
 <span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">color_less_alpha</span><span class="p">))</span>
@@ -2493,8 +2492,8 @@
             </tr>
     </tbody></table>
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_13.png"></p>
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_14.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_13.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_14.png"></p>
 <h2>Central Limit Theorem - Normal Standard Samples</h2>
 <style  type="text/css" >
     #T_330fc9c0_e33b_11ea_9187_780cb8bb5cberow0_col0 {
@@ -3030,8 +3029,8 @@
             </tr>
     </tbody></table>
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_15.png"></p>
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_16.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_15.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_16.png"></p>
 <h2>Central Limit Theorem - Exponential Standard Samples</h2>
 <style  type="text/css" >
     #T_3366bf30_e33b_11ea_96dd_780cb8bb5cberow0_col0 {
@@ -3567,8 +3566,8 @@
             </tr>
     </tbody></table>
 
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_17.png"></p>
-<p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_18.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_17.png"></p>
+<p><img alt="image alt text" src="./images/central_limit_theorem_and_normality_test_18.png"></p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -3652,10 +3651,10 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
           <div id="share" class="share">
-            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/central-limit-theorem-and-normality-test.html&amp;t=Personal%20Website%3A%20Central%20Limit%20Theorem%20and%20Normality%20Test" target="_blank" class="w3-btn w3-indigo">
+            <a href="https://www.linkedin.com/sharer.php?u=./central-limit-theorem-and-normality-test.html&amp;t=Personal%20Website%3A%20Central%20Limit%20Theorem%20and%20Normality%20Test" target="_blank" class="w3-btn w3-indigo">
               <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
             </a>
-            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/central-limit-theorem-and-normality-test.html&amp;text=Personal%20Website%3A%20Central%20Limit%20Theorem%20and%20Normality%20Test" target="_blank" class="w3-btn w3-blue">
+            <!-- <a href="https://twitter.com/share?url=./central-limit-theorem-and-normality-test.html&amp;text=Personal%20Website%3A%20Central%20Limit%20Theorem%20and%20Normality%20Test" target="_blank" class="w3-btn w3-blue">
               <i class="fa fa-twitter"></i> <span>Twitter</span>
             </a> -->
           </div>
@@ -3675,24 +3674,10 @@
           &copy;
           2021          Gastón Amengual
         </span>
-        <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="w3-btn w3-indigo">
-          <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
-        </a>
-        <a href="https://github.com/gastonamengual" target="_blank" class="w3-btn w3-black">
-          <i class="fa fa-github"></i> <span>Github</span>
-        </a>
       </div>
     </footer>
 
-    <!-- Google Analytics -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'G-6KC62F9717', 'auto');
-      ga('send', 'pageview');
-    </script>
+
 
   </body>
 </html>
