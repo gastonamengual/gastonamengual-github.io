@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Collaborative Filtering &ndash; Personal Website</title>
+
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Machine Learning" />
+    <meta property="article:published_time" content="2021-01-07" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Collaborative Filtering"/>
+    <meta property="og:description" content="."/>
+    <meta property="og:site_name" content="Personal Website" />
+    <meta property="og:url" content="https://gastonamengual.github.io/collaborative-filtering.html"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Collaborative Filtering">
+    <meta name="twitter:description" content=".">
+    <meta name="twitter:url" content="https://gastonamengual.github.io/collaborative-filtering.html">
+
+    <!-- Feed -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
+
+    <!-- Icon -->
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
+        <nav id="header-menu">
+          <ul>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+    <br><br><br>
+
+    <article>
+      <header class="w3-container col-main">
+        <h1>Collaborative Filtering</h1>
+        <div class="post-info">
+          <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
+            <span><time datetime="2021-01-07T00:00:00+01:00">Thu 07 January 2021</time> in <a href="https://gastonamengual.github.io/category/machine-learning.html" title="All articles in category Machine Learning">Machine Learning</a></span>
+          </div>
+        </div>
+      </header>
+
+      <br>
+
+
+      <div class="col-main w3-container">
+        <section id="content">
+          <p><strong>Notebook written by Gastón Amengual and <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a>.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;bmh&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mediumpurple&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;darkseagreen&quot;</span><span class="p">,</span> 
+                                                    <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;palevioletred&quot;</span><span class="p">])</span>
+</code></pre></div>
+
+
+<p><strong>Collaborative filtering</strong> is a technique used by recommender systems. It is a method of making automatic predictions (filtering) about the interests of a user by collecting preferences or taste information from many users (collaborative). The underlying assumption is that if a person A has the same opinion as person B on an issue, A is more likely to have B's opinion on a different issue than that of a randomly chosen person.</p>
+<p>Collaborative filtering approaches often suffer from three problems:</p>
+<ul>
+<li>Cold start: For a new user or item, there isn't enough data to make accurate recommendations.</li>
+<li>Scalability: In many of the environments in which these systems make recommendations, there are millions of users and products. Thus, a large amount of computation power is often necessary to calculate recommendations.</li>
+<li>Sparsity: The number of items sold on major e-commerce sites is extremely large. The most active users will only have rated a small subset of the overall database. Thus, even the most popular items have very few ratings.</li>
+</ul>
+<p>In the <strong>model-based approach approach</strong>, models are developed using different data mining, machine learning algorithms to predict an user's rating of unrated items, and they involve a step to reduce or compress the large but sparse (matrix in which most of the cells are empty) user-item matrix. If the matrix is mostly empty, reducing dimensions can improve the performance of the algorithm in terms of both space and time.</p>
+<p>A matrix with dimensions <span class="math">\(m \times n\)</span> can be reduced to a product of two matrices <span class="math">\(U\)</span> and <span class="math">\(V\)</span> with dimensions <span class="math">\(m \times p\)</span> and <span class="math">\(p \times n\)</span>, respectively. The reduced matrices represent the users and items individually. The rows in the first matrix represent the users, and the columns, the features or characteristics of the users. The same applies for the item matrix. These rows or columns are called <strong>latent factors</strong> and are an indication of hidden characteristics about the users or the items. The number of latent factors affects affects the recommendations in a manner where the greater the number of factors, the more personalized the recommendations become, but too many factors can lead to overfitting in the model. This number must be optimized during the training of the model. </p>
+<p>For matrix decomposition an approximation of <strong>Singular Value Decomposition (SVD)</strong> will be used, using stochastic mini-batch gradient descent. The model will be trained using 5-fold cross-validation.</p>
+<div class="highlight"><pre><span></span><code><span class="n">movie_lens</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Gastón\Office\Data Science\_Datasets\movie_lens_100k_data.csv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">max_movie_limits</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">max_user_limits</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="n">random_seed</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">folds</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">lambdas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">21</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">mini_batch_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">]</span>
+</code></pre></div>
+
+
+<h1>Data Preparation</h1>
+<p>Both training and testing data must have the same dimensions in order to approximate SVD. </p>
+<h2>Filtering</h2>
+<p>The most frequent movies and users are kept, as a user who has not seen many movies (or a movie that has not been seen by many users) contributes little to the training or testing, as it acts like a new movie/user.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Keep most N frequent Movies</span>
+<span class="n">movies_by_count</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;movieId&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">movies_available</span> <span class="o">=</span> <span class="n">movies_by_count</span><span class="p">[:</span><span class="n">max_movie_limits</span><span class="p">]</span>
+<span class="n">movie_lens</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="p">[</span><span class="n">movie_lens</span><span class="p">[</span><span class="s1">&#39;movieId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">movies_available</span><span class="p">)]</span>
+
+<span class="c1"># Keep most M frequent Users</span>
+<span class="n">users_by_count</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;userId&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s2">&quot;userId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">users_available</span> <span class="o">=</span> <span class="n">users_by_count</span><span class="p">[:</span><span class="n">max_user_limits</span><span class="p">]</span>
+<span class="n">movie_lens</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="p">[</span><span class="n">movie_lens</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">users_available</span><span class="p">)]</span>
+
+<span class="n">movie_lens</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Verification</span>
+<span class="n">uniques</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">uniques</span><span class="p">[</span><span class="s2">&quot;userId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_user_limits</span> <span class="ow">and</span> <span class="n">uniques</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_movie_limits</span>  <span class="c1"># Limits are preserved</span>
+</code></pre></div>
+
+
+<h2>Build Minimal Train and Test Data Sets</h2>
+<p>It is sought that at least one user-movie pair is in the data sets, such that there is at most N unique users and M unique movies. It is also checked if an <span class="math">\(n \times m\)</span> test data set can be built. </p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Extracted from: https://stackoverflow.com/a/44115314/7690767</span>
+<span class="n">train_unique_user_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">))</span>
+
+<span class="n">train_unique_movie_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">))</span>
+<span class="n">train_unique_movie_rows</span> <span class="o">=</span> <span class="n">train_unique_movie_rows</span><span class="p">[</span><span class="o">~</span> <span class="n">train_unique_movie_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_unique_user_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">])]</span>
+
+<span class="n">train_minimal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_unique_movie_rows</span><span class="p">,</span> <span class="n">train_unique_user_rows</span><span class="p">])</span>
+
+<span class="c1"># Verification</span>
+<span class="n">uniques</span> <span class="o">=</span> <span class="n">train_minimal</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">uniques</span><span class="p">[</span><span class="s2">&quot;userId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_user_limits</span> <span class="ow">and</span> <span class="n">uniques</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_movie_limits</span>  <span class="c1"># Limits are preserved</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">test_base</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">train_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">test_unique_user_rows</span> <span class="o">=</span> <span class="n">test_base</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">))</span>
+
+<span class="n">test_unique_movie_rows</span> <span class="o">=</span> <span class="n">test_base</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">))</span>
+<span class="n">test_unique_movie_rows</span> <span class="o">=</span> <span class="n">test_unique_movie_rows</span><span class="p">[</span><span class="o">~</span> <span class="n">test_unique_movie_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_unique_user_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">])]</span>
+
+<span class="n">test_minimal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">test_unique_movie_rows</span><span class="p">,</span> <span class="n">test_unique_user_rows</span><span class="p">])</span>
+
+<span class="c1"># Verification</span>
+<span class="n">uniques</span> <span class="o">=</span> <span class="n">test_minimal</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">uniques</span><span class="p">[</span><span class="s2">&quot;userId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_user_limits</span> <span class="ow">and</span> <span class="n">uniques</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">max_movie_limits</span>  <span class="c1"># Limits are preserved</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">test_minimal</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_minimal</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>  <span class="c1"># Train and Test have 0 elements in common</span>
+</code></pre></div>
+
+
+<h2>Build Train and Validation Data Sets</h2>
+<p>Create train and validation data sets. The train set consists of the minimal train data set plus a random 80% of the non used rows of the data set with most frequent movies and users, and the validation data set consists of the remaining 20%.</p>
+<div class="highlight"><pre><span></span><code><span class="n">non_used_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">train_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">test_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+<span class="n">random_sample</span> <span class="o">=</span> <span class="n">non_used_rows</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
+
+<span class="n">movie_lens_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_minimal</span><span class="p">,</span> <span class="n">random_sample</span><span class="p">])</span>
+<span class="n">movie_lens_validation</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">movie_lens_train</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+<span class="c1"># Verification</span>
+<span class="k">assert</span> <span class="n">train_minimal</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">movie_lens_train</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>     <span class="c1"># All train minimal entries are in train dataset</span>
+<span class="k">assert</span> <span class="n">test_minimal</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">movie_lens_validation</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>          <span class="c1"># All test minimal entries are in test dataset</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">movie_lens_train</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">movie_lens_validation</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>  <span class="c1"># Train and Test have 0 elements in common</span>
+<span class="k">assert</span> <span class="n">movie_lens_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">movie_lens_validation</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shapes sum whole dataset</span>
+</code></pre></div>
+
+
+<h2>Feature Matrices</h2>
+<p>Consisting of pivoting the train and validation matrices.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Pivoting Tables</span>
+<span class="n">movie_lens_train_matrix</span> <span class="o">=</span> <span class="n">movie_lens_train</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;rating&#39;</span><span class="p">)</span>
+<span class="n">movie_lens_validation_matrix</span> <span class="o">=</span> <span class="n">movie_lens_validation</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;rating&#39;</span><span class="p">)</span>
+
+<span class="c1"># Verification</span>
+<span class="k">assert</span> <span class="n">movie_lens_train_matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">movie_lens_validation_matrix</span><span class="o">.</span><span class="n">shape</span>   <span class="c1"># Train and Test have idential shape</span>
+<span class="k">assert</span> <span class="n">movie_lens_train_matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">max_user_limits</span><span class="p">,</span> <span class="n">max_movie_limits</span><span class="p">)</span>  <span class="c1"># Limits are preserved</span>
+
+<span class="n">values_in_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">))))</span>
+<span class="n">values_in_validation</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">movie_lens_validation_matrix</span><span class="p">))))</span>
+
+<span class="k">assert</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">value_train</span> <span class="ow">in</span> <span class="n">values_in_validation</span> <span class="k">for</span> <span class="n">value_train</span> <span class="ow">in</span> <span class="n">values_in_train</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h1>Cross Validation (K-Folds)</h1>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">generate_cross_validated_sample</span><span class="p">(</span><span class="n">base_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>    
+    <span class="n">repository</span> <span class="o">=</span> <span class="n">base_matrix</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Initial shuffle</span>
+    <span class="n">repository</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="c1"># Create minimaml matrices</span>
+    <span class="n">train_minimals</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">test_minimals</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">folds</span><span class="p">):</span>
+        <span class="n">train_unique_user_rows</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+
+        <span class="n">train_unique_movie_rows</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+        <span class="n">train_unique_movie_rows</span> <span class="o">=</span> <span class="n">train_unique_movie_rows</span><span class="p">[</span><span class="o">~</span> <span class="n">train_unique_movie_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_unique_user_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">])]</span>
+
+        <span class="n">train_minimal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_unique_movie_rows</span><span class="p">,</span> <span class="n">train_unique_user_rows</span><span class="p">])</span>
+        <span class="n">train_minimals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_minimal</span><span class="p">)</span>
+
+        <span class="n">repository</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">train_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">folds</span><span class="p">):</span>
+        <span class="n">test_unique_user_rows</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+
+        <span class="n">test_unique_movie_rows</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+        <span class="n">test_unique_movie_rows</span> <span class="o">=</span> <span class="n">test_unique_movie_rows</span><span class="p">[</span><span class="o">~</span> <span class="n">test_unique_movie_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_unique_user_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">])]</span>
+
+        <span class="n">test_minimal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">test_unique_movie_rows</span><span class="p">,</span> <span class="n">test_unique_user_rows</span><span class="p">])</span>
+        <span class="n">test_minimals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_minimal</span><span class="p">)</span>
+
+        <span class="n">repository</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">test_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+
+    <span class="n">portion</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">repository</span><span class="p">)</span> <span class="o">/</span> <span class="n">folds</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="n">train_minimal</span><span class="p">,</span> <span class="n">test_minimal</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">folds</span><span class="p">),</span> <span class="n">train_minimals</span><span class="p">,</span> <span class="n">test_minimals</span><span class="p">):</span>
+        <span class="n">lower_limit</span> <span class="o">=</span> <span class="n">fold</span> <span class="o">*</span> <span class="n">portion</span>
+        <span class="n">upper_limit</span> <span class="o">=</span> <span class="p">(</span><span class="n">fold</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">portion</span>
+
+        <span class="n">random_sample</span> <span class="o">=</span> <span class="n">repository</span><span class="p">[</span><span class="n">lower_limit</span><span class="p">:</span><span class="n">upper_limit</span><span class="p">]</span>
+        <span class="n">movie_lens_validation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">test_minimal</span><span class="p">,</span> <span class="n">random_sample</span><span class="p">])</span>
+
+        <span class="n">movie_lens_train</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">random_sample</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">movie_lens_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">movie_lens_train</span><span class="p">,</span> <span class="n">train_minimal</span><span class="p">])</span>
+
+        <span class="n">movie_lens_train_matrix</span> <span class="o">=</span> <span class="n">movie_lens_train</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;rating&#39;</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">movie_lens_validation</span>
+</code></pre></div>
+
+
+<h2>Test Cross Validation</h2>
+<div class="highlight"><pre><span></span><code><span class="n">train_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">folds</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">cross_validation_train</span><span class="p">,</span> <span class="n">cross_validation_test</span> <span class="ow">in</span> <span class="n">generate_cross_validated_sample</span><span class="p">(</span><span class="n">movie_lens_train</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="n">folds</span><span class="p">):</span>
+    <span class="c1"># Train Datasets do not repeat completely</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">cross_validation_train</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="k">for</span> <span class="n">train_dataset</span> <span class="ow">in</span> <span class="n">train_datasets</span><span class="p">)</span>
+
+    <span class="c1"># Test Datasets do not repeat</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">cross_validation_test</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="k">for</span> <span class="n">test_dataset</span> <span class="ow">in</span> <span class="n">test_datasets</span><span class="p">)</span>
+
+    <span class="c1"># Train and Test Datasets do not share entries</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">cross_validation_train</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cross_validation_test</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+
+    <span class="c1"># Train have the same shape as original</span>
+    <span class="k">assert</span> <span class="n">cross_validation_train</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">max_user_limits</span><span class="p">,</span> <span class="n">max_movie_limits</span><span class="p">)</span>
+
+    <span class="n">train_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cross_validation_train</span><span class="p">)</span>
+    <span class="n">test_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cross_validation_test</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">progress_bar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">assert</span> <span class="n">counter</span> <span class="o">==</span> <span class="n">folds</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 5/5 [00:01&lt;00:00,  3.13it/s]</span>
+</code></pre></div>
+
+
+<h1>Stochastic Mini-Batch Gradient Descent with L2 Regularization</h1>
+<h2>SVD Approximation with Gradient Descent</h2>
+<p>According to SVD, <span class="math">\(X = U \Sigma V\)</span>. Assuming <span class="math">\(\Sigma\)</span> merges into <span class="math">\(U\)</span> or <span class="math">\(V^T\)</span>, the matrix factorization becomes <span class="math">\(X = U V^T\)</span>.</p>
+<p>Let <span class="math">\(r_{ui}\)</span> be the rating of user <span class="math">\(u\)</span> for item <span class="math">\(i\)</span>. Because of the way a matrix product is defined, the value of <span class="math">\(r_{ui}\)</span> is the result of a dot product between two vectors: a vector <span class="math">\(p_u\)</span>, which is a row of <span class="math">\(U\)</span> and is specific to the user <span class="math">\(u\)</span>, and a vector <span class="math">\(q_i\)</span>, which is a column of <span class="math">\(V^T\)</span> and is specific to the item <span class="math">\(i\)</span>:</p>
+<div class="math">$$\begin{pmatrix} &amp;  &amp; \\ &amp; r_{ui} &amp; \\ &amp;  &amp; \end{pmatrix} = \begin{pmatrix} . \\ \cdots p_u \cdots \\ . \end{pmatrix} \begin{pmatrix} &amp; \vdots  &amp; \\ . &amp; q_i &amp; . \\  &amp; \vdots &amp; \end{pmatrix}$$</div>
+<div class="math">$$r_{ui} = p_u \cdot q_i$$</div>
+<p>The vector <span class="math">\(p_u\)</span> and <span class="math">\(q_i\)</span> represent the affinity of user <span class="math">\(u\)</span> and item <span class="math">\(i\)</span> for each of the latent factors in <span class="math">\(U\)</span> and <span class="math">\(V^T\)</span>, respectively.</p>
+<p>When a matrix <span class="math">\(X\)</span> has missing entries, the SVD of <span class="math">\(X\)</span> is not defined, the matrices <span class="math">\(XX^T\)</span> and <span class="math">\(X^TX\)</span> do not exist, so their eigenvectors do not exist either, and <span class="math">\(X\)</span> cannot be factorized as <span class="math">\(U \Sigma V^T\)</span>. A simple solution is to fill the missing entries of <span class="math">\(X\)</span> with some heuristic value, like the mean of the columns of rows. However, the results are usually highly biased, and it is importante to note that the missing values are feedback that the user did not give, and therefore should not be considered negative or null rating. Luckily, computing the eigenvectors of <span class="math">\(XX^T\)</span> and <span class="math">\(X^TX\)</span> is not the only way of computing the SVD of <span class="math">\(X\)</span>. The matrices <span class="math">\(U\)</span> and <span class="math">\(V^T\)</span> can be found if the vectors <span class="math">\(p_u\)</span> and <span class="math">\(q_i\)</span> (<span class="math">\(p_u\)</span> make up the rows of <span class="math">\(U\)</span> and <span class="math">\(q_i\)</span> make up the columns of <span class="math">\(V^T\)</span>) are found such that:</p>
+<ul>
+<li><span class="math">\(r_{ui} = p_u \cdot q_i \quad \forall \; u,i\)</span></li>
+<li>All the vectors <span class="math">\(p_u\)</span> are mutually orthogonal, as well as the vectors <span class="math">\(q_i\)</span></li>
+</ul>
+<p>It is sought to match as well as possible the values <span class="math">\(r_{ui}\)</span> with what they are supposed to be, <span class="math">\(p_u \cdot q_i\)</span>, making the error minimal:</p>
+<p><span class="math">\(\min_{p_u, q_i \\ p_u \perp p_v \\ q_i \perp q_j} \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2\)</span></p>
+<p>As <span class="math">\(X\)</span> is incomplete, the missing entries are ignored, as well as the orthogonality constraints, resulting in the following optimization problem, proposed by Simon Funk:</p>
+<p><span class="math">\(\min_{p_u, q_i}\sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2.\)</span></p>
+<p>As this optimization problem is not convex, it will be very difficult to find the values of the vectors <span class="math">\(p_u\)</span> and <span class="math">\(q_i\)</span> that make this sum minimal, and the optimal solution may not even be unique. Therefore, Gradient Descent is used. The function to be minimized is then:</p>
+<p><span class="math">\(f(p_*, q_*) = \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2 =\sum_{r_{ui} \in X} f_{ui}(p_u, q_i)\)</span></p>
+<p>with its both partial derivatives being:</p>
+<p><span class="math">\(\frac{\partial f_{ui}}{\partial p_u} = - 2 q_i (r_{ui} - p_u \cdot q_i)\)</span></p>
+<p><span class="math">\(\frac{\partial f_{ui}}{\partial q_i} = - 2 p_u (r_{ui} - p_u \cdot q_i)\)</span></p>
+<p><strong>L2 regularization</strong></p>
+<p><span class="math">\(\underset{w}{\min} f(w) + \lambda ||w||_2^2\)</span></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">X_</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+
+    <span class="c1"># Pandas DataFrame to NumPy</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X_</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="c1"># Initialize p and q</span>
+    <span class="n">variance</span> <span class="o">=</span> <span class="mf">0.1</span>    
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">variance</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">))</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">variance</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">))</span>
+
+    <span class="n">train_rmses</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iterate only over non-nan indexes</span>
+    <span class="n">non_nan_indexes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">X</span><span class="p">))))</span>
+
+    <span class="k">if</span> <span class="n">mini_batch_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">mini_batch_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_nan_indexes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+
+        <span class="c1"># Stochastic part</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">non_nan_indexes</span><span class="p">)</span>
+
+        <span class="c1"># Save p and q</span>
+        <span class="n">p_new</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">q_new</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">non_nan_indexes</span><span class="p">):</span>
+
+            <span class="c1"># Update p and q every mini_batch_size iterations</span>
+            <span class="k">if</span> <span class="n">index</span> <span class="o">%</span> <span class="n">mini_batch_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p_new</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="n">q_new</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># Update p and q new with L2 regularization derivatives</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">u</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> 
+
+            <span class="n">p_new</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">error</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">lambda_</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">u</span><span class="p">]))</span>
+            <span class="n">q_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">error</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">-</span> <span class="n">lambda_</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="c1"># Calculate RSME</span>
+        <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">p</span> <span class="o">@</span> <span class="n">q</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">train_rmses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rmse</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">train_rmses</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">calc_rmse</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">X_approx</span> <span class="o">=</span> <span class="n">p</span> <span class="o">@</span> <span class="n">q</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">user_</span><span class="p">,</span> <span class="n">movie_</span><span class="p">,</span> <span class="n">rating</span><span class="p">)</span> <span class="ow">in</span> <span class="n">test</span><span class="p">[[</span><span class="s2">&quot;userId&quot;</span><span class="p">,</span> <span class="s2">&quot;movieId&quot;</span><span class="p">,</span> <span class="s2">&quot;rating&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">user_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">user_</span><span class="p">)</span>
+        <span class="n">movie_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">columns</span> <span class="o">==</span> <span class="n">movie_</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">rating</span> <span class="o">-</span> <span class="n">X_approx</span><span class="p">[</span><span class="n">user_index</span><span class="p">,</span> <span class="n">movie_index</span><span class="p">]</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+    <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+
+
+<h2>Lambda Optimization</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Calculate Train and Test RSME for each Lambda</span>
+
+<span class="n">train_rmseses_means</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test_rmseses_means</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">lambda_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">lambdas</span><span class="p">):</span>
+    <span class="n">cross_validation_generator</span> <span class="o">=</span> <span class="n">generate_cross_validated_sample</span><span class="p">(</span><span class="n">movie_lens_train</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="n">folds</span><span class="p">)</span>
+
+    <span class="n">train_rmseses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">test_rmseses</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="p">(</span><span class="n">cross_validation_train_matrix</span><span class="p">,</span> <span class="n">cross_validation_test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cross_validation_generator</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">train_rmse</span> <span class="o">=</span> <span class="n">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">cross_validation_train_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> 
+                                                                     <span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">train_rmseses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_rmse</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">test_rmse</span> <span class="o">=</span> <span class="n">calc_rmse</span><span class="p">(</span><span class="n">cross_validation_train_matrix</span><span class="p">,</span> <span class="n">cross_validation_test</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+        <span class="n">test_rmseses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_rmse</span><span class="p">)</span>
+
+        <span class="n">data_point</span> <span class="o">=</span> <span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">test_rmse</span><span class="p">,</span> <span class="n">lambda_</span><span class="p">,</span> <span class="o">*</span><span class="n">cross_validation_train_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_point</span><span class="p">)</span>
+
+    <span class="n">train_rmseses_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_rmseses</span><span class="p">))</span>
+    <span class="n">test_rmseses_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">test_rmseses</span><span class="p">))</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 20/20 [21:48&lt;00:00, 65.44s/it]</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="c1"># Results for cross-validated training dataset</span>
+
+<span class="n">best_iteration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">test_rmseses_means</span><span class="p">)</span>
+
+<span class="n">cross_validation_rmse_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Fold&quot;</span><span class="p">,</span> <span class="s2">&quot;Test RMSE&quot;</span><span class="p">,</span> <span class="s2">&quot;Lambda&quot;</span><span class="p">,</span> <span class="s2">&quot;UserSize&quot;</span><span class="p">,</span> <span class="s2">&quot;MovieSize&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+<span class="n">cross_validation_rmse_df</span><span class="p">[</span><span class="s2">&quot;Lambda&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">cross_validation_rmse_df</span><span class="p">[</span><span class="s2">&quot;Lambda&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">cross_validation_rmse_train</span> <span class="o">=</span> <span class="n">train_rmseses_means</span><span class="p">[</span><span class="n">best_iteration</span><span class="p">]</span>
+<span class="n">cross_validation_rmse_test</span> <span class="o">=</span> <span class="n">test_rmseses_means</span><span class="p">[</span><span class="n">best_iteration</span><span class="p">]</span>
+
+<span class="n">best_lambda</span> <span class="o">=</span> <span class="n">lambdas</span><span class="p">[</span><span class="n">best_iteration</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s1">-Folds Cross-validation results:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best Lambda over </span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s2">-Folds: </span><span class="si">{</span><span class="n">best_lambda</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Train RMSE: </span><span class="si">{</span><span class="n">cross_validation_rmse_train</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Test RMSE: </span><span class="si">{</span><span class="n">cross_validation_rmse_test</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Using whole dataset (train and validation)</span>
+
+<span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">rmse_train</span> <span class="o">=</span> <span class="n">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="n">best_lambda</span><span class="p">,</span> 
+                                                             <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">rmse_validation</span> <span class="o">=</span> <span class="n">calc_rmse</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">movie_lens_validation</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Whole data set results:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train RMSE: </span><span class="si">{</span><span class="n">rmse_train</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Validation RMSE: </span><span class="si">{</span><span class="n">rmse_validation</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="mi">5</span><span class="o">-</span><span class="n">Folds</span> <span class="k">Cross</span><span class="o">-</span><span class="n">validation</span> <span class="n">results</span><span class="p">:</span>
+<span class="n">Best</span> <span class="n">Lambda</span> <span class="n">over</span> <span class="mi">5</span><span class="o">-</span><span class="n">Folds</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">09</span>
+<span class="n">Train</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">6199</span>
+<span class="n">Test</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">8953</span>
+
+<span class="n">Whole</span> <span class="k">data</span> <span class="k">set</span> <span class="n">results</span><span class="p">:</span>
+<span class="n">Train</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">7362</span>
+<span class="n">Validation</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">8643</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rmse_train</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;RMSE over whole train dataset for best Lambda&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_5.png"></p>
+<div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Lambda&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Test RMSE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">cross_validation_rmse_df</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">errwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">rmse_validation</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CI for RMSE over Testing with </span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s2">-Folds for different Lambdas&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_1.png"></p>
+<h2>Mini-Batch Size Optimization</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Calculate Train and Test RSME for each Mini-Batch Size</span>
+
+<span class="n">train_rmseses_means</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test_rmseses_means</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">mini_batch_sizes</span><span class="p">):</span>
+    <span class="n">cross_validation_generator</span> <span class="o">=</span> <span class="n">generate_cross_validated_sample</span><span class="p">(</span><span class="n">movie_lens_train</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="n">folds</span><span class="p">)</span>
+
+    <span class="n">train_rmseses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">test_rmseses</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="p">(</span><span class="n">cross_validation_train_matrix</span><span class="p">,</span> <span class="n">cross_validation_test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cross_validation_generator</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">train_rmse</span> <span class="o">=</span> <span class="n">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">cross_validation_train_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> 
+                                                                     <span class="n">lambda_</span><span class="o">=</span><span class="n">best_lambda</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">train_rmseses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_rmse</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">test_rmse</span> <span class="o">=</span> <span class="n">calc_rmse</span><span class="p">(</span><span class="n">cross_validation_train_matrix</span><span class="p">,</span> <span class="n">cross_validation_test</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+        <span class="n">test_rmseses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_rmse</span><span class="p">)</span>
+
+        <span class="n">data_point</span> <span class="o">=</span> <span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">test_rmse</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">cross_validation_train_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_point</span><span class="p">)</span>
+
+    <span class="n">train_rmseses_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_rmseses</span><span class="p">))</span>
+    <span class="n">test_rmseses_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">test_rmseses</span><span class="p">))</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 11/11 [08:32&lt;00:00, 46.60s/it]</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="c1"># Results for cross-validated training dataset</span>
+
+<span class="n">best_iteration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">test_rmseses_means</span><span class="p">)</span>
+
+<span class="n">cross_validation_rmse_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Fold&quot;</span><span class="p">,</span> <span class="s2">&quot;Test RMSE&quot;</span><span class="p">,</span> <span class="s2">&quot;Mini-Batch-Size&quot;</span><span class="p">,</span> <span class="s2">&quot;UserSize&quot;</span><span class="p">,</span> <span class="s2">&quot;MovieSize&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+<span class="n">cross_validation_rmse_train</span> <span class="o">=</span> <span class="n">train_rmseses_means</span><span class="p">[</span><span class="n">best_iteration</span><span class="p">]</span>
+<span class="n">cross_validation_rmse_test</span> <span class="o">=</span> <span class="n">test_rmseses_means</span><span class="p">[</span><span class="n">best_iteration</span><span class="p">]</span>
+
+<span class="n">best_size</span> <span class="o">=</span> <span class="n">mini_batch_sizes</span><span class="p">[</span><span class="n">best_iteration</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s1">-Folds Cross-validation results:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best Mini-Batch-Size over </span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s2">-Folds: </span><span class="si">{</span><span class="n">best_size</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Train RMSE: </span><span class="si">{</span><span class="n">cross_validation_rmse_train</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Test RMSE: </span><span class="si">{</span><span class="n">cross_validation_rmse_test</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Using whole dataset (train and validation)</span>
+
+<span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">rmse_train</span> <span class="o">=</span> <span class="n">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="n">best_lambda</span><span class="p">,</span> 
+                                                             <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="n">best_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">rmse_validation</span> <span class="o">=</span> <span class="n">calc_rmse</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">movie_lens_validation</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Whole data set results:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train RMSE: </span><span class="si">{</span><span class="n">rmse_train</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Validation RMSE: </span><span class="si">{</span><span class="n">rmse_validation</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="mi">5</span><span class="o">-</span><span class="n">Folds</span> <span class="k">Cross</span><span class="o">-</span><span class="n">validation</span> <span class="n">results</span><span class="p">:</span>
+<span class="n">Best</span> <span class="n">Mini</span><span class="o">-</span><span class="n">Batch</span><span class="o">-</span><span class="k">Size</span> <span class="n">over</span> <span class="mi">5</span><span class="o">-</span><span class="n">Folds</span><span class="p">:</span> <span class="mi">128</span><span class="p">.</span><span class="mi">00</span>
+<span class="n">Train</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">6203</span>
+<span class="n">Test</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">8946</span>
+
+<span class="n">Whole</span> <span class="k">data</span> <span class="k">set</span> <span class="n">results</span><span class="p">:</span>
+<span class="n">Train</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">7359</span>
+<span class="n">Validation</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">8619</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rmse_train</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;RMSE over whole train dataset for best Mini-Batch-Size&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_2.png"></p>
+<div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Mini-Batch-Size&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Test RMSE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">cross_validation_rmse_df</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">errwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">rmse_validation</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CI for RMSE over Testing with </span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s2">-Folds for different Mini-Batch Sizes&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_3.png"></p>
+<h1>Confidence Intervals for RMSE with optimum parameters</h1>
+<div class="highlight"><pre><span></span><code><span class="n">final_rmse_validation</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">)):</span>
+
+    <span class="n">movies_by_count</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;movieId&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">movies_available</span> <span class="o">=</span> <span class="n">movies_by_count</span><span class="p">[:</span><span class="n">max_movie_limits</span><span class="p">]</span>
+    <span class="n">movie_lens</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="p">[</span><span class="n">movie_lens</span><span class="p">[</span><span class="s1">&#39;movieId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">movies_available</span><span class="p">)]</span>
+
+    <span class="n">users_by_count</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;userId&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s2">&quot;userId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">users_available</span> <span class="o">=</span> <span class="n">users_by_count</span><span class="p">[:</span><span class="n">max_user_limits</span><span class="p">]</span>
+    <span class="n">movie_lens</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="p">[</span><span class="n">movie_lens</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">users_available</span><span class="p">)]</span>
+
+    <span class="n">movie_lens</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+    <span class="n">train_unique_user_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+
+    <span class="n">train_unique_movie_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+    <span class="n">train_unique_movie_rows</span> <span class="o">=</span> <span class="n">train_unique_movie_rows</span><span class="p">[</span><span class="o">~</span> <span class="n">train_unique_movie_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_unique_user_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">])]</span>
+
+    <span class="n">train_minimal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_unique_movie_rows</span><span class="p">,</span> <span class="n">train_unique_user_rows</span><span class="p">])</span>
+
+
+    <span class="n">test_base</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">train_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">test_unique_user_rows</span> <span class="o">=</span> <span class="n">test_base</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+
+    <span class="n">test_unique_movie_rows</span> <span class="o">=</span> <span class="n">test_base</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+    <span class="n">test_unique_movie_rows</span> <span class="o">=</span> <span class="n">test_unique_movie_rows</span><span class="p">[</span><span class="o">~</span> <span class="n">test_unique_movie_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_unique_user_rows</span><span class="p">[</span><span class="s2">&quot;movieId&quot;</span><span class="p">])]</span>
+
+    <span class="n">test_minimal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">test_unique_movie_rows</span><span class="p">,</span> <span class="n">test_unique_user_rows</span><span class="p">])</span>
+
+
+
+    <span class="n">non_used_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">train_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">test_minimal</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="n">random_sample</span> <span class="o">=</span> <span class="n">non_used_rows</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">movie_lens_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_minimal</span><span class="p">,</span> <span class="n">random_sample</span><span class="p">])</span>
+    <span class="n">movie_lens_validation</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">movie_lens_train</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+
+    <span class="n">movie_lens_train_matrix</span> <span class="o">=</span> <span class="n">movie_lens_train</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;rating&#39;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">rmse_train</span> <span class="o">=</span> <span class="n">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="n">best_lambda</span><span class="p">,</span> 
+                                                      <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="n">best_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="n">rmse_validation</span> <span class="o">=</span> <span class="n">calc_rmse</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">movie_lens_validation</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+    <span class="n">final_rmse_validation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rmse_validation</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 30/30 [05:21&lt;00:00, 10.70s/it]</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">final_rmse_validation</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;saddlebrown&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RMSE CI over 90:10 Split - Mean RMSE: </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RMSE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_4.png"></p>
+<h1>Predicted matrix</h1>
+<div class="highlight"><pre><span></span><code><span class="n">lambda_</span> <span class="o">=</span> <span class="mf">0.09</span>
+<span class="n">mini_batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">rmse_train</span> <span class="o">=</span> <span class="n">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">movie_lens_train_matrix</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span><span class="p">,</span> 
+                                                      <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="n">mini_batch_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+<span class="n">X_approx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">p</span> <span class="o">@</span> <span class="n">q</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">X_approx</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">movie_lens_train_matrix</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">X_approx</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">movie_lens_train_matrix</span><span class="o">.</span><span class="n">index</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">movie_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Gastón\Office\Data Science\_Datasets\movie_lens_100k_movies.csv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;movie id&#39;</span><span class="p">,</span> <span class="s1">&#39;movie title&#39;</span><span class="p">,</span> <span class="s1">&#39;release date&#39;</span><span class="p">,</span>
+                                                                                                                        <span class="s1">&#39;video release date&#39;</span><span class="p">,</span> <span class="s1">&#39;IMDb URL&#39;</span><span class="p">,</span> <span class="s1">&#39;unknown&#39;</span><span class="p">,</span>
+                                                                                                                        <span class="s1">&#39;Action&#39;</span><span class="p">,</span> <span class="s1">&#39;Adventure&#39;</span><span class="p">,</span> <span class="s1">&#39;Animation&#39;</span><span class="p">,</span> <span class="s1">&#39;Children&#39;</span><span class="p">,</span>
+                                                                                                                        <span class="s1">&#39;Comedy&#39;</span><span class="p">,</span> <span class="s1">&#39;Crime&#39;</span><span class="p">,</span> <span class="s1">&#39;Documentary&#39;</span><span class="p">,</span> <span class="s1">&#39;Drama&#39;</span><span class="p">,</span> <span class="s1">&#39;Fantasy&#39;</span><span class="p">,</span>
+                                                                                                                        <span class="s1">&#39;FilmNoir&#39;</span><span class="p">,</span> <span class="s1">&#39;Horror&#39;</span><span class="p">,</span> <span class="s1">&#39;Musical&#39;</span><span class="p">,</span> <span class="s1">&#39;Mystery&#39;</span><span class="p">,</span> <span class="s1">&#39;Romance&#39;</span><span class="p">,</span>
+                                                                                                                        <span class="s1">&#39;SciFi&#39;</span><span class="p">,</span> <span class="s1">&#39;Thriller&#39;</span><span class="p">,</span> <span class="s1">&#39;War&#39;</span><span class="p">,</span> <span class="s1">&#39;Western&#39;</span><span class="p">])</span>
+
+<span class="n">movie_df</span> <span class="o">=</span> <span class="n">movie_df</span><span class="p">[[</span><span class="s1">&#39;movie id&#39;</span><span class="p">,</span><span class="s1">&#39;movie title&#39;</span><span class="p">]]</span>
+<span class="n">movie_df</span> <span class="o">=</span> <span class="n">movie_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;movie id&#39;</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">recommend_movie</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">num_movies</span><span class="p">):</span>
+    <span class="n">recommended_movies_id</span> <span class="o">=</span> <span class="n">X_approx</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">user</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="n">num_movies</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">recommended_movies</span> <span class="o">=</span> <span class="n">movie_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">recommended_movies_id</span><span class="p">]</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;movie title&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">recommended_movies</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">user</span> <span class="o">=</span> <span class="n">X_approx</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">num_movies</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">recommended_movies</span> <span class="o">=</span> <span class="n">recommend_movie</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">num_movies</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Recommended movies for user </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">)</span>
+<span class="n">recommended_movies</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Recommended movies for user 416:</span>
+</code></pre></div>
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+    </tr>
+    <tr>
+      <th>movie title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Godfather, The (1972)</th>
+    </tr>
+    <tr>
+      <th>Schindler's List (1993)</th>
+    </tr>
+    <tr>
+      <th>Shawshank Redemption, The (1994)</th>
+    </tr>
+    <tr>
+      <th>Raiders of the Lost Ark (1981)</th>
+    </tr>
+    <tr>
+      <th>Princess Bride, The (1987)</th>
+    </tr>
+    <tr>
+      <th>Star Wars (1977)</th>
+    </tr>
+    <tr>
+      <th>Rear Window (1954)</th>
+    </tr>
+    <tr>
+      <th>Braveheart (1995)</th>
+    </tr>
+    <tr>
+      <th>Titanic (1997)</th>
+    </tr>
+    <tr>
+      <th>Lawrence of Arabia (1962)</th>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1>References</h1>
+<p>https://www.wikiwand.com/en/Collaborative_filtering</p>
+<p>https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+
+        <br><br><br>
+
+        <footer>
+          <div class="adjust-width">
+            <div id="author-block" class="w3-light-grey w3-border">
+              <div id="author-info">
+                <a href=""><img class="avatar" src="" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <div style="margin-left: 20px;">
+                  <a href=""><span id="author-name" class="w3-hover-text-dark-grey">Gastón Amengual</span></a>
+                  <p id="author-story"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br>
+
+          <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
+          <div id="share" class="share">
+            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/collaborative-filtering.html&amp;t=Personal%20Website%3A%20Collaborative%20Filtering" target="_blank" class="w3-btn w3-indigo">
+              <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+            </a>
+            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/collaborative-filtering.html&amp;text=Personal%20Website%3A%20Collaborative%20Filtering" target="_blank" class="w3-btn w3-blue">
+              <i class="fa fa-twitter"></i> <span>Twitter</span>
+            </a> -->
+          </div>
+
+          <br><br><br>
+
+
+
+        </footer>
+      </div>
+    </article>
+
+
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-small w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          2021          Gastón Amengual
+        </span>
+        <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="w3-btn w3-indigo">
+          <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/gastonamengual" target="_blank" class="w3-btn w3-black">
+          <i class="fa fa-github"></i> <span>Github</span>
+        </a>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-6KC62F9717', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>

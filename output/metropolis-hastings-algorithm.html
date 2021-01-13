@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Metropolis-Hastings Algorithm &ndash; Personal Website</title>
+
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Bayesian Statistics" />
+    <meta property="article:published_time" content="2020-10-02" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Metropolis-Hastings Algorithm"/>
+    <meta property="og:description" content="."/>
+    <meta property="og:site_name" content="Personal Website" />
+    <meta property="og:url" content="https://gastonamengual.github.io/metropolis-hastings-algorithm.html"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Metropolis-Hastings Algorithm">
+    <meta name="twitter:description" content=".">
+    <meta name="twitter:url" content="https://gastonamengual.github.io/metropolis-hastings-algorithm.html">
+
+    <!-- Feed -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
+
+    <!-- Icon -->
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
+        <nav id="header-menu">
+          <ul>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+    <br><br><br>
+
+    <article>
+      <header class="w3-container col-main">
+        <h1>Metropolis-Hastings Algorithm</h1>
+        <div class="post-info">
+          <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
+            <span><time datetime="2020-10-02T00:00:00+02:00">Fri 02 October 2020</time> in <a href="https://gastonamengual.github.io/category/bayesian-statistics.html" title="All articles in category Bayesian Statistics">Bayesian Statistics</a></span>
+          </div>
+        </div>
+      </header>
+
+      <br>
+
+
+      <div class="col-main w3-container">
+        <section id="content">
+          <p><strong>Notebook written by Gastón Amengual.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pymc3</span> <span class="k">as</span> <span class="nn">pm</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;bmh&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rebeccapurple&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">,</span> <span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;lawngreen&quot;</span><span class="p">,</span> <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;deeppink&quot;</span><span class="p">])</span>
+</code></pre></div>
+
+
+<p>The <strong>Metropolis-Hastings algorithm</strong> is a Markov Chain Monte Carlo method for obtaining a sequence of random samples from a probability distribution (henceforth the target distribution), from which direct sampling is difficult. This sequence can be used to approximate the distribution or to compute an integral, even if the normalizing constant is unknown.</p>
+<p>A <strong>normalizing constant</strong> is a constant by which an everywhere non-negative function must be multiplied so the area under its graph is 1, to make it a probability density function or a probability mass function. Bayes' theorem states that the posterior probability measure is proportional to the product of the prior probability measure and the likelihood function. <em>Proportional to</em> implies that one must multiply or divide by a normalizing constant to assign measure 1 to the whole space to get a probability measure. </p>
+<div class="math">$$P(H_0|D) = \dfrac{P(D|H_0)P(H_0)}{P(D)}$$</div>
+<p>Since <span class="math">\(P(D)\)</span> is difficult to calculate, an alternative way to describe this relationship is as one of proportionality:</p>
+<div class="math">$$P(H_0|D) \propto P(D|H_0)P(H_0)$$</div>
+<p>Since <span class="math">\(P(H_0|D)\)</span> is a probability, the sum over all possible (mutually exclusive) hypotheses should be 1, leading to the conclusion that</p>
+<div class="math">$$P(H_0|D) = \dfrac{P(D|H_0)P(H_0)}{\sum_{i}P(D|H_i)P(H_i)}$$</div>
+<p>where <span class="math">\(P(D) = \sum_{i}P(D|H_i)P(H_i)\)</span> is the normalizing constant and the reciprocal of the value. For continuous distributions,</p>
+<div class="math">$$P(H_0|D) = \dfrac{P(D|H_0)P(H_0)}{\int P(D|H_i)P(H_i)}$$</div>
+<h2>Intuition</h2>
+<p>The Metropolis–Hastings algorithm can draw samples from any probability distribution <span class="math">\(P(\theta)\)</span>, provided that a function <span class="math">\(g(\theta)\)</span> proportional to the density of <span class="math">\(P\)</span> is known, and the values of <span class="math">\(g(\theta)\)</span> can be calculated. The requirement that <span class="math">\(g(\theta)\)</span> must only be proportional to the density rather than exactly equal to it makes the algorithm useful, because calculating the necessary normalization factor is often extremely difficult in practice.</p>
+<div class="math">$$P(\theta) \propto g(\theta)$$</div>
+<p>The algorithm works by generating a sequence of sample values in such a way that, as more and more sample values are produced, the distribution of values more closely approximates the target distribution <span class="math">\(P(\theta)\)</span>. These sample values are produced iteratively, with the distribution of the next sample being dependent only on the current sample value (thus making the sequence of samples into a Markov chain). Specifically, at each iteration, the algorithm picks a candidate for the next sample value based on the current sample value. Then, with some probability, the candidate is either accepted (in which case the candidate value is used in the next iteration) or rejected (in which case the candidate value is discarded, and current value is reused in the next iteration). The probability of acceptance is determined by comparing the values of the function <span class="math">\(g(\theta)\)</span> of the current and candidate sample values with respect to the desired distribution <span class="math">\(P(\theta)\)</span>.</p>
+<h2>Proposal distribution</h2>
+<p>The proposal distribution <span class="math">\(q(\theta^* \mid \theta_{i-1})\)</span> is the candidate generating distribution from which the candidates are sampled, and to approaches can be considered:</p>
+<ul>
+<li>
+<p><span class="math">\(q\)</span> does not depends on the previous iteration’s value of <span class="math">\(\theta\)</span>, for example, if <span class="math">\(q(\theta^*)\)</span> is always the same distribution. In this case, <span class="math">\(q(\theta)\)</span> should be as similar as possible to <span class="math">\(p(\theta)\)</span>.</p>
+</li>
+<li>
+<p><span class="math">\(q\)</span> depends on the previous iteration (Random-Walk Metropolis-Hastings), and it is centered on <span class="math">\(\theta_{i-1}\)</span>. For instance, it might be a normal distribution with mean <span class="math">\(\theta_{i-1}\)</span>. Because the normal distribution is symmetric, <span class="math">\(q(\theta^* \mid \theta_{i-1}) = q(\theta_{i-1} \mid \theta^*)\)</span>. Thus, when the candidate is drawn from a normal with mean <span class="math">\(\theta_{i-1}\)</span> and constant variance, the acceptance ratio is <span class="math">\(\alpha = g(\theta^*) / g(\theta_{i-1})\)</span>.</p>
+</li>
+</ul>
+<h2>Acceptance rate</h2>
+<p>Not all candidate draws are accepted by the algorithm, causing the Markov chain to remain at a certain current state for many iterations. How often it is desired to accept candidates depends on the type of algorithm used. </p>
+<p>If <span class="math">\(p(\theta)\)</span> is approximated with <span class="math">\(q(\theta^*)\)</span> and candidates are always drawn from <span class="math">\(q\)</span>, accepting candidates often is good, as it means that <span class="math">\(q(\theta^*)\)</span> is approximating <span class="math">\(p(\theta)\)</span> well. However, it may still be wanted for <span class="math">\(q\)</span> to have a larger variance than <span class="math">\(p\)</span> and see some rejection of candidates as an assurance that <span class="math">\(q\)</span> is covering the space well.</p>
+<p>On the other hand, a high acceptance rate for the Random-Walk Metropolis-Hastings sampler is not preferable. If the random walk takes too small of steps, it will accept often, but will take a very long time to fully explore the posterior. If the random walk is taking too large of steps, many of its proposals will have low probability and the acceptance rate will be low, wasting many draws. Ideally, a random walk sampler should accept somewhere between <span class="math">\(23\%\)</span> and <span class="math">\(50\%\)</span> of the candidates proposed.</p>
+<h2>Algorithm</h2>
+<ol>
+<li>Select an initial value <span class="math">\(\theta_0\)</span>.</li>
+<li>
+<p>For <span class="math">\(i = 1, \ldots, m\)</span>, repeat the following steps:</p>
+<ul>
+<li>Draw a candidate sample <span class="math">\(\theta^*\)</span> from a proposal distribution <span class="math">\(q(\theta^* \mid \theta_{i-1})\)</span>.</li>
+<li>
+<p>Compute the ratio <div class="math">$$\alpha = \frac{g(\theta^*) / q(\theta^* \mid \theta_{i-1}) }{g(\theta_{i-1}) / q(\theta_{i-1} \mid \theta^*)} = \frac{g(\theta^*)q(\theta_{i-1} \mid \theta^*)}{g(\theta_{i-1})q(\theta^* \mid \theta_{i-1})} \,$$</div> .</p>
+</li>
+<li>
+<p>If <span class="math">\(\alpha \ge 1\)</span>, then set <span class="math">\(\theta_i = \theta^*\)</span>. If <span class="math">\(\alpha &lt; 1\)</span>, then set <span class="math">\(\theta_i = \theta^*\)</span> with probability <span class="math">\(\alpha\)</span>, or <span class="math">\(\theta_i = \theta_{i-1}\)</span> with probability <span class="math">\(1-\alpha\)</span>.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Steps 2b and 2c act as a correction since the proposal distribution is not the target distribution. At each step in the chain, we draw a candidate and decide whether to “move” the chain there or remain where we are. If the proposed move to the candidate is “advantageous,” <span class="math">\((\alpha \ge 1)\)</span> we “move” there and if it is not “advantageous,” we still might move there, but only with probability <span class="math">\(\alpha\)</span>. Since our decision to “move” to the candidate only depends on where the chain currently is, this is a Markov chain.</p>
+<h2>Example</h2>
+<p>In a particular industry, it is desired to know the growth <span class="math">\(\mu\)</span> of the companies. </p>
+<p>The data <span class="math">\(y\)</span> represent the percent change in total personnel from last year to this year for <span class="math">\(n=10\)</span> companies, <span class="math">\(y = (1.2, 1.4, -0.5, 0.3, 0.9, 2.3, 1.0, 0.1, 1.3, 1.9)\)</span>.</p>
+<p>Although the conjugate prior for <span class="math">\(\mu\)</span> would be a normal distribution, a t-distribution is assumed to better reflect the prior beliefs. As it is centered on <span class="math">\(0\)</span>, there is a <span class="math">\(50\%\)</span> chance of the growth being positive or negative.</p>
+<div class="math">$$\mu \sim t(0,1,1) \quad \rightarrow \quad \text{Prior Distribution}$$</div>
+<p>The likelihood is a normal distribution with known variance.</p>
+<div class="math">$$y_i | \mu \sim N(\mu,1), \; i=1,...,n \quad \rightarrow \quad \text{Likelihood Distribution}$$</div>
+<p>Because this model is not conjugate, the posterior distribution is not in a standard form from which can be easily sampled. To obtain posterior samples, a Markov chain whose stationary distribution is this posterior distribution is set up.</p>
+<div class="math">$$p(\mu | y_1, ..., y_n) \propto \prod_{i=1}^{n}[N(\mu,1)] \cdot t(0,1,1) $$</div>
+<div class="math">$$p(\mu | y_1, ..., y_n) \propto \prod_{i=1}^{n} \left [ \dfrac{1}{\sqrt{2\pi}}e^{-0.5(y_i-\mu)^2)} \right ] \cdot \dfrac{1}{\pi(1+\mu^2)} $$</div>
+<div class="math">$$p(\mu | y_1, ..., y_n) \propto \dfrac{e^{n(\bar{y}\mu-\mu^2/2)}}{1+\mu^2} \quad \rightarrow \quad \text{Posterior distribution}$$</div>
+<p>Because posterior distributions include likelihoods (the product of many numbers that are potentially small), <span class="math">\(g(\mu)\)</span> might evaluate to such a small number that are considered zero to the computer, causing a problem when evaluating the acceptance ratio. To avoid this problem, the log scale will be used:</p>
+<div class="math">$$log(p(\mu | y_1, ..., y_n)) \propto n(\bar{y}\mu-\mu^2/2) - log(1+\mu^2)$$</div>
+<p>The candidates will be drawn from a normal proposal distribution <span class="math">\(q(\mu) \sim N(\mu_i, 1)\)</span>. As <span class="math">\(q\)</span> is a symmetric distribution, <span class="math">\(\alpha = \dfrac{g(\mu)}{g(\mu_{i-1})}\)</span>, <span class="math">\(log(\alpha) = log \; g(\mu) - log \; g(\mu_{i-1})\)</span></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">prior_distribution</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">9</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">9</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">proposal_distribution</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">log_g</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">y_mean</span><span class="p">):</span>
+    <span class="k">return</span>  <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_mean</span> <span class="o">*</span> <span class="n">mu</span> <span class="o">-</span> <span class="n">mu</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">mu</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">])</span>
+</code></pre></div>
+
+
+<h2>Implementation</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">metropolis_hastings</span><span class="p">(</span><span class="n">initial_mu</span><span class="p">,</span> <span class="n">candidate_std</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">):</span>
+
+    <span class="n">current_mu</span> <span class="o">=</span> <span class="n">initial_mu</span>
+    <span class="n">current_value</span> <span class="o">=</span> <span class="n">log_g</span><span class="p">(</span><span class="n">current_mu</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">)</span>
+
+    <span class="n">num_acceptances</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">mu_chain</span> <span class="o">=</span> <span class="p">[]</span> 
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iterations</span><span class="p">):</span>
+        <span class="c1"># Draw candidate</span>
+        <span class="n">candidate_mu</span> <span class="o">=</span> <span class="n">proposal_distribution</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">current_mu</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">candidate_std</span><span class="p">)</span>
+        <span class="n">candidate_value</span> <span class="o">=</span> <span class="n">log_g</span><span class="p">(</span><span class="n">candidate_mu</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">)</span>
+
+        <span class="c1"># Calculate alpha</span>
+        <span class="n">log_alpha</span> <span class="o">=</span> <span class="n">candidate_value</span>  <span class="o">-</span> <span class="n">current_value</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_alpha</span><span class="p">)</span>
+
+        <span class="c1"># Accept or reject</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="p">:</span>
+            <span class="n">current_mu</span> <span class="o">=</span> <span class="n">candidate_mu</span>
+            <span class="n">num_acceptances</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">current_value</span> <span class="o">=</span> <span class="n">candidate_value</span>
+
+        <span class="c1"># Add to chain</span>
+        <span class="n">mu_chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_mu</span><span class="p">)</span>
+
+    <span class="n">acceptance_rate</span> <span class="o">=</span> <span class="n">num_acceptances</span><span class="o">/</span><span class="n">num_iterations</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mu_chain</span><span class="p">),</span> <span class="n">acceptance_rate</span>
+</code></pre></div>
+
+
+<h2>Posterior sampling with different STDs</h2>
+<div class="highlight"><pre><span></span><code><span class="n">candidate_stds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0005</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+<span class="n">initial_mu</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">num_iterations</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">data_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">data_mean</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">posterior_samples</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">candidate_std</span> <span class="ow">in</span> <span class="n">candidate_stds</span><span class="p">:</span>  
+    <span class="n">mu_chain</span><span class="p">,</span> <span class="n">acceptance_rate</span> <span class="o">=</span> <span class="n">metropolis_hastings</span><span class="p">(</span><span class="n">initial_mu</span><span class="p">,</span> <span class="n">candidate_std</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">,</span> <span class="n">data_size</span><span class="p">,</span> <span class="n">data_mean</span><span class="p">)</span>
+
+    <span class="n">posterior_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_chain</span><span class="p">)</span>    
+
+    <span class="n">pm</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">mu_chain</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;STD = </span><span class="si">{</span><span class="n">candidate_std</span><span class="si">}</span><span class="s1"> - Acceptance Rate: </span><span class="si">{</span><span class="n">acceptance_rate</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_1.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_2.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_3.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_4.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_5.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_6.png"></p>
+<p>The distribution generated with std <span class="math">\(= 1\)</span> and acceptance rate <span class="math">\(= 0.57\)</span> is chosen as the posterior distribution for <span class="math">\(\mu\)</span>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Data</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;rebeccapurple&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data Distribution&#39;</span><span class="p">)</span>
+
+<span class="c1"># Prior</span>
+<span class="n">x_prior</span><span class="p">,</span> <span class="n">y_prior</span> <span class="o">=</span> <span class="n">prior_distribution</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_prior</span><span class="p">,</span> <span class="n">y_prior</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;olivedrab&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Prior Distribution&#39;</span><span class="p">)</span>
+
+<span class="c1"># Posterior</span>
+<span class="n">burn_in</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">*</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">posterior</span> <span class="o">=</span> <span class="n">posterior_samples</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">burn_in</span><span class="p">:]</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">posterior</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkcyan&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Posterior Distribution&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Prior, Data, and Posterior Distributions&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_7.png"></p>
+<h1>References</h1>
+<p>Bayesian Statistics: Techniques and Models - University of California Santa Cruz - Coursera </p>
+<p>https://www.wikiwand.com/en/Metropolis%E2%80%93Hastings_algorithm</p>
+<p>https://www.wikiwand.com/en/Normalizing_constant</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+
+        <br><br><br>
+
+        <footer>
+          <div class="adjust-width">
+            <div id="author-block" class="w3-light-grey w3-border">
+              <div id="author-info">
+                <a href=""><img class="avatar" src="" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <div style="margin-left: 20px;">
+                  <a href=""><span id="author-name" class="w3-hover-text-dark-grey">Gastón Amengual</span></a>
+                  <p id="author-story"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br>
+
+          <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
+          <div id="share" class="share">
+            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/metropolis-hastings-algorithm.html&amp;t=Personal%20Website%3A%20Metropolis-Hastings%20Algorithm" target="_blank" class="w3-btn w3-indigo">
+              <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+            </a>
+            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/metropolis-hastings-algorithm.html&amp;text=Personal%20Website%3A%20Metropolis-Hastings%20Algorithm" target="_blank" class="w3-btn w3-blue">
+              <i class="fa fa-twitter"></i> <span>Twitter</span>
+            </a> -->
+          </div>
+
+          <br><br><br>
+
+
+
+        </footer>
+      </div>
+    </article>
+
+
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-small w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          2021          Gastón Amengual
+        </span>
+        <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="w3-btn w3-indigo">
+          <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/gastonamengual" target="_blank" class="w3-btn w3-black">
+          <i class="fa fa-github"></i> <span>Github</span>
+        </a>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-6KC62F9717', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>

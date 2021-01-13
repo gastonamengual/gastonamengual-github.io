@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Roulette Simulation: Statistical Analysis &ndash; Personal Website</title>
+
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Simulation" />
+    <meta property="article:published_time" content="2020-04-15" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Roulette Simulation: Statistical Analysis"/>
+    <meta property="og:description" content="."/>
+    <meta property="og:site_name" content="Personal Website" />
+    <meta property="og:url" content="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Roulette Simulation: Statistical Analysis">
+    <meta name="twitter:description" content=".">
+    <meta name="twitter:url" content="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html">
+
+    <!-- Feed -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
+
+    <!-- Icon -->
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
+  </head>
+
+  <body>
+    <div class="w3-row w3-card w3-white">
+      <header id="header">
+        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
+        <nav id="header-menu">
+          <ul>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+
+
+
+    <br><br><br>
+
+    <article>
+      <header class="w3-container col-main">
+        <h1>Roulette Simulation: Statistical Analysis</h1>
+        <div class="post-info">
+          <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
+            <span><time datetime="2020-04-15T00:00:00+02:00">Wed 15 April 2020</time> in <a href="https://gastonamengual.github.io/category/simulation.html" title="All articles in category Simulation">Simulation</a></span>
+          </div>
+        </div>
+      </header>
+
+      <br>
+
+
+      <div class="col-main w3-container">
+        <section id="content">
+          <h2><a href="https://gastonamengual.github.io/documents/roulette_simulation_statistical_analysis_paper.pdf">Read the paper here!</a></h2>
+<p><strong>Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;bmh&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mediumpurple&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">,</span> <span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;darkseagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;palevioletred&quot;</span><span class="p">])</span>
+</code></pre></div>
+
+
+<p>First, the roulette size and the analytical (henceforth <em>theoretical</em>) or population parameters are calculated.</p>
+<div class="highlight"><pre><span></span><code><span class="n">roulette_size</span> <span class="o">=</span> <span class="mi">37</span>
+
+<span class="n">theoretical_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">roulette_size</span><span class="p">))</span>
+<span class="n">theoretical_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">roulette_size</span><span class="p">))</span>
+<span class="n">theoretical_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">roulette_size</span><span class="p">))</span>
+<span class="n">theoretical_frequency</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">roulette_size</span>
+</code></pre></div>
+
+
+<h2>Roulette</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">roulette</span><span class="p">(</span><span class="n">throws</span><span class="p">):</span>
+
+    <span class="n">means</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">variances</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">stds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">frequencies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">numbers_thrown</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">number_of_frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">roulette_size</span><span class="p">)</span>
+    <span class="n">frequency_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">throws</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">number_thrown</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">roulette_size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">number_thrown</span> <span class="o">==</span> <span class="n">number_of_frequency</span><span class="p">:</span>
+            <span class="n">frequency_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">frequencies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frequency_count</span> <span class="o">/</span> <span class="n">i</span><span class="p">)</span>
+
+        <span class="n">numbers_thrown</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number_thrown</span><span class="p">)</span>
+
+        <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numbers_thrown</span><span class="p">))</span>
+        <span class="n">stds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">numbers_thrown</span><span class="p">))</span>
+        <span class="n">variances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">numbers_thrown</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">({</span><span class="s1">&#39;means&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">means</span><span class="p">),</span> 
+             <span class="s1">&#39;variances&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">variances</span><span class="p">),</span> 
+             <span class="s1">&#39;stds&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">stds</span><span class="p">),</span> 
+             <span class="s1">&#39;frequencies&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequencies</span><span class="p">)})</span>
+</code></pre></div>
+
+
+<h2>Simulation Runs</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># The experiment consists of 30 runs</span>
+<span class="n">runs</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c1"># Runs for 100 roulette throws</span>
+
+<span class="n">means_total_100</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">stds_total_100</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">variances_total_100</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">frequencies_total_100</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">runs</span><span class="p">)):</span>
+    <span class="n">statistics</span> <span class="o">=</span> <span class="n">roulette</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>    
+
+    <span class="n">means_total_100</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;means&#39;</span><span class="p">])</span>
+    <span class="n">stds_total_100</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;variances&#39;</span><span class="p">])</span>
+    <span class="n">variances_total_100</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;stds&#39;</span><span class="p">])</span>
+    <span class="n">frequencies_total_100</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;frequencies&#39;</span><span class="p">])</span>
+
+<span class="c1"># Runs for 15000 roulette throws</span>
+
+<span class="n">means_total_15000</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">stds_total_15000</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">variances_total_15000</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">frequencies_total_15000</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">runs</span><span class="p">)):</span>
+    <span class="n">statistics</span> <span class="o">=</span> <span class="n">roulette</span><span class="p">(</span><span class="mi">15000</span><span class="p">)</span>    
+
+    <span class="n">means_total_15000</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;means&#39;</span><span class="p">])</span>
+    <span class="n">stds_total_15000</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;variances&#39;</span><span class="p">])</span>
+    <span class="n">variances_total_15000</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;stds&#39;</span><span class="p">])</span>
+    <span class="n">frequencies_total_15000</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s1">&#39;frequencies&#39;</span><span class="p">])</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 30/30 [00:00&lt;00:00, 99.98it/s]</span>
+<span class="err">100%|██████████| 30/30 [11:32&lt;00:00, 23.09s/it]</span>
+</code></pre></div>
+
+
+<h2>Visualization</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">throws_visualization</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="n">ylims</span><span class="p">,</span> <span class="n">num_throws</span><span class="p">,</span> <span class="n">linewidth</span><span class="p">):</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>    
+
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">estimation</span><span class="p">,</span> <span class="n">y_label</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ylim</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">statistics</span><span class="p">,</span> <span class="n">estimations</span><span class="p">,</span> <span class="n">y_labels</span><span class="p">,</span> <span class="n">titles</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">ylims</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">statistic</span><span class="p">)):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">statistic</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">estimation</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#363434&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Throws&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">num_throws</span><span class="si">}</span><span class="s1"> Roulette Throws&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;runs_</span><span class="si">{</span><span class="n">num_throws</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">estimations</span> <span class="o">=</span> <span class="p">[</span><span class="n">theoretical_mean</span><span class="p">,</span> <span class="n">theoretical_var</span><span class="p">,</span> <span class="n">theoretical_std</span><span class="p">,</span> <span class="n">theoretical_frequency</span><span class="p">]</span>
+<span class="n">y_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mean&#39;</span><span class="p">,</span> <span class="s1">&#39;Variance&#39;</span><span class="p">,</span> <span class="s1">&#39;STD&#39;</span><span class="p">,</span> <span class="s1">&#39;Relative Frequency&#39;</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Population Mean&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Variance&#39;</span><span class="p">,</span> <span class="s1">&#39;Population STD&#39;</span><span class="p">,</span> <span class="s1">&#39;Population Relative Frequency&#39;</span><span class="p">]</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Sample Mean&#39;</span><span class="p">,</span> <span class="s1">&#39;Sample Variance&#39;</span><span class="p">,</span> <span class="s1">&#39;Sample STD&#39;</span><span class="p">,</span> <span class="s1">&#39;Sample Relative Frequency&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="c1"># 100 throws</span>
+<span class="n">statistics_100</span> <span class="o">=</span> <span class="p">[</span><span class="n">means_total_100</span><span class="p">,</span> <span class="n">stds_total_100</span><span class="p">,</span> <span class="n">variances_total_100</span><span class="p">,</span> <span class="n">frequencies_total_100</span><span class="p">]</span>
+<span class="n">ylims_100</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="mi">35</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">200</span><span class="p">],</span> <span class="p">[</span><span class="mf">7.5</span><span class="p">,</span><span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]]</span>
+<span class="n">throws_visualization</span><span class="p">(</span><span class="n">statistics_100</span><span class="p">,</span> <span class="n">ylims_100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="png" src="roulette_simulation_statistical_analysis_1.png"></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 15000 throws</span>
+<span class="n">statistics_15000</span> <span class="o">=</span> <span class="p">[</span><span class="n">means_total_15000</span><span class="p">,</span> <span class="n">stds_total_15000</span><span class="p">,</span> <span class="n">variances_total_15000</span><span class="p">,</span> <span class="n">frequencies_total_15000</span><span class="p">]</span>
+<span class="n">ylims_15000</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">17</span><span class="p">,</span><span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">110</span><span class="p">,</span><span class="mi">125</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.5</span><span class="p">,</span><span class="mf">11.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">]]</span>
+<span class="n">throws_visualization</span><span class="p">(</span><span class="n">statistics_15000</span><span class="p">,</span> <span class="n">ylims_15000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="png" src="roulette_simulation_statistical_analysis_2.png"></p>
+        </section>
+
+        <br><br><br>
+
+        <footer>
+          <div class="adjust-width">
+            <div id="author-block" class="w3-light-grey w3-border">
+              <div id="author-info">
+                <a href=""><img class="avatar" src="" onerror="this.src='theme/images/avatar.png'" alt="Avatar"></a>
+                <div style="margin-left: 20px;">
+                  <a href=""><span id="author-name" class="w3-hover-text-dark-grey">Gastón Amengual</span></a>
+                  <p id="author-story"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br><br><br>
+
+          <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
+          <div id="share" class="share">
+            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/roulette-simulation-statistical-analysis.html&amp;t=Personal%20Website%3A%20Roulette%20Simulation%3A%20Statistical%20Analysis" target="_blank" class="w3-btn w3-indigo">
+              <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+            </a>
+            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/roulette-simulation-statistical-analysis.html&amp;text=Personal%20Website%3A%20Roulette%20Simulation%3A%20Statistical%20Analysis" target="_blank" class="w3-btn w3-blue">
+              <i class="fa fa-twitter"></i> <span>Twitter</span>
+            </a> -->
+          </div>
+
+          <br><br><br>
+
+
+
+        </footer>
+      </div>
+    </article>
+
+
+    <footer id="footer">
+      <div id="footer-copyright" class="w3-center w3-small w3-text-grey w3-padding-48">
+        <span>
+          &copy;
+          2021          Gastón Amengual
+        </span>
+        <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="w3-btn w3-indigo">
+          <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/gastonamengual" target="_blank" class="w3-btn w3-black">
+          <i class="fa fa-github"></i> <span>Github</span>
+        </a>
+      </div>
+    </footer>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-6KC62F9717', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+</html>
