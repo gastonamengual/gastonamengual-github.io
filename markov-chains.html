@@ -18,38 +18,38 @@
     <meta property="og:title" content="Markov Chains"/>
     <meta property="og:description" content="."/>
     <meta property="og:site_name" content="Personal Website" />
-    <meta property="og:url" content="./markov-chains.html"/>
+    <meta property="og:url" content="https://gastonamengual.github.io/markov-chains.html"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Markov Chains">
     <meta name="twitter:description" content=".">
-    <meta name="twitter:url" content="./markov-chains.html">
+    <meta name="twitter:url" content="https://gastonamengual.github.io/markov-chains.html">
 
     <!-- Feed -->
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
-    <link rel="stylesheet" type="text/css" href="./theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/jqcloud.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/pygments-highlight-github.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
 
     <!-- Icon -->
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="./theme/js/jqcloud.min.js"></script>
+    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
   </head>
 
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="." id="header-logo" title="Home">GA</a>
+        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
         <nav id="header-menu">
           <ul>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./">About</a></li>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
             <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
@@ -65,7 +65,7 @@
         <h1>Markov Chains</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2020-09-07T00:00:00+02:00">Mon 07 September 2020</time> in <a href="./category/bayesian-statistics.html" title="All articles in category Bayesian Statistics">Bayesian Statistics</a></span>
+            <span><time datetime="2020-09-07T00:00:00+02:00">Mon 07 September 2020</time> in <a href="https://gastonamengual.github.io/category/bayesian-statistics.html" title="All articles in category Bayesian Statistics">Bayesian Statistics</a></span>
           </div>
         </div>
       </header>
@@ -91,13 +91,13 @@
 
 <h2>Definition</h2>
 <p>A Markov chain is a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event. A countably infinite sequence, in which the chain moves state at discrete time steps, gives a discrete-time Markov chain (DTMC). A continuous-time process is called a continuous-time Markov chain (CTMC). It is named after the Russian mathematician Andrey Markov.</p>
-<p>Given a sequence of random variables <span class="math">\(X_1, X_2, …, X_n\)</span> where the indices <span class="math">\(1, 2, …, n\)</span> represent successive points in time, the chain rule of probability can be used to calculate the probability of the entire sequence:</p>
-<p><span class="math">\(p(X_1,X_2,…X_n) = p(X_1) \cdot p(X_2|X_1) \cdot p(X_3|X_2,X_1) \cdot … \cdot p(X_n|X_{n−1}, X_{n−2}, …, X_2, X_1)\)</span>.</p>
+<p>Given a sequence of random variables $X_1, X_2, …, X_n$ where the indices $1, 2, …, n$ represent successive points in time, the chain rule of probability can be used to calculate the probability of the entire sequence:</p>
+<p>$p(X_1,X_2,…X_n) = p(X_1) \cdot p(X_2|X_1) \cdot p(X_3|X_2,X_1) \cdot … \cdot p(X_n|X_{n−1}, X_{n−2}, …, X_2, X_1)$.</p>
 <p>Markov chains simplify this expression by using the Markov assumption: given the entire past history, the probability distribution for the random variable at the next time step only depends on the current variable. Mathematically, the assumption is written like this:</p>
-<p><span class="math">\(p(X_{t+1} | X_t, X_{t−1}, …, X_2, X_1) = p(X_{t+1} | X_t)\)</span></p>
-<p>for all <span class="math">\(t = 2, …, n\)</span>. Under this assumption, the first expression can be written as</p>
-<p><span class="math">\(p(X_1, X_2, …, X_n) = p(X_1) \cdot p(X_2|X_1) \cdot p(X_3|X_2) \cdot (X_4|X_3) \cdot … \cdot p(X_n|X_{n−1})\)</span>,</p>
-<p>which is much simpler than the original. It consists of an initial distribution for the first variable, p(X_1), and <span class="math">\(n−1\)</span> transition probabilities. One more assumption is generally made: the transition probabilities do not change with time. Hence, the transition from time <span class="math">\(t\)</span> to time <span class="math">\(t+1\)</span> depends only on the value of <span class="math">\(X_t\)</span>.</p>
+<p>$p(X_{t+1} | X_t, X_{t−1}, …, X_2, X_1) = p(X_{t+1} | X_t)$</p>
+<p>for all $t = 2, …, n$. Under this assumption, the first expression can be written as</p>
+<p>$p(X_1, X_2, …, X_n) = p(X_1) \cdot p(X_2|X_1) \cdot p(X_3|X_2) \cdot (X_4|X_3) \cdot … \cdot p(X_n|X_{n−1})$,</p>
+<p>which is much simpler than the original. It consists of an initial distribution for the first variable, p(X_1), and $n−1$ transition probabilities. One more assumption is generally made: the transition probabilities do not change with time. Hence, the transition from time $t$ to time $t+1$ depends only on the value of $X_t$.</p>
 <h2>Examples</h2>
 <h3>Discrete Markov Chain</h3>
 <p>Suppose an initial integer secret number between 1 and 5. For each time step, your secret number will change according to the following rules:</p>
@@ -141,11 +141,11 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="./images/markov_chains_1.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/markov_chains_1.png"></p>
 <p>This is an example of a discrete Markov chain, where the possible values of the random variables come from a discrete set. Those possible values (secret numbers in this example) are called states of the chain. </p>
 <h2>State-transition Matrix</h2>
 <p>In the discrete example, if it is assumed that transition probabilities do not change with time, then there are a total of 25 (52) potential transition probabilities (from State 1 to State 2, State 1 to State 3, and so forth), which can be arranged into a matrix Q.</p>
-<p>The transition matrix is especially useful to find the probabilities associated with multiple steps of the chain. For example, <span class="math">\(p(X_{t+2} = 3 ∣ X_t = 1)\)</span>, the probability of the secret number being 3 two steps from now, given that it is currently 1. This can be calculated as <span class="math">\(\sum_{k=1}^{5} p(X_{t+2} = 3 ∣ X_{t+1} = k) \cdot p(X_{t+1}= k ∣ X_t = 1)\)</span>, the first row and third column of <span class="math">\(Q^2\)</span>.</p>
+<p>The transition matrix is especially useful to find the probabilities associated with multiple steps of the chain. For example, $p(X_{t+2} = 3 ∣ X_t = 1)$, the probability of the secret number being 3 two steps from now, given that it is currently 1. This can be calculated as $\sum_{k=1}^{5} p(X_{t+2} = 3 ∣ X_{t+1} = k) \cdot p(X_{t+1}= k ∣ X_t = 1)$, the first row and third column of $Q^2$.</p>
 <div class="highlight"><pre><span></span><code><span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
                <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
                <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
@@ -233,72 +233,10 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="./images/markov_chains_2.png"></p>
-<p><img alt="image alt text" src="./images/markov_chains_3.png"></p>
-<p>The theoretical stationary distribution for this chain is normal with mean 0 and variance <span class="math">\(\dfrac{1}{1−ϕ^2} = 1.562\)</span>. Let’s look at a histogram of our chain and compare that with the theoretical stationary distribution.</p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/markov_chains_2.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/markov_chains_3.png"></p>
+<p>The theoretical stationary distribution for this chain is normal with mean 0 and variance $\dfrac{1}{1−ϕ^2} = 1.562$. Let’s look at a histogram of our chain and compare that with the theoretical stationary distribution.</p>
 <p>The chain has reached the stationary distribution. Therefore, this simulation can be treated from the chain like a Monte Carlo sample from the stationary distribution, a normal with mean 0 and variance 1.562.</p>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
         </section>
 
         <br><br><br>
@@ -320,10 +258,10 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
           <div id="share" class="share">
-            <a href="https://www.linkedin.com/sharer.php?u=./markov-chains.html&amp;t=Personal%20Website%3A%20Markov%20Chains" target="_blank" class="w3-btn w3-indigo">
+            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/markov-chains.html&amp;t=Personal%20Website%3A%20Markov%20Chains" target="_blank" class="w3-btn w3-indigo">
               <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
             </a>
-            <!-- <a href="https://twitter.com/share?url=./markov-chains.html&amp;text=Personal%20Website%3A%20Markov%20Chains" target="_blank" class="w3-btn w3-blue">
+            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/markov-chains.html&amp;text=Personal%20Website%3A%20Markov%20Chains" target="_blank" class="w3-btn w3-blue">
               <i class="fa fa-twitter"></i> <span>Twitter</span>
             </a> -->
           </div>
@@ -346,7 +284,15 @@
       </div>
     </footer>
 
-
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-6KC62F9717', 'auto');
+      ga('send', 'pageview');
+    </script>
 
   </body>
 </html>

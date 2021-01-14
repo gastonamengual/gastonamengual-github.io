@@ -18,38 +18,38 @@
     <meta property="og:title" content="Gradient Descent"/>
     <meta property="og:description" content="Explanation and implementation of Gradient Descent. Application on benchmark functions. Evaluation with RMSE."/>
     <meta property="og:site_name" content="Personal Website" />
-    <meta property="og:url" content="./gradient-descent.html"/>
+    <meta property="og:url" content="https://gastonamengual.github.io/gradient-descent.html"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Gradient Descent">
     <meta name="twitter:description" content="Explanation and implementation of Gradient Descent. Application on benchmark functions. Evaluation with RMSE.">
-    <meta name="twitter:url" content="./gradient-descent.html">
+    <meta name="twitter:url" content="https://gastonamengual.github.io/gradient-descent.html">
 
     <!-- Feed -->
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
-    <link rel="stylesheet" type="text/css" href="./theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/jqcloud.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/pygments-highlight-github.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
 
     <!-- Icon -->
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="./theme/js/jqcloud.min.js"></script>
+    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
   </head>
 
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="." id="header-logo" title="Home">GA</a>
+        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
         <nav id="header-menu">
           <ul>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./">About</a></li>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
             <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
@@ -65,7 +65,7 @@
         <h1>Gradient Descent</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2020-12-29T00:00:00+01:00">Tue 29 December 2020</time> in <a href="./category/optimization.html" title="All articles in category Optimization">Optimization</a></span>
+            <span><time datetime="2020-12-29T00:00:00+01:00">Tue 29 December 2020</time> in <a href="https://gastonamengual.github.io/category/optimization.html" title="All articles in category Optimization">Optimization</a></span>
           </div>
         </div>
       </header>
@@ -97,10 +97,10 @@
 
 <h1>Definition</h1>
 <p>Gradient descent is a first-order iterative optimization algorithm for finding a local minimum of a differentiable function.</p>
-<p>It is based on the observation that if the multivariate function <span class="math">\(F(X)\)</span> is defined and differentiable in a neighborhood of a point <span class="math">\(a\)</span>, then <span class="math">\(F(X)\)</span> decreases fastest if one goes from <span class="math">\(a\)</span> in the direction of the negative gradient of <span class="math">\(F\)</span> at <span class="math">\(a\)</span>, <span class="math">\(- \nabla F(a)\)</span>. It follows that if <span class="math">\(a_{n+1} = a_n - \gamma \nabla F(a_n)\)</span> for <span class="math">\(\gamma \in \mathbb{R}^2\)</span> small enough, then <span class="math">\(F(a_n) \geq F(a_{n+1})\)</span>.</p>
-<p><span class="math">\(\gamma \nabla F(a)\)</span> is subtracted from <span class="math">\(a\)</span> because it is sought to move against the gradient toward the local minimum. An initial guess x_0 is made for a local minimum of <span class="math">\(F\)</span>, and the sequence <span class="math">\(x_0, x_1, x_2, \dotsc\)</span> is considered such that</p>
-<div class="math">$$x_{n+1} = x_n - \gamma_n \nabla F(x_n), \; n \geq 0$$</div>
-<p>The monotonic sequence <span class="math">\(F(x_0) \geq F(x_1) \geq F(x_2) \geq \dotsc\)</span> may converge to the desired local minimum.</p>
+<p>It is based on the observation that if the multivariate function $F(X)$ is defined and differentiable in a neighborhood of a point $a$, then $F(X)$ decreases fastest if one goes from $a$ in the direction of the negative gradient of $F$ at $a$, $- \nabla F(a)$. It follows that if $a_{n+1} = a_n - \gamma \nabla F(a_n)$ for $\gamma \in \mathbb{R}^2$ small enough, then $F(a_n) \geq F(a_{n+1})$.</p>
+<p>$\gamma \nabla F(a)$ is subtracted from $a$ because it is sought to move against the gradient toward the local minimum. An initial guess x_0 is made for a local minimum of $F$, and the sequence $x_0, x_1, x_2, \dotsc$ is considered such that</p>
+<p>$$x_{n+1} = x_n - \gamma_n \nabla F(x_n), \; n \geq 0$$</p>
+<p>The monotonic sequence $F(x_0) \geq F(x_1) \geq F(x_2) \geq \dotsc$ may converge to the desired local minimum.</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">gradient_descent</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">initial</span>
     <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
@@ -290,71 +290,9 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="./images/gradient_descent.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/gradient_descent.png"></p>
 <h1>References</h1>
 <p>https://www.wikiwand.com/en/Gradient_descent</p>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
         </section>
 
         <br><br><br>
@@ -376,10 +314,10 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
           <div id="share" class="share">
-            <a href="https://www.linkedin.com/sharer.php?u=./gradient-descent.html&amp;t=Personal%20Website%3A%20Gradient%20Descent" target="_blank" class="w3-btn w3-indigo">
+            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/gradient-descent.html&amp;t=Personal%20Website%3A%20Gradient%20Descent" target="_blank" class="w3-btn w3-indigo">
               <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
             </a>
-            <!-- <a href="https://twitter.com/share?url=./gradient-descent.html&amp;text=Personal%20Website%3A%20Gradient%20Descent" target="_blank" class="w3-btn w3-blue">
+            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/gradient-descent.html&amp;text=Personal%20Website%3A%20Gradient%20Descent" target="_blank" class="w3-btn w3-blue">
               <i class="fa fa-twitter"></i> <span>Twitter</span>
             </a> -->
           </div>
@@ -402,7 +340,15 @@
       </div>
     </footer>
 
-
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-6KC62F9717', 'auto');
+      ga('send', 'pageview');
+    </script>
 
   </body>
 </html>

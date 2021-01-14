@@ -18,38 +18,38 @@
     <meta property="og:title" content="Mandelbrot Set"/>
     <meta property="og:description" content="From-scratch implementation of the Mandelbrot Set."/>
     <meta property="og:site_name" content="Personal Website" />
-    <meta property="og:url" content="./mandelbrot-set.html"/>
+    <meta property="og:url" content="https://gastonamengual.github.io/mandelbrot-set.html"/>
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Mandelbrot Set">
     <meta name="twitter:description" content="From-scratch implementation of the Mandelbrot Set.">
-    <meta name="twitter:url" content="./mandelbrot-set.html">
+    <meta name="twitter:url" content="https://gastonamengual.github.io/mandelbrot-set.html">
 
     <!-- Feed -->
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:regular,bold">
-    <link rel="stylesheet" type="text/css" href="./theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/jqcloud.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="./theme/css/pygments-highlight-github.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/jqcloud.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/pygments-highlight-github.css">
 
     <!-- Icon -->
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="./theme/js/jqcloud.min.js"></script>
+    <script src="https://gastonamengual.github.io/theme/js/jqcloud.min.js"></script>
   </head>
 
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="." id="header-logo" title="Home">GA</a>
+        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
         <nav id="header-menu">
           <ul>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./">About</a></li>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="./pages/portfolio.html">Portfolio</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
             <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
@@ -65,7 +65,7 @@
         <h1>Mandelbrot Set</h1>
         <div class="post-info">
           <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-            <span><time datetime="2020-09-14T00:00:00+02:00">Mon 14 September 2020</time> in <a href="./category/miscellanea.html" title="All articles in category Miscellanea">Miscellanea</a></span>
+            <span><time datetime="2020-09-14T00:00:00+02:00">Mon 14 September 2020</time> in <a href="https://gastonamengual.github.io/category/miscellanea.html" title="All articles in category Miscellanea">Miscellanea</a></span>
           </div>
         </div>
       </header>
@@ -80,8 +80,8 @@
 </code></pre></div>
 
 
-<p>The Mandelbrot set is the set of complex numbers <span class="math">\(c\)</span> for which the function <span class="math">\(F(z) = z^2 + c\)</span> does not diverge when iterated from <span class="math">\(z = 0\)</span>.</p>
-<p><span class="math">\(c = a + bi\)</span>, where <span class="math">\(a\)</span> is the real part and <span class="math">\(b\)</span> is the imaginary part.</p>
+<p>The Mandelbrot set is the set of complex numbers $c$ for which the function $F(z) = z^2 + c$ does not diverge when iterated from $z = 0$.</p>
+<p>$c = a + bi$, where $a$ is the real part and $b$ is the imaginary part.</p>
 <p>A point (x,y) will belong to the Mandelbrot Set if and only if the modulus or absolute value of c is never larger than 2, no matter the number of iterations.</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">mandelbrot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">im</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">):</span>
     <span class="n">c</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">im</span><span class="p">)</span>
@@ -118,69 +118,7 @@
 </code></pre></div>
 
 
-<p><img alt="image alt text" src="./images/mandelbrot_set.png"></p>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/mandelbrot_set.png"></p>
         </section>
 
         <br><br><br>
@@ -202,10 +140,10 @@
 
           <p style="font-size:10pt; font-style: italic;">Did you like this article? Share it in LinkedIn!</p>
           <div id="share" class="share">
-            <a href="https://www.linkedin.com/sharer.php?u=./mandelbrot-set.html&amp;t=Personal%20Website%3A%20Mandelbrot%20Set" target="_blank" class="w3-btn w3-indigo">
+            <a href="https://www.linkedin.com/sharer.php?u=https%3A//gastonamengual.github.io/mandelbrot-set.html&amp;t=Personal%20Website%3A%20Mandelbrot%20Set" target="_blank" class="w3-btn w3-indigo">
               <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
             </a>
-            <!-- <a href="https://twitter.com/share?url=./mandelbrot-set.html&amp;text=Personal%20Website%3A%20Mandelbrot%20Set" target="_blank" class="w3-btn w3-blue">
+            <!-- <a href="https://twitter.com/share?url=https%3A//gastonamengual.github.io/mandelbrot-set.html&amp;text=Personal%20Website%3A%20Mandelbrot%20Set" target="_blank" class="w3-btn w3-blue">
               <i class="fa fa-twitter"></i> <span>Twitter</span>
             </a> -->
           </div>
@@ -228,7 +166,15 @@
       </div>
     </footer>
 
-
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-6KC62F9717', 'auto');
+      ga('send', 'pageview');
+    </script>
 
   </body>
 </html>
