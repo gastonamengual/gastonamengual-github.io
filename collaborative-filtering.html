@@ -108,7 +108,7 @@
 <li>Sparsity: The number of items sold on major e-commerce sites is extremely large. The most active users will only have rated a small subset of the overall database. Thus, even the most popular items have very few ratings.</li>
 </ul>
 <p>In the <strong>model-based approach approach</strong>, models are developed using different data mining, machine learning algorithms to predict an user's rating of unrated items, and they involve a step to reduce or compress the large but sparse (matrix in which most of the cells are empty) user-item matrix. If the matrix is mostly empty, reducing dimensions can improve the performance of the algorithm in terms of both space and time.</p>
-<p>A matrix with dimensions $m \times n$ can be reduced to a product of two matrices $U$ and $V$ with dimensions $m \times p$ and $p \times n$, respectively. The reduced matrices represent the users and items individually. The rows in the first matrix represent the users, and the columns, the features or characteristics of the users. The same applies for the item matrix. These rows or columns are called <strong>latent factors</strong> and are an indication of hidden characteristics about the users or the items. The number of latent factors affects affects the recommendations in a manner where the greater the number of factors, the more personalized the recommendations become, but too many factors can lead to overfitting in the model. This number must be optimized during the training of the model. </p>
+<p>A matrix with dimensions <span class="math">\(m \times n\)</span> can be reduced to a product of two matrices <span class="math">\(U\)</span> and <span class="math">\(V\)</span> with dimensions <span class="math">\(m \times p\)</span> and <span class="math">\(p \times n\)</span>, respectively. The reduced matrices represent the users and items individually. The rows in the first matrix represent the users, and the columns, the features or characteristics of the users. The same applies for the item matrix. These rows or columns are called <strong>latent factors</strong> and are an indication of hidden characteristics about the users or the items. The number of latent factors affects affects the recommendations in a manner where the greater the number of factors, the more personalized the recommendations become, but too many factors can lead to overfitting in the model. This number must be optimized during the training of the model. </p>
 <p>For matrix decomposition an approximation of <strong>Singular Value Decomposition (SVD)</strong> will be used, using stochastic mini-batch gradient descent. The model will be trained using 5-fold cross-validation.</p>
 <div class="highlight"><pre><span></span><code><span class="n">movie_lens</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Gastón\Office\Data Science\_Datasets\movie_lens_100k_data.csv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
@@ -152,7 +152,7 @@
 
 
 <h2>Build Minimal Train and Test Data Sets</h2>
-<p>It is sought that at least one user-movie pair is in the data sets, such that there is at most N unique users and M unique movies. It is also checked if an $n \times m$ test data set can be built. </p>
+<p>It is sought that at least one user-movie pair is in the data sets, such that there is at most N unique users and M unique movies. It is also checked if an <span class="math">\(n \times m\)</span> test data set can be built. </p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Extracted from: https://stackoverflow.com/a/44115314/7690767</span>
 <span class="n">train_unique_user_rows</span> <span class="o">=</span> <span class="n">movie_lens</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">))</span>
 
@@ -306,27 +306,27 @@
 
 <h1>Stochastic Mini-Batch Gradient Descent with L2 Regularization</h1>
 <h2>SVD Approximation with Gradient Descent</h2>
-<p>According to SVD, $X = U \Sigma V$. Assuming $\Sigma$ merges into $U$ or $V^T$, the matrix factorization becomes $X = U V^T$.</p>
-<p>Let $r_{ui}$ be the rating of user $u$ for item $i$. Because of the way a matrix product is defined, the value of $r_{ui}$ is the result of a dot product between two vectors: a vector $p_u$, which is a row of $U$ and is specific to the user $u$, and a vector $q_i$, which is a column of $V^T$ and is specific to the item $i$:</p>
-<p>$$\begin{pmatrix} &amp;  &amp; \ &amp; r_{ui} &amp; \ &amp;  &amp; \end{pmatrix} = \begin{pmatrix} . \ \cdots p_u \cdots \ . \end{pmatrix} \begin{pmatrix} &amp; \vdots  &amp; \ . &amp; q_i &amp; . \  &amp; \vdots &amp; \end{pmatrix}$$</p>
-<p>$$r_{ui} = p_u \cdot q_i$$</p>
-<p>The vector $p_u$ and $q_i$ represent the affinity of user $u$ and item $i$ for each of the latent factors in $U$ and $V^T$, respectively.</p>
-<p>When a matrix $X$ has missing entries, the SVD of $X$ is not defined, the matrices $XX^T$ and $X^TX$ do not exist, so their eigenvectors do not exist either, and $X$ cannot be factorized as $U \Sigma V^T$. A simple solution is to fill the missing entries of $X$ with some heuristic value, like the mean of the columns of rows. However, the results are usually highly biased, and it is importante to note that the missing values are feedback that the user did not give, and therefore should not be considered negative or null rating. Luckily, computing the eigenvectors of $XX^T$ and $X^TX$ is not the only way of computing the SVD of $X$. The matrices $U$ and $V^T$ can be found if the vectors $p_u$ and $q_i$ ($p_u$ make up the rows of $U$ and $q_i$ make up the columns of $V^T$) are found such that:</p>
+<p>According to SVD, <span class="math">\(X = U \Sigma V\)</span>. Assuming <span class="math">\(\Sigma\)</span> merges into <span class="math">\(U\)</span> or <span class="math">\(V^T\)</span>, the matrix factorization becomes <span class="math">\(X = U V^T\)</span>.</p>
+<p>Let <span class="math">\(r_{ui}\)</span> be the rating of user <span class="math">\(u\)</span> for item <span class="math">\(i\)</span>. Because of the way a matrix product is defined, the value of <span class="math">\(r_{ui}\)</span> is the result of a dot product between two vectors: a vector <span class="math">\(p_u\)</span>, which is a row of <span class="math">\(U\)</span> and is specific to the user <span class="math">\(u\)</span>, and a vector <span class="math">\(q_i\)</span>, which is a column of <span class="math">\(V^T\)</span> and is specific to the item <span class="math">\(i\)</span>:</p>
+<div class="math">$$\begin{pmatrix} &amp;  &amp; \\ &amp; r_{ui} &amp; \\ &amp;  &amp; \end{pmatrix} = \begin{pmatrix} . \\ \cdots p_u \cdots \\ . \end{pmatrix} \begin{pmatrix} &amp; \vdots  &amp; \\ . &amp; q_i &amp; . \\  &amp; \vdots &amp; \end{pmatrix}$$</div>
+<div class="math">$$r_{ui} = p_u \cdot q_i$$</div>
+<p>The vector <span class="math">\(p_u\)</span> and <span class="math">\(q_i\)</span> represent the affinity of user <span class="math">\(u\)</span> and item <span class="math">\(i\)</span> for each of the latent factors in <span class="math">\(U\)</span> and <span class="math">\(V^T\)</span>, respectively.</p>
+<p>When a matrix <span class="math">\(X\)</span> has missing entries, the SVD of <span class="math">\(X\)</span> is not defined, the matrices <span class="math">\(XX^T\)</span> and <span class="math">\(X^TX\)</span> do not exist, so their eigenvectors do not exist either, and <span class="math">\(X\)</span> cannot be factorized as <span class="math">\(U \Sigma V^T\)</span>. A simple solution is to fill the missing entries of <span class="math">\(X\)</span> with some heuristic value, like the mean of the columns of rows. However, the results are usually highly biased, and it is importante to note that the missing values are feedback that the user did not give, and therefore should not be considered negative or null rating. Luckily, computing the eigenvectors of <span class="math">\(XX^T\)</span> and <span class="math">\(X^TX\)</span> is not the only way of computing the SVD of <span class="math">\(X\)</span>. The matrices <span class="math">\(U\)</span> and <span class="math">\(V^T\)</span> can be found if the vectors <span class="math">\(p_u\)</span> and <span class="math">\(q_i\)</span> (<span class="math">\(p_u\)</span> make up the rows of <span class="math">\(U\)</span> and <span class="math">\(q_i\)</span> make up the columns of <span class="math">\(V^T\)</span>) are found such that:</p>
 <ul>
-<li>$r_{ui} = p_u \cdot q_i \quad \forall \; u,i$</li>
-<li>All the vectors $p_u$ are mutually orthogonal, as well as the vectors $q_i$</li>
+<li><span class="math">\(r_{ui} = p_u \cdot q_i \quad \forall \; u,i\)</span></li>
+<li>All the vectors <span class="math">\(p_u\)</span> are mutually orthogonal, as well as the vectors <span class="math">\(q_i\)</span></li>
 </ul>
-<p>It is sought to match as well as possible the values $r_{ui}$ with what they are supposed to be, $p_u \cdot q_i$, making the error minimal:</p>
-<p>$\min_{p_u, q_i \ p_u \perp p_v \ q_i \perp q_j} \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2$</p>
-<p>As $X$ is incomplete, the missing entries are ignored, as well as the orthogonality constraints, resulting in the following optimization problem, proposed by Simon Funk:</p>
-<p>$\min_{p_u, q_i}\sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2.$</p>
-<p>As this optimization problem is not convex, it will be very difficult to find the values of the vectors $p_u$ and $q_i$ that make this sum minimal, and the optimal solution may not even be unique. Therefore, Gradient Descent is used. The function to be minimized is then:</p>
-<p>$f(p_<em>, q_</em>) = \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2 =\sum_{r_{ui} \in X} f_{ui}(p_u, q_i)$</p>
+<p>It is sought to match as well as possible the values <span class="math">\(r_{ui}\)</span> with what they are supposed to be, <span class="math">\(p_u \cdot q_i\)</span>, making the error minimal:</p>
+<p><span class="math">\(\min_{p_u, q_i \\ p_u \perp p_v \\ q_i \perp q_j} \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2\)</span></p>
+<p>As <span class="math">\(X\)</span> is incomplete, the missing entries are ignored, as well as the orthogonality constraints, resulting in the following optimization problem, proposed by Simon Funk:</p>
+<p><span class="math">\(\min_{p_u, q_i}\sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2.\)</span></p>
+<p>As this optimization problem is not convex, it will be very difficult to find the values of the vectors <span class="math">\(p_u\)</span> and <span class="math">\(q_i\)</span> that make this sum minimal, and the optimal solution may not even be unique. Therefore, Gradient Descent is used. The function to be minimized is then:</p>
+<p><span class="math">\(f(p_*, q_*) = \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2 =\sum_{r_{ui} \in X} f_{ui}(p_u, q_i)\)</span></p>
 <p>with its both partial derivatives being:</p>
-<p>$\frac{\partial f_{ui}}{\partial p_u} = - 2 q_i (r_{ui} - p_u \cdot q_i)$</p>
-<p>$\frac{\partial f_{ui}}{\partial q_i} = - 2 p_u (r_{ui} - p_u \cdot q_i)$</p>
+<p><span class="math">\(\frac{\partial f_{ui}}{\partial p_u} = - 2 q_i (r_{ui} - p_u \cdot q_i)\)</span></p>
+<p><span class="math">\(\frac{\partial f_{ui}}{\partial q_i} = - 2 p_u (r_{ui} - p_u \cdot q_i)\)</span></p>
 <p><strong>L2 regularization</strong></p>
-<p>$\underset{w}{\min} f(w) + \lambda ||w||_2^2$</p>
+<p><span class="math">\(\underset{w}{\min} f(w) + \lambda ||w||_2^2\)</span></p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">l2_regularized_mini_batch_stochastic_gradient_descent</span><span class="p">(</span><span class="n">X_</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
 
     <span class="c1"># Pandas DataFrame to NumPy</span>
@@ -756,6 +756,68 @@
 <h1>References</h1>
 <p>https://www.wikiwand.com/en/Collaborative_filtering</p>
 <p>https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
         </section>
 
         <br><hr>

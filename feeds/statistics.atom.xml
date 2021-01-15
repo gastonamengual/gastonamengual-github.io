@@ -30,14 +30,14 @@
 
 &lt;h1&gt;1 Covariance&lt;/h1&gt;
 &lt;p&gt;The covariance is defined as the average of the product between the values from each sample where the values haven been centered, i.e., had their mean subtracted.&lt;/p&gt;
-&lt;p&gt;$$\text{cov}(X,Y) = \dfrac{\sum (x-\bar{x})(y-\bar{y})}{n - 1}$$&lt;/p&gt;
+&lt;div class="math"&gt;$$\text{cov}(X,Y) = \dfrac{\sum (x-\bar{x})(y-\bar{y})}{n - 1}$$&lt;/div&gt;
 &lt;p&gt;Whereas the magnitude of the covariance is not easily interpreted, the sign of the covariance can be interpreted as:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Positive: the two variables change in the same direction.&lt;/li&gt;
 &lt;li&gt;Negative: the two variables change in different directions.&lt;/li&gt;
 &lt;li&gt;Zero: both variables are completely independent.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;The variance is a special case of the covariance in which the two variables are identical: $cov(X,X) = var(X)$&lt;/p&gt;
+&lt;p&gt;The variance is a special case of the covariance in which the two variables are identical: &lt;span class="math"&gt;\(cov(X,X) = var(X)\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ddof&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;     
     &lt;span class="n"&gt;covariance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;ddof&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -128,13 +128,13 @@
 &lt;h2&gt;2.1 Pearson Correlation Coefficient&lt;/h2&gt;
 &lt;p&gt;The Pearson correlation coefficient is a statistic developed by Karl Pearson that measures linear correlation between two variables. &lt;/p&gt;
 &lt;p&gt;For a population, it is&lt;/p&gt;
-&lt;p&gt;$$\rho_XY = \dfrac{\text{cov}(X,Y)}{\sigma_X \sigma_Y}$$&lt;/p&gt;
+&lt;div class="math"&gt;$$\rho_XY = \dfrac{\text{cov}(X,Y)}{\sigma_X \sigma_Y}$$&lt;/div&gt;
 &lt;p&gt;For a sample, &lt;/p&gt;
-&lt;p&gt;$$r_{xy} = \dfrac{\sum_{i=1}^{n}(x_i - \bar{x}) (y_i - \bar {y})} {\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2)} \sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^{2}}}$$&lt;/p&gt;
+&lt;div class="math"&gt;$$r_{xy} = \dfrac{\sum_{i=1}^{n}(x_i - \bar{x}) (y_i - \bar {y})} {\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2)} \sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^{2}}}$$&lt;/div&gt;
 &lt;ul&gt;
-&lt;li&gt;The correlation coefficient ranges from $−1$ to $1$. &lt;/li&gt;
-&lt;li&gt;The size of the correlation indicates the strength of the linear relationship between the variables. A value of $1$ indicates total positive linear correlation and implies that a linear equation describes the relationship between X and Y perfectly, with all data points lying on a line for which Y increases as X increases. A value of $−1$ indicates total negative linear correlation and implies that all data points lie on a line for which Y decreases as X increases. A value of $0$ implies that there is no linear correlation between the variables.&lt;/li&gt;
-&lt;li&gt;If the coefficient is $0$, there is no linear relationship between the variables (no linear correlation).&lt;/li&gt;
+&lt;li&gt;The correlation coefficient ranges from &lt;span class="math"&gt;\(−1\)&lt;/span&gt; to &lt;span class="math"&gt;\(1\)&lt;/span&gt;. &lt;/li&gt;
+&lt;li&gt;The size of the correlation indicates the strength of the linear relationship between the variables. A value of &lt;span class="math"&gt;\(1\)&lt;/span&gt; indicates total positive linear correlation and implies that a linear equation describes the relationship between X and Y perfectly, with all data points lying on a line for which Y increases as X increases. A value of &lt;span class="math"&gt;\(−1\)&lt;/span&gt; indicates total negative linear correlation and implies that all data points lie on a line for which Y decreases as X increases. A value of &lt;span class="math"&gt;\(0\)&lt;/span&gt; implies that there is no linear correlation between the variables.&lt;/li&gt;
+&lt;li&gt;If the coefficient is &lt;span class="math"&gt;\(0\)&lt;/span&gt;, there is no linear relationship between the variables (no linear correlation).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;A strong correlation value dos not suggest that one variable causes the other: &lt;strong&gt;"correlation does not imply causation" refers to the inability to legitimately deduce a cause-and-effect relationship between two variables solely on the basis of an observed association or correlation between them&lt;/strong&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;pearson_correlation_sample&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -184,7 +184,7 @@
 
 
 &lt;h2&gt;2.3 Correlation Matrix&lt;/h2&gt;
-&lt;p&gt;The correlation matrix of $n$ random variables $X_1, \cdots, X_n$ is the $nxn$ matrix whose $(i,j)$ entry is $corr(X_i, X_j)$. It is symmetric, as $corr(X_i, X_j) = corr(X_j, X_i)$.&lt;/p&gt;
+&lt;p&gt;The correlation matrix of &lt;span class="math"&gt;\(n\)&lt;/span&gt; random variables &lt;span class="math"&gt;\(X_1, \cdots, X_n\)&lt;/span&gt; is the &lt;span class="math"&gt;\(nxn\)&lt;/span&gt; matrix whose &lt;span class="math"&gt;\((i,j)\)&lt;/span&gt; entry is &lt;span class="math"&gt;\(corr(X_i, X_j)\)&lt;/span&gt;. It is symmetric, as &lt;span class="math"&gt;\(corr(X_i, X_j) = corr(X_j, X_i)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Z1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Z2&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;X&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Y&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Z1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Z2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 
 &lt;span class="n"&gt;correlation_matrix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;corr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;pearson&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -202,7 +202,69 @@
 &lt;p&gt;https://www.wikiwand.com/en/Pearson_correlation_coefficient&lt;/p&gt;
 &lt;p&gt;https://www.wikiwand.com/en/Spearman%27s_rank_correlation_coefficient&lt;/p&gt;
 &lt;p&gt;https://www.statisticshowto.com/covariance/&lt;/p&gt;
-&lt;p&gt;https://www.statisticshowto.com/probability-and-statistics/correlation-analysis/&lt;/p&gt;</content><category term="Statistics"></category></entry><entry><title>Central Limit Theorem and Normality Test</title><link href="https://gastonamengual.github.io/central-limit-theorem-and-normality-test.html" rel="alternate"></link><published>2020-08-20T00:00:00+02:00</published><updated>2020-08-20T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-08-20:/central-limit-theorem-and-normality-test.html</id><summary type="html">&lt;p&gt;Application of Normal Test to Normal-Looking distributions. Explanation of Central Limit Theorem, application to the sum of t samples of size n of the uniform, normal and exponential distribution varying t and n.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual and &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;https://www.statisticshowto.com/probability-and-statistics/correlation-analysis/&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Statistics"></category></entry><entry><title>Central Limit Theorem and Normality Test</title><link href="https://gastonamengual.github.io/central-limit-theorem-and-normality-test.html" rel="alternate"></link><published>2020-08-20T00:00:00+02:00</published><updated>2020-08-20T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-08-20:/central-limit-theorem-and-normality-test.html</id><summary type="html">&lt;p&gt;Application of Normal Test to Normal-Looking distributions. Explanation of Central Limit Theorem, application to the sum of t samples of size n of the uniform, normal and exponential distribution varying t and n.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual and &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;
@@ -219,7 +281,7 @@
 &lt;p&gt;The purpose of this document is to analyze the performance of scipy.stats.normaltest, and use it to check the Central Limit Theorem (CLT). &lt;/p&gt;
 &lt;p&gt;First, two non-normal distribution will be tested with scipy's normality test. Then, the same test will be applied to Uniform, Normal, and Exponential samples of different sizes, which will be summed n times, to see wether the CLT is valid or not.&lt;/p&gt;
 &lt;h1&gt;Normal Distribuion&lt;/h1&gt;
-&lt;p&gt;Normal distribution with $\mu = 0$ and $\sigma = 1$ looks like.&lt;/p&gt;
+&lt;p&gt;Normal distribution with &lt;span class="math"&gt;\(\mu = 0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\sigma = 1\)&lt;/span&gt; looks like.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;normal&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;100000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hist&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;normal&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;olivedrab&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;density&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bins&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;40&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Normal Distribution&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Normal Distribution&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -363,8 +425,8 @@
 
 &lt;h1&gt;Central Limit Theorem&lt;/h1&gt;
 &lt;p&gt;The central limit theorem (CLT) establishes that, in some situations, when independent random variables are added, their properly normalized sum tends toward a normal distribution even if the original variables themselves are not normally distributed. The theorem is a key concept in probability theory because it implies that probabilistic and statistical methods that work for normal distributions can be applicable to many problems involving other types of distributions.&lt;/p&gt;
-&lt;p&gt;If $X_1,...,X_n$ is a random sample of size $n$ taken from a population with finite mean $\mu$ and finite variance $\sigma^2$, and if $\bar{X}$ is the sample mean, the limiting form of the distirbution $Z = (\dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}})$ as $n \rightarrow \infty$ is the standard normal distribution.&lt;/p&gt;
-&lt;p&gt;In other words, the CLT states that the sampling distribution of the sample means approaches a normal distribution as the sample size gets larger — no matter what the shape of the population distribution. This fact holds especially true for sample sizes over $30$. All this is saying is that as more samples are taken, especially large ones, the graph of the sample means will look more like a normal distribution.&lt;/p&gt;
+&lt;p&gt;If &lt;span class="math"&gt;\(X_1,...,X_n\)&lt;/span&gt; is a random sample of size &lt;span class="math"&gt;\(n\)&lt;/span&gt; taken from a population with finite mean &lt;span class="math"&gt;\(\mu\)&lt;/span&gt; and finite variance &lt;span class="math"&gt;\(\sigma^2\)&lt;/span&gt;, and if &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; is the sample mean, the limiting form of the distirbution &lt;span class="math"&gt;\(Z = (\dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}})\)&lt;/span&gt; as &lt;span class="math"&gt;\(n \rightarrow \infty\)&lt;/span&gt; is the standard normal distribution.&lt;/p&gt;
+&lt;p&gt;In other words, the CLT states that the sampling distribution of the sample means approaches a normal distribution as the sample size gets larger — no matter what the shape of the population distribution. This fact holds especially true for sample sizes over &lt;span class="math"&gt;\(30\)&lt;/span&gt;. All this is saying is that as more samples are taken, especially large ones, the graph of the sample means will look more like a normal distribution.&lt;/p&gt;
 &lt;p&gt;Even when a sample is not normally distributed, if you draw multiple samples and take each of their averages, these averages will represent a normal distribution.&lt;/p&gt;
 &lt;p&gt;The Central Limit Theorem explains, at least in part, the prevalence of normal distributions in the natural world. Most characteristics of animals and other life forms are affected by a large number of genetic and environmental factors whose effect is additive. The characteristics we measure are the sum of a large number of small effects, so their distribution tends to be normal.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;normal_test&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
@@ -415,7 +477,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;strong&gt;Null Hypothesis&lt;/strong&gt;: the sum of $t$ samples of size $n$ of some distribution $\sum_{1}^{t} (\sum_{1}^{n} X_i)$ follows a Normal Distribution, where $X_i$ is a random variable of some distribution.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Null Hypothesis&lt;/strong&gt;: the sum of &lt;span class="math"&gt;\(t\)&lt;/span&gt; samples of size &lt;span class="math"&gt;\(n\)&lt;/span&gt; of some distribution &lt;span class="math"&gt;\(\sum_{1}^{t} (\sum_{1}^{n} X_i)\)&lt;/span&gt; follows a Normal Distribution, where &lt;span class="math"&gt;\(X_i\)&lt;/span&gt; is a random variable of some distribution.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;../Datasets/CLT/uniform_samples.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index_col&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Markdown&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;## Central Limit Theorem - Uniform Samples&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;style&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;applymap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;color_less_alpha&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
@@ -3695,7 +3757,69 @@
     &lt;/tbody&gt;&lt;/table&gt;
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_17.png"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_18.png"&gt;&lt;/p&gt;</content><category term="Statistics"></category></entry><entry><title>Confidence intervals</title><link href="https://gastonamengual.github.io/confidence-intervals.html" rel="alternate"></link><published>2020-05-18T00:00:00+02:00</published><updated>2020-05-18T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-05-18:/confidence-intervals.html</id><summary type="html">&lt;p&gt;Explanation of Confidence Intervals and Bootstraping.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_18.png"&gt;&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Statistics"></category></entry><entry><title>Confidence intervals</title><link href="https://gastonamengual.github.io/confidence-intervals.html" rel="alternate"></link><published>2020-05-18T00:00:00+02:00</published><updated>2020-05-18T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-05-18:/confidence-intervals.html</id><summary type="html">&lt;p&gt;Explanation of Confidence Intervals and Bootstraping.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
@@ -3792,12 +3916,12 @@
 
 &lt;p&gt;The standard score, z-score, z-value, normal score, or standardized variable is the number of standard deviations by which the value of a raw score (i.e., an observed value or data point) is above or below the mean value of what is being observed or measured. Raw scores above the mean have positive standard scores, while those below the mean have negative standard scores.&lt;/p&gt;
 &lt;p&gt;If the population mean and population standard deviation are known, a raw score x is converted into a standard score by&lt;/p&gt;
-&lt;p&gt;$z = \dfrac{x-\mu}{\sigma}$ &lt;/p&gt;
-&lt;p&gt;where $\mu$ is the mean of the population and $\sigma$ is the standard deviation of the population.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(z = \dfrac{x-\mu}{\sigma}\)&lt;/span&gt; &lt;/p&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(\mu\)&lt;/span&gt; is the mean of the population and &lt;span class="math"&gt;\(\sigma\)&lt;/span&gt; is the standard deviation of the population.&lt;/p&gt;
 &lt;p&gt;When the population mean and the population standard deviation are unknown, the standard score may be calculated using the sample mean and sample standard deviation as estimates of the population values.&lt;/p&gt;
 &lt;p&gt;In these cases, the z-score is&lt;/p&gt;
-&lt;p&gt;$ z= \dfrac{x-\bar{x}}{S}$&lt;/p&gt;
-&lt;p&gt;where $\bar{x}$ is the mean of the sample and S is the standard deviation of the sample.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\( z= \dfrac{x-\bar{x}}{S}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(\bar{x}\)&lt;/span&gt; is the mean of the sample and S is the standard deviation of the sample.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;z_score_data_percentage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z_score&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;normal_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1000000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;normal_data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;z_score&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;
@@ -3863,4 +3987,67 @@
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;/div&gt;</content><category term="Statistics"></category></entry></feed>
+&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Statistics"></category></entry></feed>

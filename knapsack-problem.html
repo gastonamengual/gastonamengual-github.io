@@ -85,9 +85,9 @@
 
 
 <p>The knapsack problem is a problem in combinatorial optimization. Given a set of items, each with a weight and a value, determine the number of each item to include in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.</p>
-<p>The most common problem being solved is the 0-1 knapsack problem, which restricts the number $x_{i}$ of copies of each kind of item to zero or one. Given a set of $n$ items, each with a weight $w_i$ and a value $v_i$ and a maximum weight limit $W$, the problem is defined as</p>
-<p>$max \sum_{i=1}^{n}v_i x_i$</p>
-<p>$\text{subject to} \sum_{i=1}^{n} w_i x_i \leq W \quad \text{and}\quad  x_i \in {0, 1 }$</p>
+<p>The most common problem being solved is the 0-1 knapsack problem, which restricts the number <span class="math">\(x_{i}\)</span> of copies of each kind of item to zero or one. Given a set of <span class="math">\(n\)</span> items, each with a weight <span class="math">\(w_i\)</span> and a value <span class="math">\(v_i\)</span> and a maximum weight limit <span class="math">\(W\)</span>, the problem is defined as</p>
+<p><span class="math">\(max \sum_{i=1}^{n}v_i x_i\)</span></p>
+<p><span class="math">\(\text{subject to} \sum_{i=1}^{n} w_i x_i \leq W \quad \text{and}\quad  x_i \in \{0, 1 \}\)</span></p>
 <div class="highlight"><pre><span></span><code><span class="n">bag_capacity</span> <span class="o">=</span> <span class="mi">4200</span>
 <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">150</span><span class="p">,</span> <span class="mi">325</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">805</span><span class="p">,</span> <span class="mi">430</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">770</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">930</span><span class="p">,</span> <span class="mi">353</span><span class="p">])</span>
 <span class="n">profits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
@@ -221,6 +221,68 @@
 
 <h1>References</h1>
 <p>https://en.wikipedia.org/wiki/Knapsack_problem</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
         </section>
 
         <br><hr>

@@ -21,18 +21,18 @@
 &lt;h1&gt;Monte Carlo Integration&lt;/h1&gt;
 &lt;p&gt;Calculating the integral of some expressions analytically is easy if the expression is simple. In many cases, however, analytical approaches to integration are not feasible, as the expression is very complicated, possibly without a closed analytical integral, or it can be evaluated at various points but it is not possible to know the corresponding equation. In such situations, Monte Carlo methods allow to generate an approximation of the integral, represented by the &lt;strong&gt;basic Monte Carlo estimator&lt;/strong&gt; equation.&lt;/p&gt;
 &lt;p&gt;The average value of a function is given by&lt;/p&gt;
-&lt;p&gt;$f_{avg} = \dfrac{1}{b-a} \int_a^b f(x) dx$ &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(f_{avg} = \dfrac{1}{b-a} \int_a^b f(x) dx\)&lt;/span&gt; &lt;/p&gt;
 &lt;p&gt;Consequently, &lt;/p&gt;
-&lt;p&gt;$\int_a^b f(x) dx = (b-a) f_{avg}$&lt;/p&gt;
-&lt;p&gt;$\left \langle F^N \right \rangle = (b-a) \dfrac{1}{N} \sum_{i=0}^{N-1} f(X_i) \quad$ where $N$ is the number of samples used in the approximation.&lt;/p&gt;
-&lt;p&gt;$\left \langle F^N \right \rangle = \bar{F}_N = E[F_N]$&lt;/p&gt;
-&lt;p&gt;$X_i = a + U(b - a) \quad$ where U is uniformly distributed between $0$ and $1$.&lt;/p&gt;
-&lt;p&gt;The law of large numbers states that as $N$ approaches infinity, the Monte Carlo approximation converges (in probability) to the right answer:&lt;/p&gt;
-&lt;p&gt;$P(\lim_{N \rightarrow \infty} E[F_N] = F) = 1$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int_a^b f(x) dx = (b-a) f_{avg}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\left \langle F^N \right \rangle = (b-a) \dfrac{1}{N} \sum_{i=0}^{N-1} f(X_i) \quad\)&lt;/span&gt; where &lt;span class="math"&gt;\(N\)&lt;/span&gt; is the number of samples used in the approximation.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\left \langle F^N \right \rangle = \bar{F}_N = E[F_N]\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(X_i = a + U(b - a) \quad\)&lt;/span&gt; where U is uniformly distributed between &lt;span class="math"&gt;\(0\)&lt;/span&gt; and &lt;span class="math"&gt;\(1\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;The law of large numbers states that as &lt;span class="math"&gt;\(N\)&lt;/span&gt; approaches infinity, the Monte Carlo approximation converges (in probability) to the right answer:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(\lim_{N \rightarrow \infty} E[F_N] = F) = 1\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;simply by evaluating the expression a large number of times at randomly selected points in the input space and counting the proportion that are less than the integrand at that point. The larger the number of simulations we run, the better the approximation.&lt;/p&gt;
 &lt;p&gt;The formula used above works only for a uniform PDF. The more generic formula is:&lt;/p&gt;
-&lt;p&gt;$\left \langle F^N \right \rangle = \dfrac{1}{N} \sum_{i=0}^{N-1} \dfrac{f(X_i)}{\text{PDF}(X_i)} \quad$ where $N$ is the number of samples used in the approximation.&lt;/p&gt;
-&lt;p&gt;Dividing $f(x)$ by $PDF(x)$ is necessary for non-constant PDFs . When samples aren't uniformly distributed, more samples are generated where the PDF is high and reversely, fewer samples are generated where the PDF is low. In a Monte Carlo integration though, the samples need to be uniformly distributed, in order not to be biased. Dividing $f(x)$ by $PDF(x)$ counterbalances this effect: when the PDF is high, dividing $f(x)$ by $PDF(x)$ will decrease the "weight" of these samples in the sum, compensating for the higher concentration of samples; when the PDF is low, fewer samples are generated, but dividing $f(x)$ by a low value increases the contribution of these samples.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\left \langle F^N \right \rangle = \dfrac{1}{N} \sum_{i=0}^{N-1} \dfrac{f(X_i)}{\text{PDF}(X_i)} \quad\)&lt;/span&gt; where &lt;span class="math"&gt;\(N\)&lt;/span&gt; is the number of samples used in the approximation.&lt;/p&gt;
+&lt;p&gt;Dividing &lt;span class="math"&gt;\(f(x)\)&lt;/span&gt; by &lt;span class="math"&gt;\(PDF(x)\)&lt;/span&gt; is necessary for non-constant PDFs . When samples aren't uniformly distributed, more samples are generated where the PDF is high and reversely, fewer samples are generated where the PDF is low. In a Monte Carlo integration though, the samples need to be uniformly distributed, in order not to be biased. Dividing &lt;span class="math"&gt;\(f(x)\)&lt;/span&gt; by &lt;span class="math"&gt;\(PDF(x)\)&lt;/span&gt; counterbalances this effect: when the PDF is high, dividing &lt;span class="math"&gt;\(f(x)\)&lt;/span&gt; by &lt;span class="math"&gt;\(PDF(x)\)&lt;/span&gt; will decrease the "weight" of these samples in the sum, compensating for the higher concentration of samples; when the PDF is low, fewer samples are generated, but dividing &lt;span class="math"&gt;\(f(x)\)&lt;/span&gt; by a low value increases the contribution of these samples.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;monte_carlo_estimator&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;function&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;100000&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;points&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;  &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;uniform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="n"&gt;average&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;function&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;points&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
@@ -60,30 +60,30 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;$\int_{1}^{5} x^2 dx$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int_{1}^{5} x^2 dx\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The integral Monte Carlo Estimator value is 38.9021&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;$\int_{0}^{2\pi} sin(x) dx$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int_{0}^{2\pi} sin(x) dx\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The integral Monte Carlo Estimator value is -0.0966&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;$\int_{0}^{\infty} \dfrac{e^{-x}}{1+ (x-1)^2}dx$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int_{0}^{\infty} \dfrac{e^{-x}}{1+ (x-1)^2}dx\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The integral Monte Carlo Estimator value is 0.6933&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h2&gt;Estimation of $\pi$&lt;/h2&gt;
+&lt;h2&gt;Estimation of &lt;span class="math"&gt;\(\pi\)&lt;/span&gt;&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;Generate random $(x, y)$ points belonging to a square of area $4 r^2$ centered at $(h,k)$, where $r$ is the side length. &lt;/li&gt;
-&lt;li&gt;Calculate the points of the square that belong to a circle of ratio $r$ and area $\pi r^2$, that is, $\sqrt{(x-h)^2 + (y-k)^2} &amp;lt;= r^2$.&lt;/li&gt;
-&lt;li&gt;Calculate the approximation of $\pi$ as four times the proportion $p$ of points inside the circle over the total number of points:&lt;/li&gt;
+&lt;li&gt;Generate random &lt;span class="math"&gt;\((x, y)\)&lt;/span&gt; points belonging to a square of area &lt;span class="math"&gt;\(4 r^2\)&lt;/span&gt; centered at &lt;span class="math"&gt;\((h,k)\)&lt;/span&gt;, where &lt;span class="math"&gt;\(r\)&lt;/span&gt; is the side length. &lt;/li&gt;
+&lt;li&gt;Calculate the points of the square that belong to a circle of ratio &lt;span class="math"&gt;\(r\)&lt;/span&gt; and area &lt;span class="math"&gt;\(\pi r^2\)&lt;/span&gt;, that is, &lt;span class="math"&gt;\(\sqrt{(x-h)^2 + (y-k)^2} &amp;lt;= r^2\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Calculate the approximation of &lt;span class="math"&gt;\(\pi\)&lt;/span&gt; as four times the proportion &lt;span class="math"&gt;\(p\)&lt;/span&gt; of points inside the circle over the total number of points:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;$$p = \dfrac{\text{circle area}}{\text{square area}}$$&lt;/p&gt;
-&lt;p&gt;$$p = \dfrac{\pi r^2}{4 r^2} = \dfrac{\pi}{4}$$&lt;/p&gt;
-&lt;p&gt;$$\pi = 4 p$$&lt;/p&gt;
+&lt;div class="math"&gt;$$p = \dfrac{\text{circle area}}{\text{square area}}$$&lt;/div&gt;
+&lt;div class="math"&gt;$$p = \dfrac{\pi r^2}{4 r^2} = \dfrac{\pi}{4}$$&lt;/div&gt;
+&lt;div class="math"&gt;$$\pi = 4 p$$&lt;/div&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;num_points&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3000000&lt;/span&gt;
 &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
 
@@ -107,8 +107,8 @@
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/monte_carlo_methods_1.png"&gt;&lt;/p&gt;
 &lt;h2&gt;Custom Distribution Sampling&lt;/h2&gt;
 &lt;p&gt;Most distributions can be sampled from their analytic expressions. However, when working with the operation of multiple distributions, this analytic formula can be complex. Monte Carlo Methods allow to sample direct from each distribution, and apply the operations to those generated values to obtain the new custom distribution.&lt;/p&gt;
-&lt;p&gt;Let $X \sim U(0,1) , \quad Y \sim Exp(0.5) , \quad Z \sim N(0,1) , \quad Q \sim B(2,5)$.&lt;/p&gt;
-&lt;p&gt;Let $A = (X + Y + Z) \cdot Q$.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X \sim U(0,1) , \quad Y \sim Exp(0.5) , \quad Z \sim N(0,1) , \quad Q \sim B(2,5)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(A = (X + Y + Z) \cdot Q\)&lt;/span&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;sample_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;100000&lt;/span&gt;
 &lt;span class="n"&gt;A_distribution&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
 
@@ -127,7 +127,69 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/monte_carlo_methods_2.png"&gt;&lt;/p&gt;</content><category term="Simulation"></category></entry><entry><title>M/M/1 Queue Simulation</title><link href="https://gastonamengual.github.io/mm1-queue-simulation.html" rel="alternate"></link><published>2020-06-24T00:00:00+02:00</published><updated>2020-06-24T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-06-24:/mm1-queue-simulation.html</id><summary type="html">&lt;p&gt;Simulation of a MM1 Queue and analysis of average delay in queue, average customers in queue, server busy proportion, and total time it takes for n users to get service.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;&lt;a href="https://gastonamengual.github.io/documents/mm1_queue_simulation_paper.pdf"&gt;Read the paper here!&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/monte_carlo_methods_2.png"&gt;&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Simulation"></category></entry><entry><title>M/M/1 Queue Simulation</title><link href="https://gastonamengual.github.io/mm1-queue-simulation.html" rel="alternate"></link><published>2020-06-24T00:00:00+02:00</published><updated>2020-06-24T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-06-24:/mm1-queue-simulation.html</id><summary type="html">&lt;p&gt;Simulation of a MM1 Queue and analysis of average delay in queue, average customers in queue, server busy proportion, and total time it takes for n users to get service.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;&lt;a href="https://gastonamengual.github.io/documents/mm1_queue_simulation_paper.pdf"&gt;Read the paper here!&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
@@ -275,22 +337,22 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;$\lambda_c = 1 \quad \lambda_s = 2$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\lambda_c = 1 \quad \lambda_s = 2\)&lt;/span&gt;&lt;/p&gt;
 &lt;h3&gt;15 customers served&lt;/h3&gt;
-&lt;p&gt;$E[\hat d(n)] = 0.332 \quad Std[\hat d(n)] = 0.324$&lt;/p&gt;
-&lt;p&gt;$E[\hat q(n)] = 0.341 \quad Std[\hat q(n)] = 0.356$&lt;/p&gt;
-&lt;p&gt;$E[\hat u(n)] = 0.485 \quad Std[\hat u(n)] = 0.146$&lt;/p&gt;
-&lt;p&gt;$E[T(n)] = 16.04 \quad Std[T(n)] = 3.59$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat d(n)] = 0.332 \quad Std[\hat d(n)] = 0.324\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat q(n)] = 0.341 \quad Std[\hat q(n)] = 0.356\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat u(n)] = 0.485 \quad Std[\hat u(n)] = 0.146\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[T(n)] = 16.04 \quad Std[T(n)] = 3.59\)&lt;/span&gt;&lt;/p&gt;
 &lt;h3&gt;500 customers served&lt;/h3&gt;
-&lt;p&gt;$E[\hat d(n)] = 0.48 \quad Std[\hat d(n)] = 0.117$&lt;/p&gt;
-&lt;p&gt;$E[\hat q(n)] = 0.481 \quad Std[\hat q(n)] = 0.128$&lt;/p&gt;
-&lt;p&gt;$E[\hat u(n)] = 0.497 \quad Std[\hat u(n)] = 0.031$&lt;/p&gt;
-&lt;p&gt;$E[T(n)] = 502.4 \quad Std[T(n)] = 23$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat d(n)] = 0.48 \quad Std[\hat d(n)] = 0.117\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat q(n)] = 0.481 \quad Std[\hat q(n)] = 0.128\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat u(n)] = 0.497 \quad Std[\hat u(n)] = 0.031\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[T(n)] = 502.4 \quad Std[T(n)] = 23\)&lt;/span&gt;&lt;/p&gt;
 &lt;h3&gt;1000 customers served&lt;/h3&gt;
-&lt;p&gt;$E[\hat d(n)] = 0.495 \quad Std[\hat d(n)] = 0.0829$&lt;/p&gt;
-&lt;p&gt;$E[\hat q(n)] = 0.495 \quad Std[\hat q(n)] = 0.091$&lt;/p&gt;
-&lt;p&gt;$E[\hat u(n)] = 0.499 \quad Std[\hat u(n)] = 0.023$&lt;/p&gt;
-&lt;p&gt;$E[T(n)] = 1005 \quad Std[T(n)] = 30.9$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat d(n)] = 0.495 \quad Std[\hat d(n)] = 0.0829\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat q(n)] = 0.495 \quad Std[\hat q(n)] = 0.091\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[\hat u(n)] = 0.499 \quad Std[\hat u(n)] = 0.023\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(E[T(n)] = 1005 \quad Std[T(n)] = 30.9\)&lt;/span&gt;&lt;/p&gt;
 &lt;h2&gt;Box/Swarmplots of Performance measures&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;fig&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;subplots&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;figsize&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;  
 
@@ -351,7 +413,69 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/mm1_queue_simulation_2.png"&gt;&lt;/p&gt;</content><category term="Simulation"></category></entry><entry><title>Roulette Simulation: Strategies Analysis</title><link href="https://gastonamengual.github.io/roulette-simulation-strategies-analysis.html" rel="alternate"></link><published>2020-05-01T00:00:00+02:00</published><updated>2020-05-01T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-05-01:/roulette-simulation-strategies-analysis.html</id><summary type="html">&lt;p&gt;Simulation of Martingale, d'Alembert and All-in Strategies in a Casino Roulette, for which the capital flow is analyzed.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;&lt;a href="https://gastonamengual.github.io/documents/roulette_simulation_strategies_analysis_paper.pdf"&gt;Read the paper here!&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/mm1_queue_simulation_2.png"&gt;&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Simulation"></category></entry><entry><title>Roulette Simulation: Strategies Analysis</title><link href="https://gastonamengual.github.io/roulette-simulation-strategies-analysis.html" rel="alternate"></link><published>2020-05-01T00:00:00+02:00</published><updated>2020-05-01T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-05-01:/roulette-simulation-strategies-analysis.html</id><summary type="html">&lt;p&gt;Simulation of Martingale, d'Alembert and All-in Strategies in a Casino Roulette, for which the capital flow is analyzed.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;&lt;a href="https://gastonamengual.github.io/documents/roulette_simulation_strategies_analysis_paper.pdf"&gt;Read the paper here!&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
@@ -733,12 +857,74 @@
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/roulette_simulation_strategies_analysis_3.png"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Credibility Intervals&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;$P(|E(X_{n+1} - X_n)| &amp;lt;0.0001) = 0.01$&lt;/p&gt;
-&lt;p&gt;$P(|E(X_{n+1} - X_n)| &amp;lt;0.001) = 0.02$&lt;/p&gt;
-&lt;p&gt;$P(|E(X_{n+1} - X_n)| &amp;lt;0.01) = 0.31$&lt;/p&gt;
-&lt;p&gt;$P(|E(X_{n+1} - X_n)| &amp;lt;0.05) = 0.88$&lt;/p&gt;
-&lt;p&gt;$P(|E(X_{n+1} - X_n)| &amp;lt;0.1) = 0.99$&lt;/p&gt;
-&lt;p&gt;$P(|E(X_{n+1} - X_n)| &amp;lt; 0.15) = 1$&lt;/p&gt;</content><category term="Simulation"></category></entry><entry><title>Roulette Simulation: Statistical Analysis</title><link href="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html" rel="alternate"></link><published>2020-04-15T00:00:00+02:00</published><updated>2020-04-15T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-04-15:/roulette-simulation-statistical-analysis.html</id><summary type="html">&lt;p&gt;Simulation of a Casino Roulette, for which the mean and variance are analyzed, and empirical demonstration of the Law of Great Numbers.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;&lt;a href="https://gastonamengual.github.io/documents/roulette_simulation_statistical_analysis_paper.pdf"&gt;Read the paper here!&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(|E(X_{n+1} - X_n)| &amp;lt;0.0001) = 0.01\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(|E(X_{n+1} - X_n)| &amp;lt;0.001) = 0.02\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(|E(X_{n+1} - X_n)| &amp;lt;0.01) = 0.31\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(|E(X_{n+1} - X_n)| &amp;lt;0.05) = 0.88\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(|E(X_{n+1} - X_n)| &amp;lt;0.1) = 0.99\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(|E(X_{n+1} - X_n)| &amp;lt; 0.15) = 1\)&lt;/span&gt;&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Simulation"></category></entry><entry><title>Roulette Simulation: Statistical Analysis</title><link href="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html" rel="alternate"></link><published>2020-04-15T00:00:00+02:00</published><updated>2020-04-15T00:00:00+02:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-04-15:/roulette-simulation-statistical-analysis.html</id><summary type="html">&lt;p&gt;Simulation of a Casino Roulette, for which the mean and variance are analyzed, and empirical demonstration of the Law of Great Numbers.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;&lt;a href="https://gastonamengual.github.io/documents/roulette_simulation_statistical_analysis_paper.pdf"&gt;Read the paper here!&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;

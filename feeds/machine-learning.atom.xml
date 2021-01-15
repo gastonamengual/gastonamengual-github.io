@@ -29,7 +29,7 @@
 &lt;li&gt;Sparsity: The number of items sold on major e-commerce sites is extremely large. The most active users will only have rated a small subset of the overall database. Thus, even the most popular items have very few ratings.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In the &lt;strong&gt;model-based approach approach&lt;/strong&gt;, models are developed using different data mining, machine learning algorithms to predict an user's rating of unrated items, and they involve a step to reduce or compress the large but sparse (matrix in which most of the cells are empty) user-item matrix. If the matrix is mostly empty, reducing dimensions can improve the performance of the algorithm in terms of both space and time.&lt;/p&gt;
-&lt;p&gt;A matrix with dimensions $m \times n$ can be reduced to a product of two matrices $U$ and $V$ with dimensions $m \times p$ and $p \times n$, respectively. The reduced matrices represent the users and items individually. The rows in the first matrix represent the users, and the columns, the features or characteristics of the users. The same applies for the item matrix. These rows or columns are called &lt;strong&gt;latent factors&lt;/strong&gt; and are an indication of hidden characteristics about the users or the items. The number of latent factors affects affects the recommendations in a manner where the greater the number of factors, the more personalized the recommendations become, but too many factors can lead to overfitting in the model. This number must be optimized during the training of the model. &lt;/p&gt;
+&lt;p&gt;A matrix with dimensions &lt;span class="math"&gt;\(m \times n\)&lt;/span&gt; can be reduced to a product of two matrices &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(V\)&lt;/span&gt; with dimensions &lt;span class="math"&gt;\(m \times p\)&lt;/span&gt; and &lt;span class="math"&gt;\(p \times n\)&lt;/span&gt;, respectively. The reduced matrices represent the users and items individually. The rows in the first matrix represent the users, and the columns, the features or characteristics of the users. The same applies for the item matrix. These rows or columns are called &lt;strong&gt;latent factors&lt;/strong&gt; and are an indication of hidden characteristics about the users or the items. The number of latent factors affects affects the recommendations in a manner where the greater the number of factors, the more personalized the recommendations become, but too many factors can lead to overfitting in the model. This number must be optimized during the training of the model. &lt;/p&gt;
 &lt;p&gt;For matrix decomposition an approximation of &lt;strong&gt;Singular Value Decomposition (SVD)&lt;/strong&gt; will be used, using stochastic mini-batch gradient descent. The model will be trained using 5-fold cross-validation.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;movie_lens&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;C:\Users\Gastón\Office\Data Science\_Datasets\movie_lens_100k_data.csv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sep&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;drop_duplicates&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;drop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;timestamp&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -73,7 +73,7 @@
 
 
 &lt;h2&gt;Build Minimal Train and Test Data Sets&lt;/h2&gt;
-&lt;p&gt;It is sought that at least one user-movie pair is in the data sets, such that there is at most N unique users and M unique movies. It is also checked if an $n \times m$ test data set can be built. &lt;/p&gt;
+&lt;p&gt;It is sought that at least one user-movie pair is in the data sets, such that there is at most N unique users and M unique movies. It is also checked if an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; test data set can be built. &lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Extracted from: https://stackoverflow.com/a/44115314/7690767&lt;/span&gt;
 &lt;span class="n"&gt;train_unique_user_rows&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;movie_lens&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;groupby&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;userId&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;group_keys&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sample&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random_state&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;random_seed&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 
@@ -227,27 +227,27 @@
 
 &lt;h1&gt;Stochastic Mini-Batch Gradient Descent with L2 Regularization&lt;/h1&gt;
 &lt;h2&gt;SVD Approximation with Gradient Descent&lt;/h2&gt;
-&lt;p&gt;According to SVD, $X = U \Sigma V$. Assuming $\Sigma$ merges into $U$ or $V^T$, the matrix factorization becomes $X = U V^T$.&lt;/p&gt;
-&lt;p&gt;Let $r_{ui}$ be the rating of user $u$ for item $i$. Because of the way a matrix product is defined, the value of $r_{ui}$ is the result of a dot product between two vectors: a vector $p_u$, which is a row of $U$ and is specific to the user $u$, and a vector $q_i$, which is a column of $V^T$ and is specific to the item $i$:&lt;/p&gt;
-&lt;p&gt;$$\begin{pmatrix} &amp;amp;  &amp;amp; \ &amp;amp; r_{ui} &amp;amp; \ &amp;amp;  &amp;amp; \end{pmatrix} = \begin{pmatrix} . \ \cdots p_u \cdots \ . \end{pmatrix} \begin{pmatrix} &amp;amp; \vdots  &amp;amp; \ . &amp;amp; q_i &amp;amp; . \  &amp;amp; \vdots &amp;amp; \end{pmatrix}$$&lt;/p&gt;
-&lt;p&gt;$$r_{ui} = p_u \cdot q_i$$&lt;/p&gt;
-&lt;p&gt;The vector $p_u$ and $q_i$ represent the affinity of user $u$ and item $i$ for each of the latent factors in $U$ and $V^T$, respectively.&lt;/p&gt;
-&lt;p&gt;When a matrix $X$ has missing entries, the SVD of $X$ is not defined, the matrices $XX^T$ and $X^TX$ do not exist, so their eigenvectors do not exist either, and $X$ cannot be factorized as $U \Sigma V^T$. A simple solution is to fill the missing entries of $X$ with some heuristic value, like the mean of the columns of rows. However, the results are usually highly biased, and it is importante to note that the missing values are feedback that the user did not give, and therefore should not be considered negative or null rating. Luckily, computing the eigenvectors of $XX^T$ and $X^TX$ is not the only way of computing the SVD of $X$. The matrices $U$ and $V^T$ can be found if the vectors $p_u$ and $q_i$ ($p_u$ make up the rows of $U$ and $q_i$ make up the columns of $V^T$) are found such that:&lt;/p&gt;
+&lt;p&gt;According to SVD, &lt;span class="math"&gt;\(X = U \Sigma V\)&lt;/span&gt;. Assuming &lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; merges into &lt;span class="math"&gt;\(U\)&lt;/span&gt; or &lt;span class="math"&gt;\(V^T\)&lt;/span&gt;, the matrix factorization becomes &lt;span class="math"&gt;\(X = U V^T\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(r_{ui}\)&lt;/span&gt; be the rating of user &lt;span class="math"&gt;\(u\)&lt;/span&gt; for item &lt;span class="math"&gt;\(i\)&lt;/span&gt;. Because of the way a matrix product is defined, the value of &lt;span class="math"&gt;\(r_{ui}\)&lt;/span&gt; is the result of a dot product between two vectors: a vector &lt;span class="math"&gt;\(p_u\)&lt;/span&gt;, which is a row of &lt;span class="math"&gt;\(U\)&lt;/span&gt; and is specific to the user &lt;span class="math"&gt;\(u\)&lt;/span&gt;, and a vector &lt;span class="math"&gt;\(q_i\)&lt;/span&gt;, which is a column of &lt;span class="math"&gt;\(V^T\)&lt;/span&gt; and is specific to the item &lt;span class="math"&gt;\(i\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;$$\begin{pmatrix} &amp;amp;  &amp;amp; \\ &amp;amp; r_{ui} &amp;amp; \\ &amp;amp;  &amp;amp; \end{pmatrix} = \begin{pmatrix} . \\ \cdots p_u \cdots \\ . \end{pmatrix} \begin{pmatrix} &amp;amp; \vdots  &amp;amp; \\ . &amp;amp; q_i &amp;amp; . \\  &amp;amp; \vdots &amp;amp; \end{pmatrix}$$&lt;/div&gt;
+&lt;div class="math"&gt;$$r_{ui} = p_u \cdot q_i$$&lt;/div&gt;
+&lt;p&gt;The vector &lt;span class="math"&gt;\(p_u\)&lt;/span&gt; and &lt;span class="math"&gt;\(q_i\)&lt;/span&gt; represent the affinity of user &lt;span class="math"&gt;\(u\)&lt;/span&gt; and item &lt;span class="math"&gt;\(i\)&lt;/span&gt; for each of the latent factors in &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(V^T\)&lt;/span&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;When a matrix &lt;span class="math"&gt;\(X\)&lt;/span&gt; has missing entries, the SVD of &lt;span class="math"&gt;\(X\)&lt;/span&gt; is not defined, the matrices &lt;span class="math"&gt;\(XX^T\)&lt;/span&gt; and &lt;span class="math"&gt;\(X^TX\)&lt;/span&gt; do not exist, so their eigenvectors do not exist either, and &lt;span class="math"&gt;\(X\)&lt;/span&gt; cannot be factorized as &lt;span class="math"&gt;\(U \Sigma V^T\)&lt;/span&gt;. A simple solution is to fill the missing entries of &lt;span class="math"&gt;\(X\)&lt;/span&gt; with some heuristic value, like the mean of the columns of rows. However, the results are usually highly biased, and it is importante to note that the missing values are feedback that the user did not give, and therefore should not be considered negative or null rating. Luckily, computing the eigenvectors of &lt;span class="math"&gt;\(XX^T\)&lt;/span&gt; and &lt;span class="math"&gt;\(X^TX\)&lt;/span&gt; is not the only way of computing the SVD of &lt;span class="math"&gt;\(X\)&lt;/span&gt;. The matrices &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(V^T\)&lt;/span&gt; can be found if the vectors &lt;span class="math"&gt;\(p_u\)&lt;/span&gt; and &lt;span class="math"&gt;\(q_i\)&lt;/span&gt; (&lt;span class="math"&gt;\(p_u\)&lt;/span&gt; make up the rows of &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(q_i\)&lt;/span&gt; make up the columns of &lt;span class="math"&gt;\(V^T\)&lt;/span&gt;) are found such that:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;$r_{ui} = p_u \cdot q_i \quad \forall \; u,i$&lt;/li&gt;
-&lt;li&gt;All the vectors $p_u$ are mutually orthogonal, as well as the vectors $q_i$&lt;/li&gt;
+&lt;li&gt;&lt;span class="math"&gt;\(r_{ui} = p_u \cdot q_i \quad \forall \; u,i\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;All the vectors &lt;span class="math"&gt;\(p_u\)&lt;/span&gt; are mutually orthogonal, as well as the vectors &lt;span class="math"&gt;\(q_i\)&lt;/span&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;It is sought to match as well as possible the values $r_{ui}$ with what they are supposed to be, $p_u \cdot q_i$, making the error minimal:&lt;/p&gt;
-&lt;p&gt;$\min_{p_u, q_i \ p_u \perp p_v \ q_i \perp q_j} \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2$&lt;/p&gt;
-&lt;p&gt;As $X$ is incomplete, the missing entries are ignored, as well as the orthogonality constraints, resulting in the following optimization problem, proposed by Simon Funk:&lt;/p&gt;
-&lt;p&gt;$\min_{p_u, q_i}\sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2.$&lt;/p&gt;
-&lt;p&gt;As this optimization problem is not convex, it will be very difficult to find the values of the vectors $p_u$ and $q_i$ that make this sum minimal, and the optimal solution may not even be unique. Therefore, Gradient Descent is used. The function to be minimized is then:&lt;/p&gt;
-&lt;p&gt;$f(p_&lt;em&gt;, q_&lt;/em&gt;) = \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2 =\sum_{r_{ui} \in X} f_{ui}(p_u, q_i)$&lt;/p&gt;
+&lt;p&gt;It is sought to match as well as possible the values &lt;span class="math"&gt;\(r_{ui}\)&lt;/span&gt; with what they are supposed to be, &lt;span class="math"&gt;\(p_u \cdot q_i\)&lt;/span&gt;, making the error minimal:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\min_{p_u, q_i \\ p_u \perp p_v \\ q_i \perp q_j} \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;As &lt;span class="math"&gt;\(X\)&lt;/span&gt; is incomplete, the missing entries are ignored, as well as the orthogonality constraints, resulting in the following optimization problem, proposed by Simon Funk:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\min_{p_u, q_i}\sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2.\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;As this optimization problem is not convex, it will be very difficult to find the values of the vectors &lt;span class="math"&gt;\(p_u\)&lt;/span&gt; and &lt;span class="math"&gt;\(q_i\)&lt;/span&gt; that make this sum minimal, and the optimal solution may not even be unique. Therefore, Gradient Descent is used. The function to be minimized is then:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(f(p_*, q_*) = \sum_{r_{ui} \in X} (r_{ui} - p_u \cdot q_i)^2 =\sum_{r_{ui} \in X} f_{ui}(p_u, q_i)\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;with its both partial derivatives being:&lt;/p&gt;
-&lt;p&gt;$\frac{\partial f_{ui}}{\partial p_u} = - 2 q_i (r_{ui} - p_u \cdot q_i)$&lt;/p&gt;
-&lt;p&gt;$\frac{\partial f_{ui}}{\partial q_i} = - 2 p_u (r_{ui} - p_u \cdot q_i)$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\frac{\partial f_{ui}}{\partial p_u} = - 2 q_i (r_{ui} - p_u \cdot q_i)\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\frac{\partial f_{ui}}{\partial q_i} = - 2 p_u (r_{ui} - p_u \cdot q_i)\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;L2 regularization&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;$\underset{w}{\min} f(w) + \lambda ||w||_2^2$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\underset{w}{\min} f(w) + \lambda ||w||_2^2\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;l2_regularized_mini_batch_stochastic_gradient_descent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.01&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lambda_&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;num_epochs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;mini_batch_size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;seed&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;42&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
 
     &lt;span class="c1"&gt;# Pandas DataFrame to NumPy&lt;/span&gt;
@@ -676,7 +676,69 @@
 
 &lt;h1&gt;References&lt;/h1&gt;
 &lt;p&gt;https://www.wikiwand.com/en/Collaborative_filtering&lt;/p&gt;
-&lt;p&gt;https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings&lt;/p&gt;</content><category term="Machine Learning"></category></entry><entry><title>Singular Value Decomposition</title><link href="https://gastonamengual.github.io/singular-value-decomposition.html" rel="alternate"></link><published>2020-12-14T00:00:00+01:00</published><updated>2020-12-14T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-14:/singular-value-decomposition.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, from-scratch implementation and application on an image.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Singular Value Decomposition</title><link href="https://gastonamengual.github.io/singular-value-decomposition.html" rel="alternate"></link><published>2020-12-14T00:00:00+01:00</published><updated>2020-12-14T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-14:/singular-value-decomposition.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, from-scratch implementation and application on an image.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
@@ -698,65 +760,65 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Let $X = \begin{bmatrix}  | &amp;amp; | &amp;amp; | &amp;amp; | \  x_1 &amp;amp; x_2 &amp;amp; \dotsc &amp;amp; x_m \  | &amp;amp; | &amp;amp; | &amp;amp; | \end{bmatrix} \in \mathbb{C}^{nxm}$ be a matrix representing data points, where:&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X = &lt;div class="math"&gt;\begin{bmatrix}  | &amp;amp; | &amp;amp; | &amp;amp; | \\  x_1 &amp;amp; x_2 &amp;amp; \dotsc &amp;amp; x_m \\  | &amp;amp; | &amp;amp; | &amp;amp; | \end{bmatrix}&lt;/div&gt; \in \mathbb{C}^{nxm}\)&lt;/span&gt; be a matrix representing data points, where:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Each row $X_k \in \mathbb{C}^m$ is a variable or dimension of the data.&lt;/p&gt;
+&lt;p&gt;Each row &lt;span class="math"&gt;\(X_k \in \mathbb{C}^m\)&lt;/span&gt; is a variable or dimension of the data.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Each column $X_k \in \mathbb{C}^n$ is an observation or measurement from simulations or experiments. The index $k$ indicates the $k^{th}$ set of measurements or observations.&lt;/p&gt;
+&lt;p&gt;Each column &lt;span class="math"&gt;\(X_k \in \mathbb{C}^n\)&lt;/span&gt; is an observation or measurement from simulations or experiments. The index &lt;span class="math"&gt;\(k\)&lt;/span&gt; indicates the &lt;span class="math"&gt;\(k^{th}\)&lt;/span&gt; set of measurements or observations.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;The method to be explained is specially useful when $n \gg m$ (more dimensions than observations), i.e. high dimensional problems, resulting in a tall-skinny matrix, as opposed to a short-fat matrix when $n \ll m$ (more observations than dimensions).&lt;/p&gt;
-&lt;p&gt;The &lt;strong&gt;SVD&lt;/strong&gt; is a unique matrix decomposition that exists for every complex-values matrix $X \in \mathbb{C}^{nxm}$:&lt;/p&gt;
-&lt;p&gt;$$X = U \Sigma V^* \quad (1)$$&lt;/p&gt;
-&lt;p&gt;where $U \in \mathbb{C}^{n \times n}$ and $V \in \mathbb{C}^{m \times m}$ are unitary matrices$_{[1]}$. When $n \geq m$ the matrix $\Sigma$ has at most $m$ non-zero elements on the diagonal, and may be written as $\Sigma = \begin{bmatrix} \hat{\Sigma} \ 0 \end{bmatrix}$. Therefore, it is possible to exactly represent $X$ using the &lt;strong&gt;economy SVD&lt;/strong&gt;:&lt;/p&gt;
-&lt;p&gt;$$X = U\Sigma V^&lt;em&gt; = \hat{U} \hat{\Sigma} V^&lt;/em&gt;$$&lt;/p&gt;
-&lt;p&gt;where $\hat{U}$ are the first $m$ columns of $U$. The columns of $U$ are called &lt;strong&gt;left singular vectors of X&lt;/strong&gt; and the columns of V are &lt;strong&gt;right singular vectors&lt;/strong&gt;. The diagonal elements of $\Sigma$, $\sigma_i$, are called &lt;strong&gt;singular values&lt;/strong&gt;, and they are ordered so that $\sigma_{i+1} \leq \sigma_i$, i.e., from largest to smallest. The rank of $X$ is equal to the number of non-zero singular values.&lt;/p&gt;
-&lt;p&gt;SVD generalizes the eigendecomposition of a square normal matrix to any $m \times n$ matrix via an extension of the polar decomposition. It is numerically stable and provides a hierarchical representation of the data in terms of a new coordinate system defined by dominant correlations within the data. Moreover, the SVD is guaranteed to exist for any matrix, unlike the eigendecomposition.&lt;/p&gt;
+&lt;p&gt;The method to be explained is specially useful when &lt;span class="math"&gt;\(n \gg m\)&lt;/span&gt; (more dimensions than observations), i.e. high dimensional problems, resulting in a tall-skinny matrix, as opposed to a short-fat matrix when &lt;span class="math"&gt;\(n \ll m\)&lt;/span&gt; (more observations than dimensions).&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;SVD&lt;/strong&gt; is a unique matrix decomposition that exists for every complex-values matrix &lt;span class="math"&gt;\(X \in \mathbb{C}^{nxm}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;$$X = U \Sigma V^* \quad (1)$$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(U \in \mathbb{C}^{n \times n}\)&lt;/span&gt; and &lt;span class="math"&gt;\(V \in \mathbb{C}^{m \times m}\)&lt;/span&gt; are unitary matrices&lt;span class="math"&gt;\(_{[1]}\)&lt;/span&gt;. When &lt;span class="math"&gt;\(n \geq m\)&lt;/span&gt; the matrix &lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; has at most &lt;span class="math"&gt;\(m\)&lt;/span&gt; non-zero elements on the diagonal, and may be written as &lt;span class="math"&gt;\(\Sigma = &lt;div class="math"&gt;\begin{bmatrix} \hat{\Sigma} \\ 0 \end{bmatrix}&lt;/div&gt;\)&lt;/span&gt;. Therefore, it is possible to exactly represent &lt;span class="math"&gt;\(X\)&lt;/span&gt; using the &lt;strong&gt;economy SVD&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;$$X = U\Sigma V^* = \hat{U} \hat{\Sigma} V^*$$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(\hat{U}\)&lt;/span&gt; are the first &lt;span class="math"&gt;\(m\)&lt;/span&gt; columns of &lt;span class="math"&gt;\(U\)&lt;/span&gt;. The columns of &lt;span class="math"&gt;\(U\)&lt;/span&gt; are called &lt;strong&gt;left singular vectors of X&lt;/strong&gt; and the columns of V are &lt;strong&gt;right singular vectors&lt;/strong&gt;. The diagonal elements of &lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt;, &lt;span class="math"&gt;\(\sigma_i\)&lt;/span&gt;, are called &lt;strong&gt;singular values&lt;/strong&gt;, and they are ordered so that &lt;span class="math"&gt;\(\sigma_{i+1} \leq \sigma_i\)&lt;/span&gt;, i.e., from largest to smallest. The rank of &lt;span class="math"&gt;\(X\)&lt;/span&gt; is equal to the number of non-zero singular values.&lt;/p&gt;
+&lt;p&gt;SVD generalizes the eigendecomposition of a square normal matrix to any &lt;span class="math"&gt;\(m \times n\)&lt;/span&gt; matrix via an extension of the polar decomposition. It is numerically stable and provides a hierarchical representation of the data in terms of a new coordinate system defined by dominant correlations within the data. Moreover, the SVD is guaranteed to exist for any matrix, unlike the eigendecomposition.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Geometric Interpretation&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;If $M$ is an $n \times n$ real square matrix, the matrices $U$ and $V^T$ can be chosen to be real $n \times n$, too, which represent rotations or reflection of the space $R^n$, while $\Sigma$ represents the scaling of each coordinate $X_i$ by the factor $\sigma_i$. Thus the SVD decomposition breaks down any invertible linear transformation of $R^n$ into a composition of three geometrical transformations: a rotation or reflection ($V^*$), a coordinate-by-coordinate scaling ($\Sigma$), and a second rotation or reflection ($U$).&lt;/p&gt;
+&lt;p&gt;If &lt;span class="math"&gt;\(M\)&lt;/span&gt; is an &lt;span class="math"&gt;\(n \times n\)&lt;/span&gt; real square matrix, the matrices &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(V^T\)&lt;/span&gt; can be chosen to be real &lt;span class="math"&gt;\(n \times n\)&lt;/span&gt;, too, which represent rotations or reflection of the space &lt;span class="math"&gt;\(R^n\)&lt;/span&gt;, while &lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; represents the scaling of each coordinate &lt;span class="math"&gt;\(X_i\)&lt;/span&gt; by the factor &lt;span class="math"&gt;\(\sigma_i\)&lt;/span&gt;. Thus the SVD decomposition breaks down any invertible linear transformation of &lt;span class="math"&gt;\(R^n\)&lt;/span&gt; into a composition of three geometrical transformations: a rotation or reflection (&lt;span class="math"&gt;\(V^*\)&lt;/span&gt;), a coordinate-by-coordinate scaling (&lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt;), and a second rotation or reflection (&lt;span class="math"&gt;\(U\)&lt;/span&gt;).&lt;/p&gt;
 &lt;h1&gt;Interpretation as dominant correlations&lt;/h1&gt;
-&lt;p&gt;The SVD is related to an eigenvalue problem involving the correlation matrices $XX^T$ and $X^TX$:&lt;/p&gt;
-&lt;p&gt;$X^T = V \Sigma U^T$&lt;/p&gt;
-&lt;p&gt;$XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T$&lt;/p&gt;
-&lt;p&gt;$X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T$&lt;/p&gt;
-&lt;p&gt;Recalling that $U$ and $V$ are unitary, multiplying each equation's side by $U$ and $V$, respectively, $U$; $\Sigma$; and $V$ are solutions to the following eigenvalue problems:&lt;/p&gt;
-&lt;p&gt;$X X^T U = U \hat{\Sigma^2} \quad (2)$&lt;/p&gt;
-&lt;p&gt;$X^T X V = V \hat{\Sigma^2} \quad (3)$&lt;/p&gt;
+&lt;p&gt;The SVD is related to an eigenvalue problem involving the correlation matrices &lt;span class="math"&gt;\(XX^T\)&lt;/span&gt; and &lt;span class="math"&gt;\(X^TX\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(X^T = V \Sigma U^T\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Recalling that &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(V\)&lt;/span&gt; are unitary, multiplying each equation's side by &lt;span class="math"&gt;\(U\)&lt;/span&gt; and &lt;span class="math"&gt;\(V\)&lt;/span&gt;, respectively, &lt;span class="math"&gt;\(U\)&lt;/span&gt;; &lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt;; and &lt;span class="math"&gt;\(V\)&lt;/span&gt; are solutions to the following eigenvalue problems:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(X X^T U = U \hat{\Sigma^2} \quad (2)\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(X^T X V = V \hat{\Sigma^2} \quad (3)\)&lt;/span&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;The non-negative singular values of $X$ are the square root of the non-negative eigenvalue\s of $X^TX$ and of $XX^T$, and are arranged in descending order by magnitude, and thus the columns of $U$ are hierarchically ordered by how much correlation they capture in the columns of $X$; and the columns of $V$ similarly captures correlation in the rows of $X$.&lt;/p&gt;
+&lt;p&gt;The non-negative singular values of &lt;span class="math"&gt;\(X\)&lt;/span&gt; are the square root of the non-negative eigenvalue\s of &lt;span class="math"&gt;\(X^TX\)&lt;/span&gt; and of &lt;span class="math"&gt;\(XX^T\)&lt;/span&gt;, and are arranged in descending order by magnitude, and thus the columns of &lt;span class="math"&gt;\(U\)&lt;/span&gt; are hierarchically ordered by how much correlation they capture in the columns of &lt;span class="math"&gt;\(X\)&lt;/span&gt;; and the columns of &lt;span class="math"&gt;\(V\)&lt;/span&gt; similarly captures correlation in the rows of &lt;span class="math"&gt;\(X\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;The left-singular vectors of $X$ are a set of orthonormal eigenvectors of of the correlation matrix $XX^T$, &lt;/p&gt;
+&lt;p&gt;The left-singular vectors of &lt;span class="math"&gt;\(X\)&lt;/span&gt; are a set of orthonormal eigenvectors of of the correlation matrix &lt;span class="math"&gt;\(XX^T\)&lt;/span&gt;, &lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;The right-singular vectors of $X$ are a set of orthonormal eigenvectors of $X^TX$. &lt;/p&gt;
+&lt;p&gt;The right-singular vectors of &lt;span class="math"&gt;\(X\)&lt;/span&gt; are a set of orthonormal eigenvectors of &lt;span class="math"&gt;\(X^TX\)&lt;/span&gt;. &lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;Truncated SVD&lt;/h1&gt;
-&lt;p&gt;The sum of the squares of the singular values should be equal to the total variance in $X$, and each one tells how much of the total variance is accounted for by each singular vector. Often, a &lt;strong&gt;truncated SVD&lt;/strong&gt; is calculated, truncating the SVD at a rank $r$ that captures a pre-determined amount of the variance or energy in the original matrix:&lt;/p&gt;
-&lt;p&gt;$$a_{ij} = \sum_{k=1}^{r} u_{ik} \sigma_k v_{jk}$$&lt;/p&gt;
-&lt;h2&gt;Election of $r$&lt;/h2&gt;
-&lt;p&gt;Deciding how many singular values to keep (i.e. the rank $r$) is one of the most important and contentious decisions when using the SVD. There are many factors, including specifications on the desired rank of the system, the magnitude of noise, and the distribution of the singular values. &lt;/p&gt;
+&lt;p&gt;The sum of the squares of the singular values should be equal to the total variance in &lt;span class="math"&gt;\(X\)&lt;/span&gt;, and each one tells how much of the total variance is accounted for by each singular vector. Often, a &lt;strong&gt;truncated SVD&lt;/strong&gt; is calculated, truncating the SVD at a rank &lt;span class="math"&gt;\(r\)&lt;/span&gt; that captures a pre-determined amount of the variance or energy in the original matrix:&lt;/p&gt;
+&lt;div class="math"&gt;$$a_{ij} = \sum_{k=1}^{r} u_{ik} \sigma_k v_{jk}$$&lt;/div&gt;
+&lt;h2&gt;Election of &lt;span class="math"&gt;\(r\)&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;Deciding how many singular values to keep (i.e. the rank &lt;span class="math"&gt;\(r\)&lt;/span&gt;) is one of the most important and contentious decisions when using the SVD. There are many factors, including specifications on the desired rank of the system, the magnitude of noise, and the distribution of the singular values. &lt;/p&gt;
 &lt;h3&gt;Percentage of explained variance captured&lt;/h3&gt;
-&lt;p&gt;The SVD can be truncated at a rank $r$ that captures a pre-determined amount of the variance or energy in the original data, such as $90%$ or $99%$ truncation.&lt;/p&gt;
+&lt;p&gt;The SVD can be truncated at a rank &lt;span class="math"&gt;\(r\)&lt;/span&gt; that captures a pre-determined amount of the variance or energy in the original data, such as &lt;span class="math"&gt;\(90%\)&lt;/span&gt; or &lt;span class="math"&gt;\(99%\)&lt;/span&gt; truncation.&lt;/p&gt;
 &lt;h3&gt;Elbow method&lt;/h3&gt;
 &lt;p&gt;Other techniques involve identifying "elbows" in the singular value distribution, which may denote the transition from singular values that represent important variance percentage from those that represent low information.&lt;/p&gt;
 &lt;h3&gt;Gavish-Donoho&lt;/h3&gt;
-&lt;p&gt;According to &lt;a href="https://arxiv.org/abs/1305.5870"&gt;Gavish-Donoho (2014)&lt;/a&gt;, for non squared matrices, the optimal value of $r$ is calculated as&lt;/p&gt;
-&lt;p&gt;$r = \omega(\beta) \cdot median(S)$&lt;/p&gt;
+&lt;p&gt;According to &lt;a href="https://arxiv.org/abs/1305.5870"&gt;Gavish-Donoho (2014)&lt;/a&gt;, for non squared matrices, the optimal value of &lt;span class="math"&gt;\(r\)&lt;/span&gt; is calculated as&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(r = \omega(\beta) \cdot median(S)\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="image.png" src="gavish_danoho_coefficients.png"&gt;&lt;/p&gt;
-&lt;p&gt;where $\beta = \left{\begin{matrix}
-\frac{n}{m} &amp;amp; \text{if} \quad n &amp;lt; m\ 
+&lt;p&gt;where &lt;span class="math"&gt;\(\beta = \left\{&lt;div class="math"&gt;\begin{matrix}
+\frac{n}{m} &amp;amp; \text{if} \quad n &amp;lt; m\\ 
 \frac{m}{n} &amp;amp; \text{if} \quad m &amp;lt; n
-\end{matrix}\right.$&lt;/p&gt;
+\end{matrix}&lt;/div&gt;\right.\)&lt;/span&gt;&lt;/p&gt;
 &lt;h3&gt;Notes&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Conjugate transpose&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The conjugate transpose or Hermitian transpose of an $n \times m$ matrix $A$ with complex entries is the $n \times m$ matrix obtained from $A$ by taking the transpose and then taking the complex conjugate of each entry (the complex conjugate of $a+ib$ is $a-ib$, for real numbers $a$ and $b$). It is denoted as $A^H$ or $A^&lt;em&gt;$. For real matrices, the conjugate transpose is just the transpose, $A^&lt;/em&gt;=A^T$.&lt;/p&gt;
+&lt;p&gt;The conjugate transpose or Hermitian transpose of an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix &lt;span class="math"&gt;\(A\)&lt;/span&gt; with complex entries is the &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix obtained from &lt;span class="math"&gt;\(A\)&lt;/span&gt; by taking the transpose and then taking the complex conjugate of each entry (the complex conjugate of &lt;span class="math"&gt;\(a+ib\)&lt;/span&gt; is &lt;span class="math"&gt;\(a-ib\)&lt;/span&gt;, for real numbers &lt;span class="math"&gt;\(a\)&lt;/span&gt; and &lt;span class="math"&gt;\(b\)&lt;/span&gt;). It is denoted as &lt;span class="math"&gt;\(A^H\)&lt;/span&gt; or &lt;span class="math"&gt;\(A^*\)&lt;/span&gt;. For real matrices, the conjugate transpose is just the transpose, &lt;span class="math"&gt;\(A^*=A^T\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;[1] Unitary vs orthogonal matrix&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;In linear algebra, a complex square matrix $U$ is unitary if its conjugate transpose $U^&lt;em&gt;$ is also its inverse, that is, if $UU^&lt;/em&gt; = U^*U = I$, where $I$ is the identity matrix. For real numbers, unitary and orthogonal means the same.&lt;/p&gt;
+&lt;p&gt;In linear algebra, a complex square matrix &lt;span class="math"&gt;\(U\)&lt;/span&gt; is unitary if its conjugate transpose &lt;span class="math"&gt;\(U^*\)&lt;/span&gt; is also its inverse, that is, if &lt;span class="math"&gt;\(UU^* = U^*U = I\)&lt;/span&gt;, where &lt;span class="math"&gt;\(I\)&lt;/span&gt; is the identity matrix. For real numbers, unitary and orthogonal means the same.&lt;/p&gt;
 &lt;h1&gt;Image Approximation&lt;/h1&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;imread&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;piano.jpg&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="c1"&gt;# X = np.mean(A, -1) # Grayscale image&lt;/span&gt;
@@ -835,7 +897,69 @@
 &lt;p&gt;Data Driven Science &amp;amp; Engineering Machine Learning, Dynamical Systems, and Control - Brunton &amp;amp; Kutz&lt;/p&gt;
 &lt;p&gt;Singular Value Decomposition - Steve Brunton -  https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv&lt;/p&gt;
 &lt;p&gt;Lecture 47 — Singular Value Decomposition | Stanford University - https://www.youtube.com/watch?v=P5mlg91as1c&amp;amp;t=819s&lt;/p&gt;
-&lt;p&gt;Lecture 48 — Dimensionality Reduction with SVD | Stanford University - https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;amp;t=314s&lt;/p&gt;</content><category term="Machine Learning"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-12T00:00:00+01:00</published><updated>2020-12-12T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-12:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, covering three approaches, from-scratch implementation and application on Iris data set.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Lecture 48 — Dimensionality Reduction with SVD | Stanford University - https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;amp;t=314s&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-12T00:00:00+01:00</published><updated>2020-12-12T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-12:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, covering three approaches, from-scratch implementation and application on Iris data set.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
@@ -859,7 +983,7 @@
 
 &lt;p&gt;&lt;strong&gt;Principal Component Analysis (PCA)&lt;/strong&gt; is a dimensionality reduction method that transforms a large set of variables into a smaller one while keeping most of the variance present in the original set. &lt;/p&gt;
 &lt;p&gt;PCA is defined as a linear transformation that transforms the data into a new orthogonal coordinate system. The new coordinates are built such that the greatest variance lies on the first coordinate or principal component, the second greatest variance on the second coordinate, and so on. This transformation is found by maximizing the variance over the projected points.&lt;/p&gt;
-&lt;p&gt;Let $X$ be an $n \times m$ matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. However, it is also assumed that the observations have mean $0$ (i.e., $X$ has column-wise zero empirical mean)&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. However, it is also assumed that the observations have mean &lt;span class="math"&gt;\(0\)&lt;/span&gt; (i.e., &lt;span class="math"&gt;\(X\)&lt;/span&gt; has column-wise zero empirical mean)&lt;/p&gt;
 &lt;p&gt;PCA finds a new set of orthogonal coordinates (i.e. linearly independent, and non-correlated) and ranks each according to the explained variance of the data along them. &lt;/p&gt;
 &lt;p&gt;The new coordinates found are called &lt;strong&gt;principal components&lt;/strong&gt;, which are new features constructed as linear combinations of the initial features. This allows to reduce dimensionality while keeping underlying information structure. Since the principal components are ranked, it is possible to discard those with low contribution (i.e. the added explained variance is negligible). It is important to note that these new features are harder to interpret than the original ones, as they are a linear combinations that does not necessarily have an intrinsic meaning.&lt;/p&gt;
 &lt;p&gt;Each principal component is built as a linear combination of the original features and scaled according to a scalar factor. A &lt;strong&gt;scree plot&lt;/strong&gt; is a line plot of these factors, it is used to show the contribution of each principal component to the explained variance. As a consequence, as the components are ranked, the scree plot always displays the factors in descending order by magnitude.&lt;/p&gt;
@@ -867,55 +991,55 @@
 &lt;p&gt;A zero-intercept line is to be found such that the variance of the projected data points over the line is maximized. The principal components represent the directions of the data (projection) that explains the maximal amount of variance, and can be thought as new axes providing the best angle to capture the data dispersion.&lt;/p&gt;
 &lt;p&gt;Considering a data point, and a line drawn through the origin, then:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Let $a$ be the position vector of the point. &lt;/li&gt;
-&lt;li&gt;Let $b$ be the perpendicular distance vector from the point to the line.&lt;/li&gt;
-&lt;li&gt;Let $c$ be the position vector of the projected point.&lt;/li&gt;
+&lt;li&gt;Let &lt;span class="math"&gt;\(a\)&lt;/span&gt; be the position vector of the point. &lt;/li&gt;
+&lt;li&gt;Let &lt;span class="math"&gt;\(b\)&lt;/span&gt; be the perpendicular distance vector from the point to the line.&lt;/li&gt;
+&lt;li&gt;Let &lt;span class="math"&gt;\(c\)&lt;/span&gt; be the position vector of the projected point.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;All three vectors form a square triangle such that, according to the Pythagoras theorem, $a^2 = b^2 + c^2$. $b$ and $c$ are inversely related and, since $a$ is fixed, if $b$ gets bigger, $c$ gets smaller, and vice versa. As the objective is to maximize variance (dispersion), PCA can either minimize the distance to the line ($b$) or maximize the distance from the projected point to the origin ($c$).&lt;/p&gt;
+&lt;p&gt;All three vectors form a square triangle such that, according to the Pythagoras theorem, &lt;span class="math"&gt;\(a^2 = b^2 + c^2\)&lt;/span&gt;. &lt;span class="math"&gt;\(b\)&lt;/span&gt; and &lt;span class="math"&gt;\(c\)&lt;/span&gt; are inversely related and, since &lt;span class="math"&gt;\(a\)&lt;/span&gt; is fixed, if &lt;span class="math"&gt;\(b\)&lt;/span&gt; gets bigger, &lt;span class="math"&gt;\(c\)&lt;/span&gt; gets smaller, and vice versa. As the objective is to maximize variance (dispersion), PCA can either minimize the distance to the line (&lt;span class="math"&gt;\(b\)&lt;/span&gt;) or maximize the distance from the projected point to the origin (&lt;span class="math"&gt;\(c\)&lt;/span&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src="https://liorpachter.files.wordpress.com/2014/05/pca_figure1.jpg" width=500 /&gt;&lt;/p&gt;
 &lt;h2&gt;Covariance approach&lt;/h2&gt;
 &lt;p&gt;As an alternative, the principal components can be also thought as eigenvectors of the data covariance matrix, and can be computed by eigendecomposition of the data covariance matrix. &lt;/p&gt;
-&lt;p&gt;Let $X$ be an $n \times m$ matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
-&lt;p&gt;Let $B$ be an $n \times m$ matrix where each column is computed by subtracting the column-wise mean $\bar{X}$ from each column of $X$, namely, $B = X - \bar{X}$.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(B\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Calculate the covariance matrix $C$&lt;/strong&gt;, such that $C = \dfrac{B^TB}{n-1}$.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Calculate the covariance matrix &lt;span class="math"&gt;\(C\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the eigenvectors ($V$) and eigenvalues ($\Lambda$) of $C$&lt;/strong&gt;, such that $CV = \Lambda V$.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compute the eigenvectors (&lt;span class="math"&gt;\(V\)&lt;/span&gt;) and eigenvalues (&lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt;) of &lt;span class="math"&gt;\(C\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(CV = \Lambda V\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Sort the eigenvectors according to their eigenvalues in decreasing order&lt;/strong&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Choose the first $r$ eigenvectors that will be the new $r$ dimensions&lt;/strong&gt;. Select a subset $W$ of the eigenvectors as basis vectors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Choose the first &lt;span class="math"&gt;\(r\)&lt;/span&gt; eigenvectors that will be the new &lt;span class="math"&gt;\(r\)&lt;/span&gt; dimensions&lt;/strong&gt;. Select a subset &lt;span class="math"&gt;\(W\)&lt;/span&gt; of the eigenvectors as basis vectors.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the projected data matrix $T$&lt;/strong&gt;, such that $T = B W$.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compute the projected data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = B W\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2&gt;SVD approach&lt;/h2&gt;
 &lt;p&gt;Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD).&lt;/p&gt;
-&lt;p&gt;Let $X$ be an $n \times m$ matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
-&lt;p&gt;Let $B$ be an $n \times m$ matrix where each column is computed by subtracting the column-wise mean $\bar{X}$ from each column of $X$, namely, $B = X - \bar{X}$.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(B\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the SVD&lt;/strong&gt;. $B = U \Sigma V^T$ &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compute the SVD&lt;/strong&gt;. &lt;span class="math"&gt;\(B = U \Sigma V^T\)&lt;/span&gt; &lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Choose the first $r$ rows from $U$ and first $r$ singular (new $r$ dimensions)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Choose the first &lt;span class="math"&gt;\(r\)&lt;/span&gt; rows from &lt;span class="math"&gt;\(U\)&lt;/span&gt; and first &lt;span class="math"&gt;\(r\)&lt;/span&gt; singular (new &lt;span class="math"&gt;\(r\)&lt;/span&gt; dimensions)&lt;/strong&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the projected data matrix $T$&lt;/strong&gt;, such that $T = XV = U \Sigma V^T V = U \Sigma$. This form is also the polar decomposition of $T$.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compute the projected data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = XV = U \Sigma V^T V = U \Sigma\)&lt;/span&gt;. This form is also the polar decomposition of &lt;span class="math"&gt;\(T\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2&gt;Relation between Covariance and SVD approaches&lt;/h2&gt;
 &lt;p&gt;According to the SVD, &lt;/p&gt;
-&lt;p&gt;$$B = U \Sigma V^T$$&lt;/p&gt;
-&lt;p&gt;$$B^TB = V \Sigma U^T U \Sigma V^T = V \Sigma^2 V^T$$&lt;/p&gt;
-&lt;p&gt;The covariance matrix of $B$ is $C = \dfrac{B^TB}{n-1} = \dfrac{V \Sigma^2 V^T}{n-1}$.&lt;/p&gt;
-&lt;p&gt;$\Sigma$ are the eigenvalues of the matrix $B$, while $\Lambda$ are the eigenvalues of $C$. The relationship between them is defined as $\Lambda = \dfrac{\Sigma^2}{n-1}$.&lt;/p&gt;
-&lt;p&gt;Moreover, the right singular vectors $V$ of $B$ are equivalent to the eigenvectors of $B^TB$.&lt;/p&gt;
+&lt;div class="math"&gt;$$B = U \Sigma V^T$$&lt;/div&gt;
+&lt;div class="math"&gt;$$B^TB = V \Sigma U^T U \Sigma V^T = V \Sigma^2 V^T$$&lt;/div&gt;
+&lt;p&gt;The covariance matrix of &lt;span class="math"&gt;\(B\)&lt;/span&gt; is &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1} = \dfrac{V \Sigma^2 V^T}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; are the eigenvalues of the matrix &lt;span class="math"&gt;\(B\)&lt;/span&gt;, while &lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt; are the eigenvalues of &lt;span class="math"&gt;\(C\)&lt;/span&gt;. The relationship between them is defined as &lt;span class="math"&gt;\(\Lambda = \dfrac{\Sigma^2}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Moreover, the right singular vectors &lt;span class="math"&gt;\(V\)&lt;/span&gt; of &lt;span class="math"&gt;\(B\)&lt;/span&gt; are equivalent to the eigenvectors of &lt;span class="math"&gt;\(B^TB\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h2&gt;Implementation&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;scree_variance_explained_plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;fig&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;subplots&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -1116,7 +1240,69 @@
 &lt;p&gt;https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385&lt;/p&gt;
 &lt;p&gt;Eigenvectors and eigenvalues | Essence of linear algebra, chapter 14 - 3Blue1Brown - https://www.youtube.com/watch?v=PFDu9oVAE-g&lt;/p&gt;
 &lt;p&gt;PCA (Principal Component Analysis) in Python -  Python Engineer - https://www.youtube.com/watch?v=52d7ha-GdV8&amp;amp;t=3s&lt;/p&gt;
-&lt;p&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest - https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title&lt;/p&gt;</content><category term="Machine Learning"></category></entry><entry><title>Feature Scaling</title><link href="https://gastonamengual.github.io/feature-scaling.html" rel="alternate"></link><published>2020-11-20T00:00:00+01:00</published><updated>2020-11-20T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-11-20:/feature-scaling.html</id><summary type="html">&lt;p&gt;Different techniques of scaling data, including Normalization and Standarization.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest - https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Feature Scaling</title><link href="https://gastonamengual.github.io/feature-scaling.html" rel="alternate"></link><published>2020-11-20T00:00:00+01:00</published><updated>2020-11-20T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-11-20:/feature-scaling.html</id><summary type="html">&lt;p&gt;Different techniques of scaling data, including Normalization and Standarization.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
@@ -1156,15 +1342,15 @@
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/feature_scaling_1.png"&gt;&lt;/p&gt;
 &lt;h2&gt;Normalization&lt;/h2&gt;
-&lt;p&gt;Normalization is used to bound values between two numbers, typically between $[0,1]$ or $[-1,1]$. Normalization is a scaling technique in which values are shifted and rescaled so that they end up ranging between 0 and 1. It is also known as Min-Max scaling.&lt;/p&gt;
+&lt;p&gt;Normalization is used to bound values between two numbers, typically between &lt;span class="math"&gt;\([0,1]\)&lt;/span&gt; or &lt;span class="math"&gt;\([-1,1]\)&lt;/span&gt;. Normalization is a scaling technique in which values are shifted and rescaled so that they end up ranging between 0 and 1. It is also known as Min-Max scaling.&lt;/p&gt;
 &lt;p&gt;Normalization is good to use when the distribution of the data does not follow a Gaussian distribution.&lt;/p&gt;
 &lt;h3&gt;Rescaling (min-max normalization)&lt;/h3&gt;
-&lt;p&gt;It consists in rescaling the range of features to scale the range in $[0, 1]$ or $[−1, 1]$. The general formula for a min-max of $[0, 1]$ is given as:&lt;/p&gt;
-&lt;p&gt;$x' = \dfrac{x - min(x)}{max(x) - min(x)}$&lt;/p&gt;
-&lt;p&gt;where $x$ is an original value and $x'$ is the normalized value.&lt;/p&gt;
+&lt;p&gt;It consists in rescaling the range of features to scale the range in &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt; or &lt;span class="math"&gt;\([−1, 1]\)&lt;/span&gt;. The general formula for a min-max of &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt; is given as:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x' = \dfrac{x - min(x)}{max(x) - min(x)}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(x\)&lt;/span&gt; is an original value and &lt;span class="math"&gt;\(x'\)&lt;/span&gt; is the normalized value.&lt;/p&gt;
 &lt;p&gt;When the value of X is the minimum value in the column, the numerator will be 0, and hence X’ is 0. On the other hand, when the value of X is the maximum value in the column, the numerator is equal to the denominator and thus the value of X’ is 1. If the value of X is between the minimum and the maximum value, then the value of X’ is between 0 and 1&lt;/p&gt;
-&lt;p&gt;To rescale a range between an arbitrary set of values $[a, b]$, the formula becomes:&lt;/p&gt;
-&lt;p&gt;$x' = a + \dfrac{(x - min(x))(b-a)}{max(x) - min(x)}$&lt;/p&gt;
+&lt;p&gt;To rescale a range between an arbitrary set of values &lt;span class="math"&gt;\([a, b]\)&lt;/span&gt;, the formula becomes:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x' = a + \dfrac{(x - min(x))(b-a)}{max(x) - min(x)}\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
 &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
 
@@ -1175,7 +1361,7 @@
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/feature_scaling_2.png"&gt;&lt;/p&gt;
 &lt;h3&gt;Mean normalization&lt;/h3&gt;
-&lt;p&gt;$x' = \dfrac{x - average(x)}{max(x) - min(x)}$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x' = \dfrac{x - average(x)}{max(x) - min(x)}\)&lt;/span&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;X_scaled&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;max&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;min&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
 &lt;span class="n"&gt;plot_scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X_scaled&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Mean normalization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -1183,10 +1369,10 @@
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/feature_scaling_3.png"&gt;&lt;/p&gt;
 &lt;h2&gt;Standardization&lt;/h2&gt;
-&lt;p&gt;Standardization transforms the data to have a mean equal to $0$ (subtracting the mean in the numerator) and a variance equal to $1$, and it makes the data have no units.&lt;/p&gt;
+&lt;p&gt;Standardization transforms the data to have a mean equal to &lt;span class="math"&gt;\(0\)&lt;/span&gt; (subtracting the mean in the numerator) and a variance equal to &lt;span class="math"&gt;\(1\)&lt;/span&gt;, and it makes the data have no units.&lt;/p&gt;
 &lt;p&gt;It can be helpful in cases where the data follows a Gaussian distribution. However, this does not have to be necessarily true. Also, unlike normalization, standardization does not have a bounding range. So, even if there are outliers in the data, they will not be affected by standardization.&lt;/p&gt;
-&lt;p&gt;$x' = \dfrac{x - \bar{x}}{\sigma}$&lt;/p&gt;
-&lt;p&gt;where $x$ is the original feature vector, $\bar{x} = \text{average}(x)$ is the mean of that feature vector, and $\sigma$ is its standard deviation.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x' = \dfrac{x - \bar{x}}{\sigma}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(x\)&lt;/span&gt; is the original feature vector, &lt;span class="math"&gt;\(\bar{x} = \text{average}(x)\)&lt;/span&gt; is the mean of that feature vector, and &lt;span class="math"&gt;\(\sigma\)&lt;/span&gt; is its standard deviation.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;X_scaled&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
 &lt;span class="n"&gt;plot_scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X_scaled&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Standardization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -1195,4 +1381,66 @@
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/feature_scaling_4.png"&gt;&lt;/p&gt;
 &lt;h1&gt;References&lt;/h1&gt;
 &lt;p&gt;https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/&lt;/p&gt;
-&lt;p&gt;https://www.wikiwand.com/en/Feature_scaling&lt;/p&gt;</content><category term="Machine Learning"></category></entry></feed>
+&lt;p&gt;https://www.wikiwand.com/en/Feature_scaling&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry></feed>

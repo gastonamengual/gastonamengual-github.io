@@ -100,65 +100,65 @@
 </code></pre></div>
 
 
-<p>Let $X = \begin{bmatrix}  | &amp; | &amp; | &amp; | \  x_1 &amp; x_2 &amp; \dotsc &amp; x_m \  | &amp; | &amp; | &amp; | \end{bmatrix} \in \mathbb{C}^{nxm}$ be a matrix representing data points, where:</p>
+<p>Let <span class="math">\(X = <div class="math">\begin{bmatrix}  | &amp; | &amp; | &amp; | \\  x_1 &amp; x_2 &amp; \dotsc &amp; x_m \\  | &amp; | &amp; | &amp; | \end{bmatrix}</div> \in \mathbb{C}^{nxm}\)</span> be a matrix representing data points, where:</p>
 <ul>
 <li>
-<p>Each row $X_k \in \mathbb{C}^m$ is a variable or dimension of the data.</p>
+<p>Each row <span class="math">\(X_k \in \mathbb{C}^m\)</span> is a variable or dimension of the data.</p>
 </li>
 <li>
-<p>Each column $X_k \in \mathbb{C}^n$ is an observation or measurement from simulations or experiments. The index $k$ indicates the $k^{th}$ set of measurements or observations.</p>
+<p>Each column <span class="math">\(X_k \in \mathbb{C}^n\)</span> is an observation or measurement from simulations or experiments. The index <span class="math">\(k\)</span> indicates the <span class="math">\(k^{th}\)</span> set of measurements or observations.</p>
 </li>
 </ul>
-<p>The method to be explained is specially useful when $n \gg m$ (more dimensions than observations), i.e. high dimensional problems, resulting in a tall-skinny matrix, as opposed to a short-fat matrix when $n \ll m$ (more observations than dimensions).</p>
-<p>The <strong>SVD</strong> is a unique matrix decomposition that exists for every complex-values matrix $X \in \mathbb{C}^{nxm}$:</p>
-<p>$$X = U \Sigma V^* \quad (1)$$</p>
-<p>where $U \in \mathbb{C}^{n \times n}$ and $V \in \mathbb{C}^{m \times m}$ are unitary matrices$_{[1]}$. When $n \geq m$ the matrix $\Sigma$ has at most $m$ non-zero elements on the diagonal, and may be written as $\Sigma = \begin{bmatrix} \hat{\Sigma} \ 0 \end{bmatrix}$. Therefore, it is possible to exactly represent $X$ using the <strong>economy SVD</strong>:</p>
-<p>$$X = U\Sigma V^<em> = \hat{U} \hat{\Sigma} V^</em>$$</p>
-<p>where $\hat{U}$ are the first $m$ columns of $U$. The columns of $U$ are called <strong>left singular vectors of X</strong> and the columns of V are <strong>right singular vectors</strong>. The diagonal elements of $\Sigma$, $\sigma_i$, are called <strong>singular values</strong>, and they are ordered so that $\sigma_{i+1} \leq \sigma_i$, i.e., from largest to smallest. The rank of $X$ is equal to the number of non-zero singular values.</p>
-<p>SVD generalizes the eigendecomposition of a square normal matrix to any $m \times n$ matrix via an extension of the polar decomposition. It is numerically stable and provides a hierarchical representation of the data in terms of a new coordinate system defined by dominant correlations within the data. Moreover, the SVD is guaranteed to exist for any matrix, unlike the eigendecomposition.</p>
+<p>The method to be explained is specially useful when <span class="math">\(n \gg m\)</span> (more dimensions than observations), i.e. high dimensional problems, resulting in a tall-skinny matrix, as opposed to a short-fat matrix when <span class="math">\(n \ll m\)</span> (more observations than dimensions).</p>
+<p>The <strong>SVD</strong> is a unique matrix decomposition that exists for every complex-values matrix <span class="math">\(X \in \mathbb{C}^{nxm}\)</span>:</p>
+<div class="math">$$X = U \Sigma V^* \quad (1)$$</div>
+<p>where <span class="math">\(U \in \mathbb{C}^{n \times n}\)</span> and <span class="math">\(V \in \mathbb{C}^{m \times m}\)</span> are unitary matrices<span class="math">\(_{[1]}\)</span>. When <span class="math">\(n \geq m\)</span> the matrix <span class="math">\(\Sigma\)</span> has at most <span class="math">\(m\)</span> non-zero elements on the diagonal, and may be written as <span class="math">\(\Sigma = <div class="math">\begin{bmatrix} \hat{\Sigma} \\ 0 \end{bmatrix}</div>\)</span>. Therefore, it is possible to exactly represent <span class="math">\(X\)</span> using the <strong>economy SVD</strong>:</p>
+<div class="math">$$X = U\Sigma V^* = \hat{U} \hat{\Sigma} V^*$$</div>
+<p>where <span class="math">\(\hat{U}\)</span> are the first <span class="math">\(m\)</span> columns of <span class="math">\(U\)</span>. The columns of <span class="math">\(U\)</span> are called <strong>left singular vectors of X</strong> and the columns of V are <strong>right singular vectors</strong>. The diagonal elements of <span class="math">\(\Sigma\)</span>, <span class="math">\(\sigma_i\)</span>, are called <strong>singular values</strong>, and they are ordered so that <span class="math">\(\sigma_{i+1} \leq \sigma_i\)</span>, i.e., from largest to smallest. The rank of <span class="math">\(X\)</span> is equal to the number of non-zero singular values.</p>
+<p>SVD generalizes the eigendecomposition of a square normal matrix to any <span class="math">\(m \times n\)</span> matrix via an extension of the polar decomposition. It is numerically stable and provides a hierarchical representation of the data in terms of a new coordinate system defined by dominant correlations within the data. Moreover, the SVD is guaranteed to exist for any matrix, unlike the eigendecomposition.</p>
 <p><strong>Geometric Interpretation</strong></p>
-<p>If $M$ is an $n \times n$ real square matrix, the matrices $U$ and $V^T$ can be chosen to be real $n \times n$, too, which represent rotations or reflection of the space $R^n$, while $\Sigma$ represents the scaling of each coordinate $X_i$ by the factor $\sigma_i$. Thus the SVD decomposition breaks down any invertible linear transformation of $R^n$ into a composition of three geometrical transformations: a rotation or reflection ($V^*$), a coordinate-by-coordinate scaling ($\Sigma$), and a second rotation or reflection ($U$).</p>
+<p>If <span class="math">\(M\)</span> is an <span class="math">\(n \times n\)</span> real square matrix, the matrices <span class="math">\(U\)</span> and <span class="math">\(V^T\)</span> can be chosen to be real <span class="math">\(n \times n\)</span>, too, which represent rotations or reflection of the space <span class="math">\(R^n\)</span>, while <span class="math">\(\Sigma\)</span> represents the scaling of each coordinate <span class="math">\(X_i\)</span> by the factor <span class="math">\(\sigma_i\)</span>. Thus the SVD decomposition breaks down any invertible linear transformation of <span class="math">\(R^n\)</span> into a composition of three geometrical transformations: a rotation or reflection (<span class="math">\(V^*\)</span>), a coordinate-by-coordinate scaling (<span class="math">\(\Sigma\)</span>), and a second rotation or reflection (<span class="math">\(U\)</span>).</p>
 <h1>Interpretation as dominant correlations</h1>
-<p>The SVD is related to an eigenvalue problem involving the correlation matrices $XX^T$ and $X^TX$:</p>
-<p>$X^T = V \Sigma U^T$</p>
-<p>$XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T$</p>
-<p>$X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T$</p>
-<p>Recalling that $U$ and $V$ are unitary, multiplying each equation's side by $U$ and $V$, respectively, $U$; $\Sigma$; and $V$ are solutions to the following eigenvalue problems:</p>
-<p>$X X^T U = U \hat{\Sigma^2} \quad (2)$</p>
-<p>$X^T X V = V \hat{\Sigma^2} \quad (3)$</p>
+<p>The SVD is related to an eigenvalue problem involving the correlation matrices <span class="math">\(XX^T\)</span> and <span class="math">\(X^TX\)</span>:</p>
+<p><span class="math">\(X^T = V \Sigma U^T\)</span></p>
+<p><span class="math">\(XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T\)</span></p>
+<p><span class="math">\(X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T\)</span></p>
+<p>Recalling that <span class="math">\(U\)</span> and <span class="math">\(V\)</span> are unitary, multiplying each equation's side by <span class="math">\(U\)</span> and <span class="math">\(V\)</span>, respectively, <span class="math">\(U\)</span>; <span class="math">\(\Sigma\)</span>; and <span class="math">\(V\)</span> are solutions to the following eigenvalue problems:</p>
+<p><span class="math">\(X X^T U = U \hat{\Sigma^2} \quad (2)\)</span></p>
+<p><span class="math">\(X^T X V = V \hat{\Sigma^2} \quad (3)\)</span></p>
 <ul>
 <li>
-<p>The non-negative singular values of $X$ are the square root of the non-negative eigenvalue\s of $X^TX$ and of $XX^T$, and are arranged in descending order by magnitude, and thus the columns of $U$ are hierarchically ordered by how much correlation they capture in the columns of $X$; and the columns of $V$ similarly captures correlation in the rows of $X$.</p>
+<p>The non-negative singular values of <span class="math">\(X\)</span> are the square root of the non-negative eigenvalue\s of <span class="math">\(X^TX\)</span> and of <span class="math">\(XX^T\)</span>, and are arranged in descending order by magnitude, and thus the columns of <span class="math">\(U\)</span> are hierarchically ordered by how much correlation they capture in the columns of <span class="math">\(X\)</span>; and the columns of <span class="math">\(V\)</span> similarly captures correlation in the rows of <span class="math">\(X\)</span>.</p>
 </li>
 <li>
-<p>The left-singular vectors of $X$ are a set of orthonormal eigenvectors of of the correlation matrix $XX^T$, </p>
+<p>The left-singular vectors of <span class="math">\(X\)</span> are a set of orthonormal eigenvectors of of the correlation matrix <span class="math">\(XX^T\)</span>, </p>
 </li>
 <li>
-<p>The right-singular vectors of $X$ are a set of orthonormal eigenvectors of $X^TX$. </p>
+<p>The right-singular vectors of <span class="math">\(X\)</span> are a set of orthonormal eigenvectors of <span class="math">\(X^TX\)</span>. </p>
 </li>
 </ul>
 <h1>Truncated SVD</h1>
-<p>The sum of the squares of the singular values should be equal to the total variance in $X$, and each one tells how much of the total variance is accounted for by each singular vector. Often, a <strong>truncated SVD</strong> is calculated, truncating the SVD at a rank $r$ that captures a pre-determined amount of the variance or energy in the original matrix:</p>
-<p>$$a_{ij} = \sum_{k=1}^{r} u_{ik} \sigma_k v_{jk}$$</p>
-<h2>Election of $r$</h2>
-<p>Deciding how many singular values to keep (i.e. the rank $r$) is one of the most important and contentious decisions when using the SVD. There are many factors, including specifications on the desired rank of the system, the magnitude of noise, and the distribution of the singular values. </p>
+<p>The sum of the squares of the singular values should be equal to the total variance in <span class="math">\(X\)</span>, and each one tells how much of the total variance is accounted for by each singular vector. Often, a <strong>truncated SVD</strong> is calculated, truncating the SVD at a rank <span class="math">\(r\)</span> that captures a pre-determined amount of the variance or energy in the original matrix:</p>
+<div class="math">$$a_{ij} = \sum_{k=1}^{r} u_{ik} \sigma_k v_{jk}$$</div>
+<h2>Election of <span class="math">\(r\)</span></h2>
+<p>Deciding how many singular values to keep (i.e. the rank <span class="math">\(r\)</span>) is one of the most important and contentious decisions when using the SVD. There are many factors, including specifications on the desired rank of the system, the magnitude of noise, and the distribution of the singular values. </p>
 <h3>Percentage of explained variance captured</h3>
-<p>The SVD can be truncated at a rank $r$ that captures a pre-determined amount of the variance or energy in the original data, such as $90%$ or $99%$ truncation.</p>
+<p>The SVD can be truncated at a rank <span class="math">\(r\)</span> that captures a pre-determined amount of the variance or energy in the original data, such as <span class="math">\(90%\)</span> or <span class="math">\(99%\)</span> truncation.</p>
 <h3>Elbow method</h3>
 <p>Other techniques involve identifying "elbows" in the singular value distribution, which may denote the transition from singular values that represent important variance percentage from those that represent low information.</p>
 <h3>Gavish-Donoho</h3>
-<p>According to <a href="https://arxiv.org/abs/1305.5870">Gavish-Donoho (2014)</a>, for non squared matrices, the optimal value of $r$ is calculated as</p>
-<p>$r = \omega(\beta) \cdot median(S)$</p>
+<p>According to <a href="https://arxiv.org/abs/1305.5870">Gavish-Donoho (2014)</a>, for non squared matrices, the optimal value of <span class="math">\(r\)</span> is calculated as</p>
+<p><span class="math">\(r = \omega(\beta) \cdot median(S)\)</span></p>
 <p><img alt="image.png" src="gavish_danoho_coefficients.png"></p>
-<p>where $\beta = \left{\begin{matrix}
-\frac{n}{m} &amp; \text{if} \quad n &lt; m\ 
+<p>where <span class="math">\(\beta = \left\{<div class="math">\begin{matrix}
+\frac{n}{m} &amp; \text{if} \quad n &lt; m\\ 
 \frac{m}{n} &amp; \text{if} \quad m &lt; n
-\end{matrix}\right.$</p>
+\end{matrix}</div>\right.\)</span></p>
 <h3>Notes</h3>
 <p><strong>Conjugate transpose</strong></p>
-<p>The conjugate transpose or Hermitian transpose of an $n \times m$ matrix $A$ with complex entries is the $n \times m$ matrix obtained from $A$ by taking the transpose and then taking the complex conjugate of each entry (the complex conjugate of $a+ib$ is $a-ib$, for real numbers $a$ and $b$). It is denoted as $A^H$ or $A^<em>$. For real matrices, the conjugate transpose is just the transpose, $A^</em>=A^T$.</p>
+<p>The conjugate transpose or Hermitian transpose of an <span class="math">\(n \times m\)</span> matrix <span class="math">\(A\)</span> with complex entries is the <span class="math">\(n \times m\)</span> matrix obtained from <span class="math">\(A\)</span> by taking the transpose and then taking the complex conjugate of each entry (the complex conjugate of <span class="math">\(a+ib\)</span> is <span class="math">\(a-ib\)</span>, for real numbers <span class="math">\(a\)</span> and <span class="math">\(b\)</span>). It is denoted as <span class="math">\(A^H\)</span> or <span class="math">\(A^*\)</span>. For real matrices, the conjugate transpose is just the transpose, <span class="math">\(A^*=A^T\)</span>.</p>
 <p><strong>[1] Unitary vs orthogonal matrix</strong></p>
-<p>In linear algebra, a complex square matrix $U$ is unitary if its conjugate transpose $U^<em>$ is also its inverse, that is, if $UU^</em> = U^*U = I$, where $I$ is the identity matrix. For real numbers, unitary and orthogonal means the same.</p>
+<p>In linear algebra, a complex square matrix <span class="math">\(U\)</span> is unitary if its conjugate transpose <span class="math">\(U^*\)</span> is also its inverse, that is, if <span class="math">\(UU^* = U^*U = I\)</span>, where <span class="math">\(I\)</span> is the identity matrix. For real numbers, unitary and orthogonal means the same.</p>
 <h1>Image Approximation</h1>
 <div class="highlight"><pre><span></span><code><span class="n">X</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s1">&#39;piano.jpg&#39;</span><span class="p">)</span>
 <span class="c1"># X = np.mean(A, -1) # Grayscale image</span>
@@ -238,6 +238,68 @@
 <p>Singular Value Decomposition - Steve Brunton -  https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv</p>
 <p>Lecture 47 — Singular Value Decomposition | Stanford University - https://www.youtube.com/watch?v=P5mlg91as1c&amp;t=819s</p>
 <p>Lecture 48 — Dimensionality Reduction with SVD | Stanford University - https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;t=314s</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
         </section>
 
         <br><hr>

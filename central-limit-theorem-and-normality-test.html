@@ -95,7 +95,7 @@
 <p>The purpose of this document is to analyze the performance of scipy.stats.normaltest, and use it to check the Central Limit Theorem (CLT). </p>
 <p>First, two non-normal distribution will be tested with scipy's normality test. Then, the same test will be applied to Uniform, Normal, and Exponential samples of different sizes, which will be summed n times, to see wether the CLT is valid or not.</p>
 <h1>Normal Distribuion</h1>
-<p>Normal distribution with $\mu = 0$ and $\sigma = 1$ looks like.</p>
+<p>Normal distribution with <span class="math">\(\mu = 0\)</span> and <span class="math">\(\sigma = 1\)</span> looks like.</p>
 <div class="highlight"><pre><span></span><code><span class="n">normal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal Distribution&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Normal Distribution&#39;</span><span class="p">)</span>
@@ -239,8 +239,8 @@
 
 <h1>Central Limit Theorem</h1>
 <p>The central limit theorem (CLT) establishes that, in some situations, when independent random variables are added, their properly normalized sum tends toward a normal distribution even if the original variables themselves are not normally distributed. The theorem is a key concept in probability theory because it implies that probabilistic and statistical methods that work for normal distributions can be applicable to many problems involving other types of distributions.</p>
-<p>If $X_1,...,X_n$ is a random sample of size $n$ taken from a population with finite mean $\mu$ and finite variance $\sigma^2$, and if $\bar{X}$ is the sample mean, the limiting form of the distirbution $Z = (\dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}})$ as $n \rightarrow \infty$ is the standard normal distribution.</p>
-<p>In other words, the CLT states that the sampling distribution of the sample means approaches a normal distribution as the sample size gets larger — no matter what the shape of the population distribution. This fact holds especially true for sample sizes over $30$. All this is saying is that as more samples are taken, especially large ones, the graph of the sample means will look more like a normal distribution.</p>
+<p>If <span class="math">\(X_1,...,X_n\)</span> is a random sample of size <span class="math">\(n\)</span> taken from a population with finite mean <span class="math">\(\mu\)</span> and finite variance <span class="math">\(\sigma^2\)</span>, and if <span class="math">\(\bar{X}\)</span> is the sample mean, the limiting form of the distirbution <span class="math">\(Z = (\dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}})\)</span> as <span class="math">\(n \rightarrow \infty\)</span> is the standard normal distribution.</p>
+<p>In other words, the CLT states that the sampling distribution of the sample means approaches a normal distribution as the sample size gets larger — no matter what the shape of the population distribution. This fact holds especially true for sample sizes over <span class="math">\(30\)</span>. All this is saying is that as more samples are taken, especially large ones, the graph of the sample means will look more like a normal distribution.</p>
 <p>Even when a sample is not normally distributed, if you draw multiple samples and take each of their averages, these averages will represent a normal distribution.</p>
 <p>The Central Limit Theorem explains, at least in part, the prevalence of normal distributions in the natural world. Most characteristics of animals and other life forms are affected by a large number of genetic and environmental factors whose effect is additive. The characteristics we measure are the sum of a large number of small effects, so their distribution tends to be normal.</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normal_test</span><span class="p">():</span>
@@ -291,7 +291,7 @@
 </code></pre></div>
 
 
-<p><strong>Null Hypothesis</strong>: the sum of $t$ samples of size $n$ of some distribution $\sum_{1}^{t} (\sum_{1}^{n} X_i)$ follows a Normal Distribution, where $X_i$ is a random variable of some distribution.</p>
+<p><strong>Null Hypothesis</strong>: the sum of <span class="math">\(t\)</span> samples of size <span class="math">\(n\)</span> of some distribution <span class="math">\(\sum_{1}^{t} (\sum_{1}^{n} X_i)\)</span> follows a Normal Distribution, where <span class="math">\(X_i\)</span> is a random variable of some distribution.</p>
 <div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../Datasets/CLT/uniform_samples.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;## Central Limit Theorem - Uniform Samples&quot;</span><span class="p">))</span>
 <span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">color_less_alpha</span><span class="p">))</span>
@@ -3572,6 +3572,68 @@
 
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_17.png"></p>
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/central_limit_theorem_and_normality_test_18.png"></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
         </section>
 
         <br><hr>
