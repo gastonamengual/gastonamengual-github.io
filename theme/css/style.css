@@ -1,30 +1,29 @@
-/* Global */
-
 body {
   margin: 0px;
   padding: 0px;
-  background-color: #fcfcfc;
-  font-family: 'Open Sans', sans-serif;
+  background-color: #E8E6F3;
+  font-family: 'Spartan';
   font-size: 12pt;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Spartan';
   line-height: 1.1;
+  color: #4a2964;
 }
 
 h1 {
-  font-weight: bold;
+  font-weight: 800;
   font-size: 23pt;
 }
 
 h2 {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 20pt;
 }
 
 h3 {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 16pt;
 }
 
@@ -147,6 +146,7 @@ ul.social li a:hover {
 #header-menu {
   font-size: 14pt;
   text-align: right;
+  font-weight: bold;
 }
 
 #header-menu ul {
@@ -176,7 +176,7 @@ ul.social li a:hover {
 }
 
 #intro-description {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Spartan';
   font-size: 11pt;
   display: inline;
 }
@@ -214,7 +214,6 @@ ul.social li a:hover {
 
 #content a {
   color: #4a2964;
-  font-weight: bold;
 }
 
 #content a:hover {
@@ -346,4 +345,16 @@ ul.social li a:hover {
   #share a span {
     display: inline;
   }
+}
+
+.categories_content{
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-left: 2rem;
+}
+
+.categories-uptitle{
+  font-size: 1.7rem;
+  font-weight: 800;
 }
