@@ -213,7 +213,8 @@ ul.social li a:hover {
 }
 
 #content a {
-  color: #4a2964;
+  color: black;
+  font-weight: 600;
 }
 
 #content a:hover {
