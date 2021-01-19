@@ -87,11 +87,6 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;bmh&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">10</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-</code></pre></div>
-
-
 <p>The purpose of this document is to analyze the performance of scipy.stats.normaltest, and use it to check the Central Limit Theorem (CLT). </p>
 <p>First, two non-normal distribution will be tested with scipy's normality test. Then, the same test will be applied to Uniform, Normal, and Exponential samples of different sizes, which will be summed n times, to see wether the CLT is valid or not.</p>
 <h1>Normal Distribuion</h1>

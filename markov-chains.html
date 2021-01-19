@@ -85,14 +85,6 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;bmh&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">10</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rebeccapurple&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">,</span> <span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;lawngreen&quot;</span><span class="p">,</span> <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;deeppink&quot;</span><span class="p">])</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
-</code></pre></div>
-
-
 <h2>Definition</h2>
 <p>A Markov chain is a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event. A countably infinite sequence, in which the chain moves state at discrete time steps, gives a discrete-time Markov chain (DTMC). A continuous-time process is called a continuous-time Markov chain (CTMC). It is named after the Russian mathematician Andrey Markov.</p>
 <p>Given a sequence of random variables <span class="math">\(X_1, X_2, …, X_n\)</span> where the indices <span class="math">\(1, 2, …, n\)</span> represent successive points in time, the chain rule of probability can be used to calculate the probability of the entire sequence:</p>

@@ -94,19 +94,6 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">rc</span><span class="p">(</span><span class="s1">&#39;animation&#39;</span><span class="p">,</span> <span class="n">html</span><span class="o">=</span><span class="s1">&#39;html5&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;bmh&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-
-<span class="n">style</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;description_width&#39;</span><span class="p">:</span> <span class="s1">&#39;40px&#39;</span><span class="p">}</span>
-<span class="n">slider_layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="s1">&#39;99%&#39;</span><span class="p">)</span>
-
-<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rebeccapurple&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;gray&quot;</span><span class="p">]</span>
-</code></pre></div>
-
-
 <h1>1 Theoretical Framework</h1>
 <h2>1.1 Introduction</h2>
 <p>Simulated annealing is a probabilistic technique for <strong>approximating the global minimum</strong> of a given function. It is often used when the search space is discrete, and for situations with a lot of local minima where algorithms like Gradient Descent would get stuck. The name of the algorithm comes from annealing in metallurgy, a technique involving <strong>heating and controlled cooling of a material</strong> to increase the size of its crystals and reduce their defects, both attributes depending on their thermodynamic free energy. Heating and cooling the material affects both the temperature and the thermodynamic free energy. </p>
