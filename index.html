@@ -9,9 +9,7 @@
 
     <!-- PWA -->
     <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
-    <!-- <meta name="application-name" content="Gastón Amengual">
-    <meta name="apple-mobile-web-app-title" content="Gastón Amengual"> -->
-    <meta name="theme-color" content="#4a2964">
+    <meta name="theme-color" content="#6A1A6A">
     <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
@@ -36,12 +34,12 @@
   <body>
     <div class="w3-row w3-card w3-white">
       <header id="header">
-        <a href="https://gastonamengual.github.io" id="header-logo" title="Home">GA</a>
+        <img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="header-logo">
         <nav id="header-menu">
           <ul>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple active"><a href="https://gastonamengual.github.io/">About</a></li>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
-            <li class="w3-bottombar w3-border-white w3-hover-border-purple"><a href="/categories.html">Articles</a></li>
+            <li class="header-li active"><a href="https://gastonamengual.github.io/">About</a></li>
+            <li class="header-li"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="header-li"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
       </header>
@@ -64,8 +62,9 @@
 
       <div class="col-main w3-container">
         <section id="content">
-          <div class="w3-row w3-light-grey w3-border-bottom">
-    <aside id="intro" class="w3-container w3-center w3-padding-32">
+          <div style="background-color: #f1f1f1;">
+    <aside id="intro" style="padding: 0.01em 16px; text-align: center !important; padding-top: 0px !important;
+    padding-bottom: 10px !important;">
         <div style="line-height: 180px;">
             <img class="avatar" src='https://gastonamengual.github.io/images/avatar.png'>
         </div>
@@ -77,9 +76,9 @@
             </span>
         </div>
         <div>
-            <a href="mailto: gastonamengual@icloud.com" target="_blank" class="w3-btn w3-purple">Mail</a>
-            <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="w3-btn w3-indigo">LinkedIn</a>
-            <a href="https://github.com/gastonamengual" target="_blank" class="w3-btn w3-black">GitHub</a>
+            <a href="mailto: gastonamengual@icloud.com" target="_blank" class="contact-btn" id="mail-btn">Mail</a>
+            <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="contact-btn" id="linkedin-btn">LinkedIn</a>
+            <a href="https://github.com/gastonamengual" target="_blank" class="contact-btn" id="github-btn">GitHub</a>
         </div>
     </aside>
 </div>
