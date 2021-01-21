@@ -179,46 +179,8 @@
 
 
 <h1>Visualization</h1>
-<div class="highlight"><pre><span></span><code><span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Martingale&#39;</span><span class="p">,</span> <span class="s1">&#39;Infinite Martingale&#39;</span><span class="p">,</span> <span class="s2">&quot;d&#39;Alembert&quot;</span><span class="p">,</span> <span class="s1">&#39;All-in&#39;</span><span class="p">]</span>
-</code></pre></div>
-
-
 <h2>Cash Flow Plots</h2>
 <p>Shows the cash flow for all roulette throws in all 100 iterations</p>
-<div class="highlight"><pre><span></span><code><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-
-<span class="n">strategies</span> <span class="o">=</span> <span class="p">[</span><span class="n">martingale_cash_list</span><span class="p">,</span> <span class="n">martingale_infinite_cash_list</span><span class="p">,</span> <span class="n">dalembert_cash_list</span><span class="p">,</span> <span class="n">all_in_cash_list</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">strategie</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">strategies</span><span class="p">,</span> <span class="n">titles</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">102</span><span class="p">),</span> <span class="n">strategie</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">initial_cash</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial capital&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s2">&quot;Martingale&quot;</span> <span class="ow">or</span> <span class="n">title</span> <span class="o">==</span> <span class="s2">&quot;d&#39;Alembert&quot;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Cash ($)&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s2">&quot;d&#39;Alembert&quot;</span> <span class="ow">or</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;All-in&#39;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Iterations&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Infinite Martingale&#39;</span> <span class="ow">or</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;All-in&#39;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;symlog&#39;</span><span class="p">,</span> <span class="n">linthresh</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;All-in&#39;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">7</span><span class="p">)</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Roulette Strategies&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.915</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">runs</span><span class="si">}</span><span class="s1"> Runs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;strategies.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div>
-
-
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/roulette_simulation_strategies_analysis_1.png">    </p>
 <h2>Wins Relative Frequency Plots</h2>
 <p>Calculates relative frequency of wins for each strategy</p>
@@ -256,35 +218,6 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-
-<span class="n">frequencies</span> <span class="o">=</span> <span class="p">[</span><span class="n">martingale_rel_freq</span><span class="p">,</span> <span class="n">martingale_infinite_rel_freq</span><span class="p">,</span> <span class="n">dalembert_rel_freq</span><span class="p">,</span> <span class="n">all_in_rel_freq</span><span class="p">]</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mediumpurple&#39;</span><span class="p">,</span> <span class="s1">&#39;olivedrab&#39;</span><span class="p">,</span> <span class="s1">&#39;darkgoldenrod&#39;</span><span class="p">,</span> <span class="s1">&#39;saddlebrown&#39;</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">titles</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s2">&quot;Martingale&quot;</span> <span class="ow">or</span> <span class="n">title</span> <span class="o">==</span> <span class="s2">&quot;d&#39;Alembert&quot;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Relative frequency&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s2">&quot;d&#39;Alembert&quot;</span> <span class="ow">or</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;All-in&#39;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Iterations&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;All-in&#39;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">12.5</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Bets Won Relative Frequency&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.915</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">runs</span><span class="si">}</span><span class="s1"> Runs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;frequencies.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div>
-
-
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/roulette_simulation_strategies_analysis_2.png"></p>
 <h2>Win Percentage for 100 Iterations</h2>
 <p>Times the final capital was greater than initial capital at final roulette throw in all 100 iterations</p>
@@ -311,23 +244,14 @@
     <span class="k">if</span><span class="p">(</span><span class="n">all_in_cash_list</span><span class="p">[</span><span class="n">run</span><span class="p">][</span><span class="n">iterations</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">initial_cash</span><span class="p">):</span>
         <span class="n">wins</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="n">all_in_wins</span> <span class="o">=</span> <span class="n">wins</span><span class="o">/</span><span class="n">runs</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;After 100 iterations&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Martingale wins percentage: </span><span class="si">{</span><span class="n">martingale_wins</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Martingale infinite wins percentage: </span><span class="si">{</span><span class="n">martingale_infinite_wins</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dalembert wins percentage: </span><span class="si">{</span><span class="n">dalembert_wins</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;All in wins percentage: </span><span class="si">{</span><span class="n">all_in_wins</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">After 100 iterations</span>
-<span class="err">Martingale wins percentage: 11%</span>
-<span class="err">Martingale infinite wins percentage: 99%</span>
-<span class="err">Dalembert wins percentage: 52%</span>
-<span class="err">All in wins percentage: 0%</span>
-</code></pre></div>
-
-
+<p>After 100 iterations</p>
+<p>Martingale wins percentage: 11%</p>
+<p>Martingale infinite wins percentage: 99%</p>
+<p>Dalembert wins percentage: 52%</p>
+<p>All in wins percentage: 0%</p>
 <h2>Final Capital for 100 Iterations (12 for All-in)</h2>
 <div class="highlight"><pre><span></span><code><span class="n">final_amount</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
@@ -352,21 +276,13 @@
     <span class="k">if</span><span class="p">(</span><span class="n">all_in_cash_list</span><span class="p">[</span><span class="n">run</span><span class="p">][</span><span class="mi">12</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">initial_cash</span><span class="p">):</span>
         <span class="n">final_amount</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">all_in_cash_list</span><span class="p">[</span><span class="n">run</span><span class="p">][</span><span class="mi">12</span><span class="p">])</span>
 <span class="n">all_in_final_capital</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">final_amount</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Martingale final capital mean: $</span><span class="si">{</span><span class="n">martingale_final_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Martingale infinite final capital mean: $</span><span class="si">{</span><span class="n">martingale_infinite_final_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dalembert final capital mean: $</span><span class="si">{</span><span class="n">dalembert_final_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;All in final capital mean: $</span><span class="si">{</span><span class="n">all_in_final_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">Martingale final capital mean: $5972.73</span>
-<span class="err">Martingale infinite final capital mean: $5607.07</span>
-<span class="err">Dalembert final capital mean: $1758.40</span>
-<span class="err">All in final capital mean: $204800.00</span>
-</code></pre></div>
-
-
+<p>Martingale final capital mean: $5972.73</p>
+<p>Martingale infinite final capital mean: $5607.07</p>
+<p>Dalembert final capital mean: $1758.40</p>
+<p>All in final capital mean: $204800.00</p>
 <h2>Maximum Capital Obtained</h2>
 <p>Calculates the maximum capital obtained in all iterations of all runs.</p>
 <div class="highlight"><pre><span></span><code><span class="n">martingale_max_capital</span> <span class="o">=</span> <span class="mi">0</span>
@@ -392,21 +308,13 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
         <span class="k">if</span><span class="p">(</span><span class="n">all_in_cash_list</span><span class="p">[</span><span class="n">run</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">all_in_max_capital</span><span class="p">):</span>
             <span class="n">all_in_max_capital</span> <span class="o">=</span> <span class="n">all_in_cash_list</span><span class="p">[</span><span class="n">run</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Martingale max capital: $</span><span class="si">{</span><span class="n">martingale_max_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Martingale infinite max capital: $</span><span class="si">{</span><span class="n">martingale_infinite_max_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dalembert max capital: $</span><span class="si">{</span><span class="n">dalembert_max_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;All in max capital: $</span><span class="si">{</span><span class="n">all_in_max_capital</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">Martingale max capital: $6500.00</span>
-<span class="err">Martingale infinite max capital: $6900.00</span>
-<span class="err">Dalembert max capital: $2936.00</span>
-<span class="err">All in max capital: $563200.00</span>
-</code></pre></div>
-
-
+<p>Martingale max capital: $6500.00</p>
+<p>Martingale infinite max capital: $6900.00</p>
+<p>Dalembert max capital: $2936.00</p>
+<p>All in max capital: $563200.00</p>
 <h2>Probabilistic Martingale Verification</h2>
 <div class="highlight"><pre><span></span><code><span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">martingale_cash_list</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

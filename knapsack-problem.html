@@ -66,11 +66,6 @@
       <div class="col-main w3-container">
         <section id="content">
           <p><strong>Notebook written by Gastón Amengual.</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-</code></pre></div>
-
-
 <p>The knapsack problem is a problem in combinatorial optimization. Given a set of items, each with a weight and a value, determine the number of each item to include in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.</p>
 <p>The most common problem being solved is the 0-1 knapsack problem, which restricts the number <span class="math">\(x_{i}\)</span> of copies of each kind of item to zero or one. Given a set of <span class="math">\(n\)</span> items, each with a weight <span class="math">\(w_i\)</span> and a value <span class="math">\(v_i\)</span> and a maximum weight limit <span class="math">\(W\)</span>, the problem is defined as</p>
 <p><span class="math">\(max \sum_{i=1}^{n}v_i x_i\)</span></p>
@@ -93,11 +88,6 @@
         <span class="n">items_df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;Enters Bag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Yes&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">items_df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;Enters Bag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The final bag weight is </span><span class="si">{</span><span class="n">bag_weight</span><span class="si">}</span><span class="s1"> kg&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The total profit is $</span><span class="si">{</span><span class="n">items_df</span><span class="p">[</span><span class="n">items_df</span><span class="p">[</span><span class="s1">&#39;Enters Bag&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Yes&#39;</span><span class="p">][</span><span class="s1">&#39;Profit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">items_df</span><span class="p">[</span><span class="n">items_df</span><span class="p">[</span><span class="s1">&#39;Enters Bag&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Yes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> out of 10 items entered&quot;</span><span class="p">)</span>
-<span class="n">items_df</span>
 </code></pre></div>
 
 

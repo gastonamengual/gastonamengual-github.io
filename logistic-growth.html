@@ -72,17 +72,16 @@
 </code></pre></div>
 
 
-<p>Logistic Growth is a mathematical function characterized by increasing growth in the beginning period, but a decreasing growth at a later stage, as you get closer to a maximum.</p>
-<p><span class="math">\(y(t) = \dfrac{c}{1+a \cdot e^{-bt}}\)</span></p>
+<p>Logistic Growth is a mathematical function characterized by increasing growth in the beginning period, but a decreasing growth at a later stage, as you get closer to a maximum. It is an S-shaped curve with equation</p>
+<div class="math">$$y(t) = \dfrac{c}{1+a \cdot e^{-bt}}$$</div>
 <p>In which:</p>
 <ul>
-<li>y(t) is the number of cases at any given time t</li>
-<li>c is the limiting value, the maximum capacity for y</li>
-<li>b has to be larger than 0</li>
+<li><span class="math">\(y(t)\)</span> is the number of cases at any given time <span class="math">\(t\)</span></li>
+<li><span class="math">\(c\)</span> is the limiting value, the maximum capacity for <span class="math">\(y\)</span></li>
+<li><span class="math">\(b\)</span> has to be larger than <span class="math">\(0\)</span></li>
 </ul>
-<p>Two very other interesting points about this formula are:
-* The number of cases at the beginning, also called initial value is: <span class="math">\(\dfrac{c}{1 + a}\)</span>
-* The maximum growth rate is at <span class="math">\(t = \dfrac{ln(a)}{b}\)</span> and <span class="math">\(y(t) = \dfrac{c}{2}\)</span></p>
+<p>The number of cases at the beginning, also called initial value is: <span class="math">\(\dfrac{c}{1 + a}\)</span></p>
+<p>The maximum growth rate is at <span class="math">\(t = \dfrac{ln(a)}{b}\)</span> and <span class="math">\(y(t) = \dfrac{c}{2}\)</span></p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">logistic_growth</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">c</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
 </code></pre></div>
@@ -156,16 +155,6 @@
 <span class="n">c</span> <span class="o">=</span> <span class="mf">81802.14</span>
 
 <span class="n">lg_model</span> <span class="o">=</span> <span class="n">logistic_growth</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Timestep&#39;</span><span class="p">],</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> 
-</code></pre></div>
-
-
-<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lg_model</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkmagenta&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Logistic Model&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Total Cases&#39;</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkcyan&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Real Observations&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Infections&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Logistic Model vs Real Observations&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
