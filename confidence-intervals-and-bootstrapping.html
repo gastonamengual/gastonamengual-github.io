@@ -66,6 +66,8 @@
       <div class="col-main w3-container">
         <section id="content">
           <p><strong>Notebook written by Gastón Amengual.</strong></p>
+<hr>
+
 <h1>Confidence Intervals</h1>
 <p>A confidence interval is a type of estimate computed from the statistics of the observed data, and were introduced by Jerzy Neyman in 1937. This proposes a range of plausible values for an unknown parameter, like the population mean. The interval has an associated confidence level that the true parameter is in the proposed range. </p>
 <p>The confidence level represents the frequency of possible confidence intervals that contain the true value of the unknown population parameter. If confidence intervals are constructed using a given confidence level from an infinite number of independent sample statistics, the proportion of those intervals that contain the true value of the parameter will be equal to the confidence level. </p>
@@ -181,17 +183,14 @@
 <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">bootstrap_sorted</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">)</span>
 <span class="n">mean</span> <span class="o">=</span> <span class="n">sample_mean_distribution</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sample_mean_distribution</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;95% confidence interval: (</span><span class="si">{</span><span class="n">lower_bound</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">upper_bound</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Bootstrapped Resampling Mean Distribution - Mean: </span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/confidence_intervals_and_bootstrapping_2.png"></p>
 <p>As can be observed, this method shows similar results as those produced by the analytic calculation, and approximates very efficiently the population mean.</p>
+<hr>
+
 <h1>References</h1>
 <p>https://www.wikiwand.com/en/Confidence_interval</p>
 <p>https://machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method/</p>

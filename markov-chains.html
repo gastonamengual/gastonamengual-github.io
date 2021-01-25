@@ -66,6 +66,8 @@
       <div class="col-main w3-container">
         <section id="content">
           <p><strong>Notebook written by Gastón Amengual.</strong></p>
+<hr>
+
 <h1>Definition</h1>
 <p>A Markov chain is a stochastic model describing a sequence of possible events in which the probability of each event depends only on the state attained in the previous event, named after the Russian mathematician Andrey Markov.</p>
 <p>A countably infinite sequence, in which the chain moves state at discrete time steps, gives a discrete-time Markov chain, while a continuous-time process is called a continuous-time Markov chain. </p>
@@ -109,17 +111,7 @@
 
 
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">coin_flip_markov_chain</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Secret Number Markov Chain&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">numbers</span> <span class="o">=</span> <span class="n">coin_flip_markov_chain</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
-<span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1.5</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rwidth</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Secret Number Markov Chain Histogram&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">coin_flip_markov_chain</span><span class="p">(</span><span class="mi">100000</span><span class="p">))</span>
 </code></pre></div>
 
 
@@ -197,21 +189,18 @@
 
 
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">continous_markov_chain</span><span class="p">(</span><span class="mi">500</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Continuous Markov Chain&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">continous_markov_chain</span><span class="p">(</span><span class="mi">100000</span><span class="p">),</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Continuous Markov Chain Histogram - Mean: </span><span class="si">{</span><span class="n">markov_chain_sample</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> - Var.: </span><span class="si">{</span><span class="n">markov_chain_sample</span><span class="o">.</span><span class="n">var</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/markov_chains_3.png"></p>
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/markov_chains_4.png"></p>
 <p>The theoretical stationary distribution for this chain is normal with mean <span class="math">\(0\)</span> and variance <span class="math">\(\dfrac{1}{1 - \phi^2} = 1.0036\)</span>. Looking at the histogram, it can be concluded that the chain has reached the stationary distribution. Therefore, this distribution was sampled not by its analytic formula, but from simulating a Markov chain whose stationary distribution is the desired distribution <span class="math">\(N \sim (0, 1.0018)\)</span>.</p>
+<hr>
+
+<h1>References</h1>
+<p>Bayesian Statistics: Techniques and Models - University of California Santa Cruz - Coursera </p>
+<p>https://www.wikiwand.com/en/Markov_chain</p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",

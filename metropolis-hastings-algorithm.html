@@ -66,12 +66,9 @@
       <div class="col-main w3-container">
         <section id="content">
           <p><strong>Notebook written by Gastón Amengual.</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">pymc3</span> <span class="k">as</span> <span class="nn">pm</span>
+<hr>
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pymc3</span> <span class="k">as</span> <span class="nn">pm</span>
 </code></pre></div>
 
 
@@ -203,8 +200,6 @@
     <span class="n">posterior_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_chain</span><span class="p">)</span>    
 
     <span class="n">pm</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">mu_chain</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;STD = </span><span class="si">{</span><span class="n">candidate_std</span><span class="si">}</span><span class="s1"> - Acceptance Rate: </span><span class="si">{</span><span class="n">acceptance_rate</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
@@ -226,16 +221,12 @@
 <span class="n">burn_in</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">*</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">posterior</span> <span class="o">=</span> <span class="n">posterior_samples</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">burn_in</span><span class="p">:]</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">posterior</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkcyan&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Posterior Distribution&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Prior, Data, and Posterior Distributions&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/metropolis_hastings_7.png"></p>
+<hr>
+
 <h1>References</h1>
 <p>Bayesian Statistics: Techniques and Models - University of California Santa Cruz - Coursera </p>
 <p>https://www.wikiwand.com/en/Metropolis%E2%80%93Hastings_algorithm</p>

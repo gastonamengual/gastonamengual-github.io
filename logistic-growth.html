@@ -65,13 +65,9 @@
 
       <div class="col-main w3-container">
         <section id="content">
-          <p><strong>Notebook written by Gastón Amengual.</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</code></pre></div>
+          <hr>
 
-
+<p><strong>Notebook written by Gastón Amengual.</strong></p>
 <p>Logistic Growth is a mathematical function characterized by increasing growth in the beginning period, but a decreasing growth at a later stage, as you get closer to a maximum. It is an S-shaped curve with equation</p>
 <div class="math">$$y(t) = \dfrac{c}{1+a \cdot e^{-bt}}$$</div>
 <p>In which:</p>
@@ -92,7 +88,6 @@
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cases&#39;</span><span class="p">]</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Timestep&#39;</span><span class="p">,</span><span class="s1">&#39;Total Cases&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </code></pre></div>
 
 

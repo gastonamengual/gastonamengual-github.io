@@ -22,7 +22,7 @@
 
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="Collaborative Filtering"/>
-    <meta property="og:description" content="Application of CF with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-Validation."/>
+    <meta property="og:description" content="Application of Collaborative Filtering with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-Validation."/>
     <meta property="og:site_name" content="Gastón Amengual" />
     <meta property="og:url" content="https://gastonamengual.github.io/collaborative-filtering.html"/>
 
@@ -66,13 +66,7 @@
       <div class="col-main w3-container">
         <section id="content">
           <p><strong>Notebook written by Gastón Amengual and <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a> as the base for Watch This! app (see second portfolio project).</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-</code></pre></div>
-
+<hr>
 
 <p><strong>Collaborative filtering</strong> is a technique used by recommender systems. It is a method of making automatic predictions (filtering) about the interests of a user by collecting preferences or taste information from many users (collaborative). The underlying assumption is that if a person A has the same opinion as person B on an issue, A is more likely to have B's opinion on a different issue than that of a randomly chosen person.</p>
 <p>Collaborative filtering approaches often suffer from three problems:</p>
@@ -274,10 +268,6 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 5/5 [00:01&lt;00:00,  3.13it/s]</span>
-</code></pre></div>
-
-
 <h1>Stochastic Mini-Batch Gradient Descent with L2 Regularization</h1>
 <h2>SVD Approximation with Gradient Descent</h2>
 <p>According to SVD, <span class="math">\(X = U \Sigma V\)</span>. Assuming <span class="math">\(\Sigma\)</span> merges into <span class="math">\(U\)</span> or <span class="math">\(V^T\)</span>, the matrix factorization becomes <span class="math">\(X = U V^T\)</span>.</p>
@@ -401,10 +391,6 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 20/20 [21:48&lt;00:00, 65.44s/it]</span>
-</code></pre></div>
-
-
 <div class="highlight"><pre><span></span><code><span class="c1"># Results for cross-validated training dataset</span>
 
 <span class="n">best_iteration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">test_rmseses_means</span><span class="p">)</span>
@@ -446,22 +432,11 @@
 
 
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rmse_train</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;RMSE over whole train dataset for best Lambda&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_5.png"></p>
 <div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Lambda&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Test RMSE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">cross_validation_rmse_df</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">errwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">rmse_validation</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CI for RMSE over Testing with </span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s2">-Folds for different Lambdas&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
@@ -494,10 +469,6 @@
 
     <span class="n">train_rmseses_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_rmseses</span><span class="p">))</span>
     <span class="n">test_rmseses_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">test_rmseses</span><span class="p">))</span>
-</code></pre></div>
-
-
-<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 11/11 [08:32&lt;00:00, 46.60s/it]</span>
 </code></pre></div>
 
 
@@ -540,22 +511,11 @@
 
 
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rmse_train</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;RMSE over whole train dataset for best Mini-Batch-Size&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
 <p><img alt="image alt text" src="https://gastonamengual.github.io/images/collaborative_filtering_2.png"></p>
 <div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Mini-Batch-Size&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Test RMSE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">cross_validation_rmse_df</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">errwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">rmse_validation</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CI for RMSE over Testing with </span><span class="si">{</span><span class="n">folds</span><span class="si">}</span><span class="s2">-Folds for different Mini-Batch Sizes&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
@@ -612,16 +572,8 @@
 </code></pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">100%|██████████| 30/30 [05:21&lt;00:00, 10.70s/it]</span>
-</code></pre></div>
-
-
 <div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">final_rmse_validation</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;saddlebrown&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RMSE CI over 90:10 Split - Mean RMSE: </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RMSE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 
 
@@ -727,6 +679,8 @@
 </table>
 </div>
 
+<p><br>
+<hr></p>
 <h1>References</h1>
 <p>https://www.wikiwand.com/en/Collaborative_filtering</p>
 <p>https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings</p>
