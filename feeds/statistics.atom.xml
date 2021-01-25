@@ -1,5 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Gastón Amengual - Statistics</title><link href="https://gastonamengual.github.io/" rel="alternate"></link><link href="https://gastonamengual.github.io/feeds/statistics.atom.xml" rel="self"></link><id>https://gastonamengual.github.io/</id><updated>2021-01-21T00:00:00+01:00</updated><entry><title>Confidence Intervals and Bootstrapping</title><link href="https://gastonamengual.github.io/confidence-intervals-and-bootstrapping.html" rel="alternate"></link><published>2021-01-21T00:00:00+01:00</published><updated>2021-01-21T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-01-21:/confidence-intervals-and-bootstrapping.html</id><summary type="html">&lt;p&gt;Explanation of Confidence Intervals, Bootstrapping, and comparison.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Gastón Amengual - Statistics</title><link href="https://gastonamengual.github.io/" rel="alternate"></link><link href="https://gastonamengual.github.io/feeds/statistics.atom.xml" rel="self"></link><id>https://gastonamengual.github.io/</id><updated>2021-01-25T00:00:00+01:00</updated><entry><title>Descriptive Statistics</title><link href="https://gastonamengual.github.io/descriptive-statistics.html" rel="alternate"></link><published>2021-01-25T00:00:00+01:00</published><updated>2021-01-25T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-01-25:/descriptive-statistics.html</id><summary type="html">&lt;p&gt;Application of Descriptive Statistics, such as Mean, Median, Standard Deviation, Interquartile Range to real dataset.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A &lt;strong&gt;descriptive statistic&lt;/strong&gt; is a statistic that quantitatively describes or summarizes features from a collection of information. They are used to describe the basic features of the data in a study, providing summaries about the sample and the measures. They form the basis of almost every quantitative analysis of data. &lt;/p&gt;
+&lt;p&gt;Descriptive statistics, in contrast to inferential statistics, does not try to reach any conclusions from the data: it only describes what it shows, simplifying large amounts of data in a sensible way, and reducing lots of data into a simpler summary.&lt;/p&gt;
+&lt;p&gt;There are three main characteristics of a single variable to observe:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;The frequency distribution&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;The central tendency&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;The dispersion.&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+
+&lt;p&gt;&lt;em&gt;Descriptive Statistics will be applied to real data of Length of Women's First Pregnancies and Length of Women's Not First (i.e. second, third, ...) Pregnancies. The full dataset given by National Survey of Family Growth can be found &lt;a href="https://github.com/AllenDowney/ThinkStats2/tree/master/code"&gt;here&lt;/a&gt;. For more information, relate to &lt;a href="https://greenteapress.com/wp/think-stats-2e/"&gt;Allan Downey - Think Stats 2.&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;descriptive_statistics_first_pregnants_length.npy&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;descriptive_statistics_not_first_pregnants_length.npy&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr&gt;
+
+&lt;h1&gt;1 Frequency Distribution&lt;/h1&gt;
+&lt;p&gt;The (absolute) frequency of an event &lt;span class="math"&gt;\(i\)&lt;/span&gt; is the number &lt;span class="math"&gt;\(n_i\)&lt;/span&gt; of times the observation occurs in an experiment. The relative frequency of an event is the absolute frequency normalized by the total number of events: &lt;span class="math"&gt;\(f_i = \dfrac{n_i}{N} = \dfrac{n_i}{\sum_j n_j}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Frequencies are often represented in &lt;strong&gt;histograms&lt;/strong&gt;. A histogram is a representation of tabulated frequencies, shown as adjacent rectangles, erected over discrete intervals called bins, with an area proportional to the frequency of the observations in the interval. The height of a rectangle is also equal to the frequency density of the interval, i.e., the frequency divided by the width of the interval. The total area of the histogram equals the number of data. A histogram may also be normalized displaying relative frequencies, showing the proportion of cases that fall into each of several categories, and the total area equals 1.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;weeks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;return_counts&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;normalized_counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;weeks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;normalized_counts&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mi"&gt;9&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;edgecolor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;linewidth&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;weeks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;return_counts&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;normalized_counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;weeks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;normalized_counts&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;darkcyan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mi"&gt;9&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;edgecolor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;linewidth&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;=.&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/descriptive_statistics_1.png"&gt;&lt;/p&gt;
+&lt;h1&gt;2 Central Tendency&lt;/h1&gt;
+&lt;p&gt;The central tendency is a central or typical value for a probability distribution. The most common measures of central tendency are the arithmetic mean, the median, and the mode.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://miro.medium.com/max/754/0*wHMvuwRa_YF9SFwY.png"&gt;&lt;/p&gt;
+&lt;h2&gt;Mean&lt;/h2&gt;
+&lt;p&gt;The arithmetic mean, expected value or average, &lt;span class="math"&gt;\(\bar{x}\)&lt;/span&gt;, is the central value of a discrete set of numbers &lt;span class="math"&gt;\(x_1, x_2, \dotsc, x_n\)&lt;/span&gt;. It is calculated as the sum of the values divided by the number of values.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\bar{x} = \dfrac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(w_i\)&lt;/span&gt; is the weight associated with &lt;span class="math"&gt;\(x_i\)&lt;/span&gt;. If the mean is not weighted, then &lt;span class="math"&gt;\(w_i = 1\)&lt;/span&gt;, which can be reduced to the usual formula&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\bar{x} = \dfrac{1}{n} \sum_{i=1}^{n} x_{i}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The mean is sensitive to outliers, data points that differ significantly from other observations.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;first_pregnants_length_mean&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length_mean&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The First Pregnants Length Mean is 38.610 weeks&lt;/span&gt;
+&lt;span class="err"&gt;The Not First Pregnants Length Mean is 38.523 weeks&lt;/span&gt;
+&lt;span class="err"&gt;The Difference of Means is 14.58 hours more for First Pregnants&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Median&lt;/h2&gt;
+&lt;p&gt;The median is the value that is exactly in the middle of a data set, separating the higher half from the lower half. It is not affected by a small proportion of extremely large or small values, and provides a better representation of a typical value. For a set &lt;span class="math"&gt;\(X\)&lt;/span&gt; of &lt;span class="math"&gt;\(n\)&lt;/span&gt; elements, &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(Med(X) =\)&lt;/span&gt; 
+&lt;span class="math"&gt;\(&lt;div class="math"&gt;\begin{matrix}\dfrac{X[\frac{n}{2}] + X[\frac{n + 1}{2}]}{2}  &amp;amp; \text{if n is even}\\ X[\frac{n + 1}{2}] &amp;amp; \text{if n is odd}\end{matrix}&lt;/div&gt;\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(X\)&lt;/span&gt; is the ordered list of values in data set and &lt;span class="math"&gt;\(n\)&lt;/span&gt; is the number of values in data set.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Even Case&lt;/span&gt;
+&lt;span class="n"&gt;first_pregnants_length_sorted&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;first_pregnants_length_median&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length_sorted&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length_sorted&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;first_pregnants_length_sorted&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length_sorted&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)])&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Odd Case&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length_sorted&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length_median&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;not_first_pregnants_length_sorted&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length_sorted&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The First Pregnants Length Median is 39 weeks&lt;/span&gt;
+&lt;span class="err"&gt;The Not First Pregnants Length Median is 39 weeks&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Mode&lt;/h2&gt;
+&lt;p&gt;The mode is the value that appears most often in a set of data values. If X is a discrete random variable, the mode is the value x (i.e, X = x) at which the probability mass function takes its maximum value, the value most likely to be sampled. The numerical value of the mode is the same as that of the mean and median in a normal distribution, and it may be very different in highly skewed distributions.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;weeks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;return_counts&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;weeks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;return_counts&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The First Pregnants Length Mode is 39.0 weeks, counted 2114 times&lt;/span&gt;
+&lt;span class="err"&gt;The Not First Pregnants Length Mode is 39.0 weeks, counted 2579 times&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;3 Dispersion&lt;/h1&gt;
+&lt;p&gt;The dispersion or variability refers to the spread of the values around the central tendency, describing how far apart data points lie from each other and from the center of a distribution. It is important as it tells whether the points tend to be clustered around the center or more widely spread out. When there is low variability, it is easier to predict information about the population based on sample data, while high variability makes it harder. &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Skewness&lt;/strong&gt; is a statistic that measures the asymmetry of a distribution. Negative skewness indicates that a distribution “skews left”, that is, it extends farther to the left than the right. Positive skewness indicates that a distribution skews right.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Comparison_standard_deviations.svg/1200px-Comparison_standard_deviations.svg.png" style="width:500px;height:300px;"&gt;&lt;/p&gt;
+&lt;h2&gt;Range&lt;/h2&gt;
+&lt;p&gt;It is the difference between the lowest and highest values. It is the size of the smallest interval which contains all the data and provides an indication of statistical dispersion. It is usually a good indicator for distributions with low dispersion, but can be misleading when there are multiple outliers.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The range of First Pregnants Length is 31.0&lt;/span&gt;
+&lt;span class="err"&gt;The range of Not First Pregnants Length is 46.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Interquartile Range&lt;/h2&gt;
+&lt;p&gt;The interquartile range (IQR) is a measure of statistical dispersion equal to the difference between 75% and 25% percentiles:&lt;/p&gt;
+&lt;div class="math"&gt;$$\text{IQR} = Q_3 - Q_1$$&lt;/div&gt;
+&lt;p&gt;Unlike total range, the interquartile range has a breakdown point of 25%, and is thus often preferred to the total range, giving the range of the middle half of a data set.&lt;/p&gt;
+&lt;p&gt;It is useful for skewed distributions, as the median is the best measure of central tendency because it is the value exactly in the middle when all values are sorted. The IQR can give an overview of where most of the values lie and how clustered they are, and, because it is based on the middle half of the distribution, it is less influenced by extreme values.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;first_pregnants_length_iqr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;percentile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.75&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;percentile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length_iqr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;percentile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.75&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;percentile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The First Pregnants Length IQR is 4 weeks&lt;/span&gt;
+&lt;span class="err"&gt;The Not First Pregnants Length IQR is 4 weeks&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Variance&lt;/h2&gt;
+&lt;p&gt;The variance is the expectation of the squared deviation of a random variable from its mean. &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\text{Var}(X) = E[(X - \bar{x})^2]\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;As the squares are positive or non-zero, it is non-negative, and it is measured in squared units.&lt;/p&gt;
+&lt;p&gt;Since the units of variance are much larger than those of a typical value of a data set, it is harder to interpret the variance number intuitively. &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;first_pregnants_length_var&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length_var&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The First Pregnants Length Variance is 7.457 weeks&lt;/span&gt;
+&lt;span class="err"&gt;The Not First Pregnants Length Variance is 6.841 weeks&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Standard Deviation&lt;/h2&gt;
+&lt;p&gt;The standard deviation (Std.) is a measure of the amount of variation or dispersion of a set of values. A low standard deviation indicates that the values tend to be close to the mean, while a high standard deviation indicates that the values are spread out over a wider range. It is the square root of the variance.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\text{Std}(X) = \sqrt{E[(X - \bar{x})^2]}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Looking at the formula above, by squaring the differences from the mean, standard deviation reflects uneven dispersion more accurately, therefore more spread out samples are more likely to be sampled than evenly spread samples. A higher standard deviation tells not only that the distribution is more spread out, but also more unevenly spread out&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;first_pregnants_length_std&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(((&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;span class="n"&gt;not_first_pregnants_length_std&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(((&lt;/span&gt;&lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;not_first_pregnants_length&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The First Pregnants Length Standard Deviation is 2.731 weeks&lt;/span&gt;
+&lt;span class="err"&gt;The Not First Pregnants Length Standard Deviation is 2.616 weeks&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Box-and-whiskers plot&lt;/h2&gt;
+&lt;p&gt;A boxplot is a method for graphically depicting groups of numerical data through their quartiles. The whiskers indicate variability outside the upper and lower quartiles, and the outliers are plotted as individual points. Boxplots display variation in samples of a statistical population without making any assumptions of the underlying statistical distribution. The spacings between the different parts of the box indicate the degree of dispersion and skewness in the data.&lt;/p&gt;
+&lt;p&gt;Elements of Box-and-whiskers plot:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Minimum&lt;/strong&gt;: 0th percentile, the lowest data point excluding any outliers.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Maximum&lt;/strong&gt;: 100th percentile, the largest data point excluding any outliers.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Median&lt;/strong&gt;: 50th Percentile, the middle value of the data set.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;First quartile&lt;/strong&gt;: 25th Percentile.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Third quartile&lt;/strong&gt;: 75th Percentile.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;sns&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;boxplot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/descriptive_statistics_2.png"&gt;&lt;/p&gt;
+&lt;h1&gt;References&lt;/h1&gt;
+&lt;p&gt;https://www.wikiwand.com/en/Descriptive_statistics#/Univariate_analysis&lt;/p&gt;
+&lt;p&gt;https://conjointly.com/kb/descriptive-statistics/&lt;/p&gt;
+&lt;p&gt;https://www.scribbr.com/statistics/descriptive-statistics/&lt;/p&gt;
+&lt;p&gt;https://www.wikiwand.com/en/Frequency_(statistics)&lt;/p&gt;
+&lt;p&gt;https://www.wikiwand.com/en/Mean&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Statistics"></category></entry><entry><title>Confidence Intervals and Bootstrapping</title><link href="https://gastonamengual.github.io/confidence-intervals-and-bootstrapping.html" rel="alternate"></link><published>2021-01-21T00:00:00+01:00</published><updated>2021-01-21T00:00:00+01:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-01-21:/confidence-intervals-and-bootstrapping.html</id><summary type="html">&lt;p&gt;Explanation of Confidence Intervals, Bootstrapping, and comparison.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
 &lt;h1&gt;Confidence Intervals&lt;/h1&gt;
 &lt;p&gt;A confidence interval is a type of estimate computed from the statistics of the observed data, and were introduced by Jerzy Neyman in 1937. This proposes a range of plausible values for an unknown parameter, like the population mean. The interval has an associated confidence level that the true parameter is in the proposed range. &lt;/p&gt;
 &lt;p&gt;The confidence level represents the frequency of possible confidence intervals that contain the true value of the unknown population parameter. If confidence intervals are constructed using a given confidence level from an infinite number of independent sample statistics, the proportion of those intervals that contain the true value of the parameter will be equal to the confidence level. &lt;/p&gt;
