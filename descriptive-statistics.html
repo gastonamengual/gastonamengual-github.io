@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
     <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
     <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/gruvbox.css">
     <link href='fonts/fonts.css' rel='stylesheet'>
   </head>
 
@@ -41,7 +42,7 @@
         <nav id="header-menu">
           <ul>
             <li class="header-li"><a href="https://gastonamengual.github.io/">About</a></li>
-            <li class="header-li"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="header-li"><a href="https://gastonamengual.github.io/pages/portfolio.html">PORTFOLIO</a></li>
             <li class="header-li"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
@@ -128,8 +129,9 @@
 
 <h2>Median</h2>
 <p>The median is the value that is exactly in the middle of a data set, separating the higher half from the lower half. It is not affected by a small proportion of extremely large or small values, and provides a better representation of a typical value. For a set <span class="math">\(X\)</span> of <span class="math">\(n\)</span> elements, </p>
-<p><span class="math">\(Med(X) =\)</span> 
-<span class="math">\(<div class="math">\begin{matrix}\dfrac{X[\frac{n}{2}] + X[\frac{n + 1}{2}]}{2}  &amp; \text{if n is even}\\ X[\frac{n + 1}{2}] &amp; \text{if n is odd}\end{matrix}</div>\)</span></p>
+<p><span class="math">\(Med(X) =\)</span> </p>
+<div class="math">$$\dfrac{X[\frac{n}{2}] + X[\frac{n + 1}{2}]}{2} \quad \text{if n is even}$$</div>
+<div class="math">$$X \left[ \frac{n + 1}{2} \right] \quad \text{if n is odd}$$</div>
 <p>where <span class="math">\(X\)</span> is the ordered list of values in data set and <span class="math">\(n\)</span> is the number of values in data set.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Even Case</span>
 <span class="n">first_pregnants_length_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">first_pregnants_length</span><span class="p">)</span>

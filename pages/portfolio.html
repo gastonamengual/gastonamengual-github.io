@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta charset="utf-8">
 
-    <title>Portfolio &ndash; Gastón Amengual</title>
+    <title>PORTFOLIO &ndash; Gastón Amengual</title>
 
     <!-- PWA -->
     <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
@@ -17,7 +17,7 @@
 
     <!-- Social -->
     <meta property="og:type" content="article"/>
-    <meta property="og:title" content="Portfolio"/>
+    <meta property="og:title" content="PORTFOLIO"/>
     <meta property="og:description" content=""/>
     <meta property="og:site_name" content="Gastón Amengual" />
     <meta property="og:url" content="https://gastonamengual.github.io/pages/portfolio.html"/>
@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
     <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
     <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/gruvbox.css">
     <link href='fonts/fonts.css' rel='stylesheet'>
   </head>
 
@@ -38,7 +39,7 @@
         <nav id="header-menu">
           <ul>
             <li class="header-li"><a href="https://gastonamengual.github.io/">About</a></li>
-            <li class="header-li active"><a href="https://gastonamengual.github.io/pages/portfolio.html">Portfolio</a></li>
+            <li class="header-li active"><a href="https://gastonamengual.github.io/pages/portfolio.html">PORTFOLIO</a></li>
             <li class="header-li"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
@@ -51,7 +52,7 @@
 
     <article>
       <header class="w3-container col-main">
-        <h1>Portfolio</h1>
+        <h1>PORTFOLIO</h1>
         <!-- <div class="post-info"> -->
           <!-- <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;"> -->
             <!--  -->
@@ -63,27 +64,36 @@
       <div class="col-main w3-container">
         <section id="content">
           <h2><em>Watch This!</em> - Movie Recommender System</h2>
-<p><div style="justify-content: space-between; display: flex; padding: 0; ">
-    <div style="width:50%; text-align: start; padding: 0;">
+<p><div class="portfolio-project-header">
+    <div class="portfolio-project-header-date">
         <i>November 2020 - Present</i>
     </div>
-    <div style="width:50%; text-align: end;">
+    <div class="portfolio-project-header-links">
         <a target="/blank" href="https://elc.github.io/WatchThis/">Be an alpha tester to the App!</a> - <a target="/blank" href="../collaborative-filtering.html">Collaborative Filtering Code</i></a>
     </div>
 </div> </p>
-<p><img style="height: 70vh; width=auto;" src='https://gastonamengual.github.io/images/watch_this_interface.png'></p>
-<p>For my first Machine Learning project, along with <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a> I developed a Movie Recommender App using the Collaborative Filtering technique, in which users rate (like or dislike) different movies to train the algorithm to make them a movie recommendation. I studied the matrix factorization and dimensionality reduction algorithms Principal Component Analysis (PCA) and Singular Value Decomposition (SVD), and implemented an approximation of the SVD with Stochastic Mini-Batch L2-Regularized Gradient Descent and K-Folds Cross-Validation. The app was developed using Vue.js.</p>
+<div class="portfolio-with-vertical-image">
+    <div style="display: flex; justify-content: center; align-items: center; width: 30%;">
+        <img style="height: 70vh; width=auto;" src='https://gastonamengual.github.io/images/watch_this_interface.png'>
+    </div>
+    <div class="portfolio-with-vertical-image-text">
+        <p>For my first Machine Learning project, along with <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a> I developed a Movie Recommender App using the Collaborative Filtering technique, in which users rate (like or dislike) different movies to train the algorithm to make them a movie recommendation. I studied the matrix factorization and dimensionality reduction algorithms Principal Component Analysis (PCA) and Singular Value Decomposition (SVD), and implemented an approximation of the SVD with Stochastic Mini-Batch L2-Regularized Gradient Descent and K-Folds Cross-Validation. The app was developed using Vue.js.</p>
+    </div>
+</div>
+
+<hr>
+
 <h2>Monte Carlo Simulation Model for the Economic Impact of an Inventory-Dependent Business using s,S Inventory Policy</h2>
-<p><div class="w3-container" style="justify-content: space-between; display: flex; padding: 0;">
-    <div class="w3-container" style="width:50%; text-align: start; padding: 0;">
+<p><div class="portfolio-project-header">
+    <div class="portfolio-project-header-date">
         <i>June 2020 - November 2020</i>
     </div>
-    <div class="w3-container" style="width:50%; text-align: end;">
+    <div class="portfolio-project-header-links">
         <a href="https://github.com/gastonamengual/Monte-Carlo-Simulation-Economic-Impact-s-S-Inventory-Policy">Code <i class="fa fa-github"></i></a> - <a href="https://gastonamengual.github.io/documents/project_1_paper.pdf">Paper</a> - <a href="https://gastonamengual.github.io/documents/project_1_poster.pdf">Poster</a> - <a href="https://gastonamengual.github.io/documents/project_1_certification.pdf">Certification</a>
     </div>
 </div></p>
 <p><img style="height: auto; width: 100%;" src='https://gastonamengual.github.io/images/project_1_image.png'></p>
-<p>As a way of entering the field of Data Science, for my first project I developed, along with <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a> (see his post <a href="https://elc.github.io/projects/#simulation-projects" target="_blank">here</a>), a Monte Carlo Simulation for a Business that manages its inventory with an s,S policy. The main goal was to make a basic simulation applying Monte Carlo Methods and analyzing it with basic statistical tools such as the sample mean, the variance, and confidence intervals. Moreover, the project was presented at the National Informatics and System Engineering Congress 2020 (CoNaIISI).</p>
+<p style="text-align: justify;">As a way of entering the field of Data Science, for my first project I developed, along with <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a> (see his post <a href="https://elc.github.io/projects/#simulation-projects" target="_blank">here</a>), a Monte Carlo Simulation for a Business that manages its inventory with an s,S policy. The main goal was to make a basic simulation applying Monte Carlo Methods and analyzing it with basic statistical tools such as the sample mean, the variance, and confidence intervals. Moreover, the project was presented at the National Informatics and System Engineering Congress 2020 (CoNaIISI).</p>
         </section>
         
 

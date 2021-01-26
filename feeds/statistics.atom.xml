@@ -62,8 +62,9 @@
 
 &lt;h2&gt;Median&lt;/h2&gt;
 &lt;p&gt;The median is the value that is exactly in the middle of a data set, separating the higher half from the lower half. It is not affected by a small proportion of extremely large or small values, and provides a better representation of a typical value. For a set &lt;span class="math"&gt;\(X\)&lt;/span&gt; of &lt;span class="math"&gt;\(n\)&lt;/span&gt; elements, &lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(Med(X) =\)&lt;/span&gt; 
-&lt;span class="math"&gt;\(&lt;div class="math"&gt;\begin{matrix}\dfrac{X[\frac{n}{2}] + X[\frac{n + 1}{2}]}{2}  &amp;amp; \text{if n is even}\\ X[\frac{n + 1}{2}] &amp;amp; \text{if n is odd}\end{matrix}&lt;/div&gt;\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(Med(X) =\)&lt;/span&gt; &lt;/p&gt;
+&lt;div class="math"&gt;$$\dfrac{X[\frac{n}{2}] + X[\frac{n + 1}{2}]}{2} \quad \text{if n is even}$$&lt;/div&gt;
+&lt;div class="math"&gt;$$X \left[ \frac{n + 1}{2} \right] \quad \text{if n is odd}$$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(X\)&lt;/span&gt; is the ordered list of values in data set and &lt;span class="math"&gt;\(n\)&lt;/span&gt; is the number of values in data set.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Even Case&lt;/span&gt;
 &lt;span class="n"&gt;first_pregnants_length_sorted&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;first_pregnants_length&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -900,8 +901,8 @@
             &lt;/tr&gt;
     &lt;/tbody&gt;&lt;/table&gt;
 
-&lt;p&gt;&lt;br&gt;
-&lt;hr&gt;&lt;/p&gt;
+&lt;hr&gt;
+
 &lt;h1&gt;References&lt;/h1&gt;
 &lt;p&gt;https://en.wikipedia.org/wiki/Normal_distribution&lt;/p&gt;
 &lt;p&gt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html&lt;/p&gt;

@@ -59,8 +59,8 @@ article {
 
 .col-main {
   margin: auto;
-  width: 100%;
-  max-width: 900px;
+  width: 95%;
+  max-width: 1000px;
 }
 
 .post-info {
@@ -106,6 +106,8 @@ article {
   font-size: 14pt;
   text-align: right;
   font-weight: bold;
+  align-items: center;
+  display: flex;
 }
 
 #header-menu ul {
@@ -114,7 +116,7 @@ article {
   margin-bottom: 0;
   line-height: 1.5;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 #header-menu ul li {
@@ -183,9 +185,8 @@ article {
 }
 
 #content div.highlight {
-  max-height: 600px;
-  font-size: 11pt;
-  background-color: white;
+  font-size: 12pt;
+  background-color: #FDFDFD;
   overflow: auto;
   margin: 3rem 0;
   border-radius: 10px;
@@ -194,10 +195,6 @@ article {
 #content pre {
   margin: 0;
   padding: 1rem;
-}
-
-#content code {
-  background-color: white;
 }
 
 #content ul,
@@ -227,33 +224,9 @@ article {
 }
 
 #content hr {
-  margin: .5rem auto .5rem auto;
-  border-color: #ccc;
-  border-width: 1px;
-}
-
-
-
-/* Screen > 530px */
-
-@media screen and (min-width: 530px) {
-
-  h1 {
-    font-size: 26pt;
-  }
-
-  article {
-    font-size: 14pt;
-  }
-
-  #header-menu ul {
-    flex-direction: row;
-    margin-top: 18px;
-  }
-
-  #content p.content-highlight {
-    font-size: 24pt;
-  }
+  margin: 4rem auto 3rem auto;
+  border-color: #646464;
+  border-width: 1.4px;
 }
 
 .categories_content {
@@ -300,4 +273,89 @@ article {
 
 #github-btn{
   background-color: #211F1F;
+}
+
+.portfolio-with-vertical-image{
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.portfolio-with-vertical-image-text{
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  width: 70%; 
+  text-align: justify;
+}
+
+.portfolio-project-header{
+  justify-content: space-between;
+  display: flex;
+  padding: 0;
+}
+
+.portfolio-project-header-date{
+  width:30%; 
+  text-align: start;
+}
+
+.portfolio-project-header-links{
+  width:70%; 
+  text-align: end;
+}
+
+
+@media screen and (max-width: 768px) {
+
+  h1 {
+    font-size: 26pt;
+  }
+
+  article {
+    font-size: 14pt;
+  }
+
+  #header-menu ul {
+    flex-direction: column;
+    margin-top: 18px;
+  }
+
+  #content p.content-highlight {
+    font-size: 24pt;
+  }
+
+  .portfolio-with-vertical-image{
+    flex-direction: column;
+  }
+
+  .portfolio-with-vertical-image-text{
+    width: 95%;
+    max-width: 1000px;
+    margin-top: 2rem;
+  }
+
+  .portfolio-project-header{
+    flex-direction: column;
+  }
+
+  .portfolio-project-header-date{
+    width:100%; 
+    text-align: start;
+  }
+  
+  .portfolio-project-header-links{
+    margin-top: .5rem;
+    width:100%; 
+    text-align: start;
+  }
+
+  #content hr {
+    margin: 2rem auto 3rem auto;
+  }
+
+  .contact-btn{
+    font-size: 12pt;
+  }
 }
