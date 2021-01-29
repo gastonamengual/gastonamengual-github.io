@@ -25,30 +25,26 @@
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/gruvbox.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
     <link href='fonts/fonts.css' rel='stylesheet'>
   </head>
 
   <body>
-    <div class="w3-row w3-card w3-white">
-      <header id="header">
-        <img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="header-logo">
-        <nav id="header-menu">
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
           <ul>
-            <li class="header-li"><a href="https://gastonamengual.github.io/">About</a></li>
-            <li class="header-li"><a href="https://gastonamengual.github.io/pages/portfolio.html">PORTFOLIO</a></li>
-            <li class="header-li"><a href="/categories.html">Articles</a></li>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
-      </header>
     </div>
 
 
-    <br><br><br>
-
-    <div class="w3-container col-main w3-center">
+    <div class="col-main category-title">
       <h1>Machine Learning</h1>
     </div>
 
@@ -56,107 +52,81 @@
 
     <br><br>
 
-    <section id="listing">
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/collaborative-filtering.html">Collaborative Filtering</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2021-01-07T00:00:00+01:00">07 January 2021</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/collaborative-filtering.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Collaborative Filtering</h2>
+            <time class="category-article-date" datetime="2021-01-07T00:00:00-03:00">07 January 2021</time>
+          </header>
+          <div class="category-article-content">
+            <p>Application of Collaborative Filtering with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-Validation.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Application of Collaborative Filtering with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-Validation.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/collaborative-filtering.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/singular-value-decomposition.html">Singular Value Decomposition</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-12-14T00:00:00+01:00">14 December 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/singular-value-decomposition.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Singular Value Decomposition</h2>
+            <time class="category-article-date" datetime="2020-12-14T00:00:00-03:00">14 December 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Theoretical explanation of the SVD, from-scratch implementation and application on an image.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Theoretical explanation of the SVD, from-scratch implementation and application on an image.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/singular-value-decomposition.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/principal-component-analysis.html">Principal Component Analysis</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-12-12T00:00:00+01:00">12 December 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/principal-component-analysis.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Principal Component Analysis</h2>
+            <time class="category-article-date" datetime="2020-12-12T00:00:00-03:00">12 December 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Theoretical explanation of the SVD, covering three approaches, from-scratch implementation and application on Iris data set.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Theoretical explanation of the SVD, covering three approaches, from-scratch implementation and application on Iris data set.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/principal-component-analysis.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/feature-scaling.html">Feature Scaling</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-11-20T00:00:00+01:00">20 November 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/feature-scaling.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Feature Scaling</h2>
+            <time class="category-article-date" datetime="2020-11-20T00:00:00-03:00">20 November 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Different techniques of scaling data, including Normalization and Standarization.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Different techniques of scaling data, including Normalization and Standarization.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/feature-scaling.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
 
-    </section>
-
-
-    <footer id="footer">
-      <div id="footer-copyright" class="w3-center w3-large w3-text-white w3-padding-48">
-        <span>
+    <footer>
+        <p>
           &copy;
           2021          Gastón Amengual
-        </span>
-      </div>
+        </p>
     </footer>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
-  gtag('config', "G-6KC62F9717");</script>    </body>
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
 </html>

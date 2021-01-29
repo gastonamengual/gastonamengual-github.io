@@ -25,30 +25,26 @@
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/css/gruvbox.css">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
     <link href='fonts/fonts.css' rel='stylesheet'>
   </head>
 
   <body>
-    <div class="w3-row w3-card w3-white">
-      <header id="header">
-        <img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="header-logo">
-        <nav id="header-menu">
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
           <ul>
-            <li class="header-li"><a href="https://gastonamengual.github.io/">About</a></li>
-            <li class="header-li"><a href="https://gastonamengual.github.io/pages/portfolio.html">PORTFOLIO</a></li>
-            <li class="header-li"><a href="/categories.html">Articles</a></li>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
           </ul>
         </nav>
-      </header>
     </div>
 
 
-    <br><br><br>
-
-    <div class="w3-container col-main w3-center">
+    <div class="col-main category-title">
       <h1>Modeling and Simulation</h1>
     </div>
 
@@ -56,128 +52,95 @@
 
     <br><br>
 
-    <section id="listing">
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/monte-carlo-methods.html">Monte Carlo Methods</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-09-24T00:00:00+02:00">24 September 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/monte-carlo-methods.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Monte Carlo Methods</h2>
+            <time class="category-article-date" datetime="2020-09-24T00:00:00-03:00">24 September 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Includes three applications of the Monte Carlo Methods: Integration, Pi Approximation, and Custom Distribution Sampling.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Includes three applications of the Monte Carlo Methods: Integration, Pi Approximation, and Custom Distribution Sampling.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/monte-carlo-methods.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/logistic-growth.html">Logistic Growth</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-07-20T00:00:00+02:00">20 July 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/logistic-growth.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Logistic Growth</h2>
+            <time class="category-article-date" datetime="2020-07-20T00:00:00-03:00">20 July 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Explanation of the Logistic Growth model and application to data set.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Explanation of the Logistic Growth model and application to data set.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/logistic-growth.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/mm1-queue-simulation.html">M/M/1 Queue Simulation</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-06-24T00:00:00+02:00">24 June 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/mm1-queue-simulation.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>M/M/1 Queue Simulation</h2>
+            <time class="category-article-date" datetime="2020-06-24T00:00:00-03:00">24 June 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Simulation of a MM1 Queue and analysis of average delay in queue, average customers in queue, server busy proportion, and total time it takes for n users to get service.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Simulation of a MM1 Queue and analysis of average delay in queue, average customers in queue, server busy proportion, and total time it takes for n users to get service.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/mm1-queue-simulation.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/roulette-simulation-strategies-analysis.html">Roulette Simulation: Strategies Analysis</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-05-01T00:00:00+02:00">01 May 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/roulette-simulation-strategies-analysis.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Roulette Simulation: Strategies Analysis</h2>
+            <time class="category-article-date" datetime="2020-05-01T00:00:00-03:00">01 May 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Simulation of Martingale, d'Alembert and All-in Strategies in a Casino Roulette, for which the capital flow is analyzed.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Simulation of Martingale, d'Alembert and All-in Strategies in a Casino Roulette, for which the capital flow is analyzed.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/roulette-simulation-strategies-analysis.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
-      <article class="w3-container w3-card-2 w3-white col-main">
-        <header>
-          <h2><a href="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html">Roulette Simulation: Statistical Analysis</a></h2>
-          <div class="post-info">
-            <div class="w3-opacity w3-margin-right w3-margin-bottom" style="flex-grow: 1;">
-              <span><time datetime="2020-04-15T00:00:00+02:00">15 April 2020</time> </span>
-            </div>
+      <a class="category-link" href="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html">
+        <article class="col-main category-article">  
+          <header class="category-article-header">
+            <h2>Roulette Simulation: Statistical Analysis</h2>
+            <time class="category-article-date" datetime="2020-04-15T00:00:00-03:00">15 April 2020</time>
+          </header>
+          <div class="category-article-content">
+            <p>Simulation of a Casino Roulette, for which the mean and variance are analyzed, and empirical demonstration of the Law of Great Numbers.</p>
           </div>
-        </header>
-
-        <div class="entry-content">
-          Simulation of a Casino Roulette, for which the mean and variance are analyzed, and empirical demonstration of the Law of Great Numbers.
-        </div>
-
-        <footer>
-          <a class="w3-btn w3-purple w3-right" href="https://gastonamengual.github.io/roulette-simulation-statistical-analysis.html">Read &#10093;</a>
-        </footer>
-      </article>
-
+        </article>
+      </a>
+      
       <br><br>
 
 
-    </section>
-
-
-    <footer id="footer">
-      <div id="footer-copyright" class="w3-center w3-large w3-text-white w3-padding-48">
-        <span>
+    <footer>
+        <p>
           &copy;
           2021          Gastón Amengual
-        </span>
-      </div>
+        </p>
     </footer>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
-  gtag('config', "G-6KC62F9717");</script>    </body>
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
 </html>
