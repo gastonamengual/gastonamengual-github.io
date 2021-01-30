@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Central Limit Theorem and Normality Test &ndash; Gastón Amengual</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Statistics" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Central Limit Theorem and Normality Test"/>
+    <meta property="og:description" content="Application of Normality Test to normal-like distributions. Explanation of the Central Limit Theorem, and verification with Normality Test for different combinations of sums of uniform, exponential, and normal samples of different sizes."/>
+    <meta property="og:site_name" content="Gastón Amengual" />
+    <meta property="og:url" content="https://gastonamengual.github.io/central-limit-theorem-and-normality-test.html"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+    </div>
+
+
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>Central Limit Theorem and Normality Test</h1>
+        <a class="article-category" href="https://gastonamengual.github.io/category/statistics.html">Statistics</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;bmh&quot;</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> 
+          <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> 
+          <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> 
+          <span class="s1">&#39;lines.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> 
+          <span class="s1">&#39;lines.markersize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> 
+          <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> 
+          <span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mediumpurple&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;darkseagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;palevioletred&quot;</span><span class="p">]),}</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><em>This article uses concepts related to Hypothesis Testing, such as p-values and null hypothesis. However, this knowledge should not determine the understanding the article, as it will be only a tool to prove or disprove a given statement of a certain topic. That statement or null hypothesis will be proposed, and the p-values will accept or reject the hypothesis. For more information on Hypothesis Testing, please visit https://en.wikipedia.org/wiki/Statistical_hypothesis_testing.</em></p>
+<h1>1 Normality Test</h1>
+<p>Normality tests are used to determine if a data set is well-modeled by a normal distribution and to compute how likely it is for a random variable underlying the data set to be normally distributed. The scipy.stats.normaltest function will be used, which tests the null hypothesis that a sample comes from a normal distribution, and it is based on D’Agostino and Pearson’s test that combines skew and kurtosis to produce an omnibus test of normality.</p>
+<p><span class="math">\(1000\)</span> p-values for samples with same size will be taken applying the normal test. The acceptance percentage will be calculated as the proportion of those p-values that are less than <span class="math">\(\alpha = 0.5\)</span>. That proportion is the number of times the given null hypothesis was rejected.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normal_test</span><span class="p">(</span><span class="n">distribution</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Null Hypothesis: The </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> Distribution is a Normal Distribution&#39;</span><span class="p">)</span>
+
+    <span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sizes</span><span class="p">:</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">p_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+
+        <span class="n">acceptance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;From 1000 samples of </span><span class="si">{</span><span class="n">size</span><span class="si">:</span><span class="s1">4.0f</span><span class="si">}</span><span class="s1"> elements, </span><span class="si">{</span><span class="n">acceptance</span> <span class="o">*</span> <span class="mi">100</span><span class="si">:</span><span class="s1">2.2f</span><span class="si">}</span><span class="s1">% of the time the null hypothesis was rejected&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h2>1.1 Normal-looking Custom Probability Function</h2>
+<p>In many occasions, one can mistakenly suggest that a data sample follows a normal distribution just because its visualization is <em>normal-like</em>. However, this assumption should not be taken lightly, and must be statistically verified. The following distribution was built to resemble a normal distribution and to check the efficiency of the normal test.  </p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">custom_distribution</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctanh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>To verify that the function is a probability distribution, the area under its curve must be equal to 1.</p>
+<div class="highlight"><pre><span></span><code><span class="n">size</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">histogram</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">custom_distribution</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sum_area_rectangles</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">histogram</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">histogram</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The area under the curve equals </span><span class="si">{</span><span class="n">sum_area_rectangles</span><span class="si">:</span><span class="s1">.3g</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">sum_area_rectangles</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;It is a probability distribution.&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">The area under the curve equals 1.</span>
+<span class="err">It is a probability distribution.</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">custom_distribution</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Custom Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of Custom and Normal distributions&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/normal_distribution_normality_test_and_central_limit_theorem_2.png"></p>
+<div class="highlight"><pre><span></span><code><span class="n">normal_test</span><span class="p">(</span><span class="n">custom_distribution</span><span class="p">,</span> <span class="s1">&#39;Custom Distribution&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Null Hypothesis: The Custom Distribution Distribution is a Normal Distribution</span>
+<span class="err">From 1000 samples of   30 elements, 18.00% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of   50 elements, 25.20% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of  100 elements, 36.40% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of  200 elements, 56.30% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of  500 elements, 85.30% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of 1000 elements, 98.80% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of 2000 elements, 100.00% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of 5000 elements, 100.00% of the time the null hypothesis was rejected</span>
+</code></pre></div>
+
+
+<p>As can be observed, beginning in fairly small data samples (<span class="math">\(500\)</span>) the normal distribution fails to model the custom distribution samples most of the times, and fails completely for sample size bigger than approximately <span class="math">\(2000\)</span>.</p>
+<h2>1.2 Customized Beta Distribution</h2>
+<p>To verify the effectiveness of the normal test, a normal-like beta distribution will be tested. After experimentation, it was found that <span class="math">\((Beta(5, 5) \cdot 6) - 3)\)</span> resembles a normal distribution.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">custom_beta</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">3</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">size</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">custom_beta</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Salmon&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Custom Beta Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Olivedrab&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of Custom Beta and Normal distributions&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/normal_distribution_normality_test_and_central_limit_theorem_3.png"></p>
+<div class="highlight"><pre><span></span><code><span class="n">normal_test</span><span class="p">(</span><span class="n">custom_beta</span><span class="p">,</span> <span class="s1">&#39;Custom Beta&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Null Hypothesis: The Custom Beta Distribution is a Normal Distribution</span>
+<span class="err">From 1000 samples of   30 elements, 3.70% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of   50 elements, 4.40% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of  100 elements, 9.70% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of  200 elements, 21.00% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of  500 elements, 65.90% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of 1000 elements, 97.00% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of 2000 elements, 100.00% of the time the null hypothesis was rejected</span>
+<span class="err">From 1000 samples of 5000 elements, 100.00% of the time the null hypothesis was rejected</span>
+</code></pre></div>
+
+
+<p>It can be concluded that from a sample size of <span class="math">\(1000\)</span>, the normal distribution fails to model the custom beta distribution most of the times.</p>
+<h1>2 Central Limit Theorem</h1>
+<p>Let <span class="math">\(X_1, \dotsc, X_n\)</span> be a random sample of size <span class="math">\(n\)</span>, i.e. a sequence of independent and identically distributed random variables from a distribution of expected value <span class="math">\(\mu\)</span> and finite variance <span class="math">\(\sigma^2\)</span>. The sample average of the random variables is </p>
+<div class="math">$$\bar{X}_n = \dfrac{X_1 + \dotsc + X_n}{n}$$</div>
+<p>By the law of large numbers, the sample averages <span class="math">\(\bar{X}_n $converge almost surely to the expected value $\mu\)</span> as <span class="math">\(n \to \infty\)</span>. The Central Limit Theorem describes the size and the distributional form of the stochastic fluctuations around the deterministic number <span class="math">\(\mu\)</span> during this convergence. It states that, as <span class="math">\(n\)</span> gets larger, the distribution of the difference between the sample average <span class="math">\(\bar{X}_n\)</span> and its limit <span class="math">\(\mu\)</span>, when multiplied by the factor <span class="math">\(\sqrt{n}\)</span>, that is <span class="math">\(\sqrt{n} ( \bar{X}_n -\mu)\)</span>, approximates the normal distribution with mean <span class="math">\(0\)</span> and variance <span class="math">\(\sigma^2\)</span>. For large enough <span class="math">\(n\)</span>, the distribution of <span class="math">\(\bar{X}_n\)</span> is close to the normal distribution with mean <span class="math">\(\mu\)</span> and variance <span class="math">\(\sigma^{2}/n\)</span>. The usefulness of the theorem is that the distribution of <span class="math">\(\sqrt{n} ( \bar{X}_n -\mu)\)</span> approaches normality regardless of the shape of the distribution of the individual <span class="math">\(X_i\)</span>. This fact holds especially true for sample sizes over <span class="math">\(30\)</span>. As more samples are taken, especially large ones, the graph of the sample means looks more like a normal distribution. </p>
+<p>The Central Limit Theorem partially explains the prevalence of normal distributions in the natural world. Most characteristics of animals and other life forms are affected by a large number of genetic and environmental factors whose effects are additive. As the characteristics measure are the sum of a large number of small effects, so their distribution tends to be normal.</p>
+<h2>2.1 Die Roll Example</h2>
+<p>Suppose a die is rolled. The expected value of the dice is <span class="math">\(E[X] = \sum_{i} x_i \cdot P(X = x_i) = \frac{1}{6} \cdot (1 + 2 + 3 + 4 + 5 + 6) = 3.5\)</span>. Although it is not possible to obtain a <span class="math">\(3.5\)</span> on a roll of a die, with an increase in the number of die rolls, the average of the die rolls would be close to <span class="math">\(3.5\)</span>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">35</span><span class="p">]</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mediumpurple&quot;</span><span class="p">,</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;olivedrab&quot;</span><span class="p">,</span> <span class="s2">&quot;darkseagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;darkkhaki&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;darkcyan&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">sizes</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+    <span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Calculate mean of size samples of 10 uniform distibuted number</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1"> samples - $E[X]=</span><span class="si">{</span><span class="n">means</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3g</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Histogram of Expected Value of Die Rolls&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/normal_distribution_normality_test_and_central_limit_theorem_4.png"></p>
+<p>It can be observed that with a small number of samples, the histogram does not present a definite pattern. However, by increasing the sample size, the sampling distribution starts to resemble a normal distribution (demonstrated by Central Limit Theorem), and the most frequent average of <span class="math">\(10\)</span> die rolls is approximately <span class="math">\(3.5\)</span>.</p>
+<h2>2.2 Normal Tests for CLT</h2>
+<p>There are two parameters that can be varied when applying the Central Limit Theorem. <span class="math">\(n\)</span>, the number of i.i.d. variables used to calculate the sample mean (10 in the previous example), and <span class="math">\(r\)</span>, the number of sample means that are taken to form the sample mean distribution (5, 30, ..., 10000 in the previous example).</p>
+<p>In this section, the normal test will be applied for different combinations of <span class="math">\(r\)</span> and <span class="math">\(n\)</span> for the Uniform, Normal, and Exponential distributions, following the following <strong>Null Hypothesis</strong>: </p>
+<p><em>The number of <span class="math">\(r\)</span> sample means of <span class="math">\(n\)</span> i.i.d. variables of some distribution follows a Normal Distribution.</em></p>
+<p>For every <span class="math">\(r-n\)</span> combination, 1000 p-values will be calculated, along with the mean of how many of them were lower than the significance level.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normal_test_varying_r_n</span><span class="p">(</span><span class="n">distribution</span><span class="p">,</span> <span class="n">significance</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">rs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">rs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">rs</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">ns</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">rs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ns</span><span class="p">:</span>
+            <span class="n">p_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Get p-value for 1000 samples of size (r, n) and calculate average</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">p_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+
+            <span class="n">df</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">significance</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">color_less_alpha</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">bg_color</span> <span class="o">=</span> <span class="s1">&#39;forestgreen&#39;</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">alpha</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">bg_color</span> <span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bg_color</span> <span class="o">=</span> <span class="s1">&#39;firebrick&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;background-color: </span><span class="si">{</span><span class="n">bg_color</span><span class="si">}</span><span class="s1">; color: white; font-weight: bold;&#39;</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">distributions</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">distribution</span> <span class="ow">in</span> <span class="n">distributions</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">normal_test_varying_r_n</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">distribution</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>In the following matrices, <span class="math">\(r\)</span> will correspond to the rows, and <span class="math">\(n\)</span> to the columns, and each cells shows the percentage of times the null hypothesis was rejected. The pattern is as follows:</p>
+<ul>
+    <li style="font-weight: bold; color:forestgreen;">Null Hypothesis was rejected less than 5% of the times</li>
+    <li style="font-weight: bold; color:darkorange;">Null Hypothesis was rejected between 5% and 15% of the times</li>
+    <li style="font-weight: bold; color:firebrick;">Null Hypothesis was rejected more than 15% of the times</li>
+</ul>
+
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;normal_uniform_samples.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;$r$&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;$n$&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">color_less_alpha</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.5g}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Uniform Samples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_table_styles</span><span class="p">([{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;caption&#39;</span><span class="p">,</span> <span class="s1">&#39;props&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;font-size&#39;</span><span class="p">,</span> <span class="s1">&#39;1.5rem&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;font-weight&#39;</span><span class="p">,</span> <span class="s1">&#39;bold&#39;</span><span class="p">)]}]))</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;normal_exponential_samples.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;$r$&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;$n$&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">color_less_alpha</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.5g}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Exponential Samples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_table_styles</span><span class="p">([{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;caption&#39;</span><span class="p">,</span> <span class="s1">&#39;props&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;font-size&#39;</span><span class="p">,</span> <span class="s1">&#39;1.5rem&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;font-weight&#39;</span><span class="p">,</span> <span class="s1">&#39;bold&#39;</span><span class="p">)]}]))</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;normal_normal_samples.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;$r$&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;$n$&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">color_less_alpha</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.5g}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Normal Samples&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_table_styles</span><span class="p">([{</span><span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="s1">&#39;caption&#39;</span><span class="p">,</span> <span class="s1">&#39;props&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;font-size&#39;</span><span class="p">,</span> <span class="s1">&#39;1.5rem&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;font-weight&#39;</span><span class="p">,</span> <span class="s1">&#39;bold&#39;</span><span class="p">)]}]))</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/normal_distribution_normality_test_and_central_limit_theorem_5.png"></p>
+<p>It can be concluded that the samples generated for most of the combinations of the uniform and normal distribution were normally distributed most of the times, while for the exponential distribution, larger values of <span class="math">\(r\)</span> did not change the acceptance proportion (they were mostly rejected), being the number of <span class="math">\(n\)</span> the most critical parameter for the sample to be follow a normal distribution.</p>
+<p>In summary, not many variables follow a normal distribution, but, thanks to Central Limit Theorem, this distribution can be found in many natural phenomena when a sufficiently large sample is given, simplifying their study and analysis.</p>
+<h1>References</h1>
+<p><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Normality_test">https://en.wikipedia.org/wiki/Normality_test</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Central_limit_theorem">https://en.wikipedia.org/wiki/Central_limit_theorem</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+
+    <footer>
+        <p>
+          &copy;
+          2021          Gastón Amengual
+        </p>
+    </footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>
