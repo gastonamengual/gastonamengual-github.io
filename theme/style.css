@@ -538,6 +538,27 @@ code{
 
 /*---------------*/
 
+/* --- TABLES --- */
+
+.table-div{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+table{
+  text-align: center;
+  border-color: #343434;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+}
+
+/*---------------*/
+
 /* --- MEDIA QUERIES FOR PHONE --- */
 
 @media screen and (max-width: 768px) {

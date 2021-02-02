@@ -284,7 +284,8 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Optimization"></category></entry><entry><title>Simulated Annealing</title><link href="https://gastonamengual.github.io/simulated-annealing.html" rel="alternate"></link><published>2020-09-25T00:00:00-03:00</published><updated>2020-09-25T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-09-25:/simulated-annealing.html</id><summary type="html">&lt;p&gt;Theoretical framework of the algorithm, including annealing schedules, and acceptance probability function. Implementation and application over benchmark functions. Evaluation with RMSE.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual and &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;/script&gt;</content><category term="Optimization"></category></entry><entry><title>Simulated Annealing</title><link href="https://gastonamengual.github.io/simulated-annealing.html" rel="alternate"></link><published>2020-09-25T00:00:00-03:00</published><updated>2020-09-25T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-09-25:/simulated-annealing.html</id><summary type="html">&lt;p&gt;Theoretical framework of the algorithm, including annealing schedules, and acceptance probability function. Implementation and application over benchmark functions. Evaluation with RMSE.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;In collaboration with &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 
 &lt;h1&gt;1 Theoretical Framework&lt;/h1&gt;
@@ -520,23 +521,9 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
 
 
 &lt;div&gt;
-&lt;style scoped&gt;
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-&lt;/style&gt;
-&lt;table border="1" class="dataframe"&gt;
+&lt;table border="1"&gt;
   &lt;thead&gt;
-    &lt;tr style="text-align: right;"&gt;
-      &lt;th&gt;&lt;/th&gt;
+    &lt;tr&gt;
       &lt;th&gt;Function&lt;/th&gt;
       &lt;th&gt;Average RMSE (10)&lt;/th&gt;
       &lt;th&gt;Average RMSE (20)&lt;/th&gt;
@@ -546,7 +533,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;th&gt;0&lt;/th&gt;
       &lt;td&gt;Linear&lt;/td&gt;
       &lt;td&gt;25.95&lt;/td&gt;
       &lt;td&gt;15.802&lt;/td&gt;
@@ -554,7 +540,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.959&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;1&lt;/th&gt;
       &lt;td&gt;Geometric&lt;/td&gt;
       &lt;td&gt;0.179&lt;/td&gt;
       &lt;td&gt;0.066&lt;/td&gt;
@@ -562,7 +547,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.066&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;2&lt;/th&gt;
       &lt;td&gt;Slow&lt;/td&gt;
       &lt;td&gt;1.258&lt;/td&gt;
       &lt;td&gt;0.526&lt;/td&gt;
@@ -570,7 +554,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.058&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;3&lt;/th&gt;
       &lt;td&gt;Exponential&lt;/td&gt;
       &lt;td&gt;0.919&lt;/td&gt;
       &lt;td&gt;0.045&lt;/td&gt;
@@ -578,7 +561,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.043&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;4&lt;/th&gt;
       &lt;td&gt;Exponential Multiplicative&lt;/td&gt;
       &lt;td&gt;13.672&lt;/td&gt;
       &lt;td&gt;1.696&lt;/td&gt;
@@ -628,23 +610,9 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
 
 
 &lt;div&gt;
-&lt;style scoped&gt;
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-&lt;/style&gt;
-&lt;table border="1" class="dataframe"&gt;
+&lt;table border="1"&gt;
   &lt;thead&gt;
-    &lt;tr style="text-align: right;"&gt;
-      &lt;th&gt;&lt;/th&gt;
+    &lt;tr&gt;
       &lt;th&gt;Solution Abs Error&lt;/th&gt;
       &lt;th&gt;Solution Rel Error&lt;/th&gt;
       &lt;th&gt;Value Abs Error&lt;/th&gt;
@@ -657,7 +625,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;th&gt;0&lt;/th&gt;
       &lt;td&gt;-0.0003&lt;/td&gt;
       &lt;td&gt;-0.1276&lt;/td&gt;
       &lt;td&gt;0.0049&lt;/td&gt;
@@ -668,7 +635,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Problem 14&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;1&lt;/th&gt;
       &lt;td&gt;0.0002&lt;/td&gt;
       &lt;td&gt;0.0193&lt;/td&gt;
       &lt;td&gt;0.0061&lt;/td&gt;
@@ -679,7 +645,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Ackley&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;2&lt;/th&gt;
       &lt;td&gt;0.0001&lt;/td&gt;
       &lt;td&gt;0.0492&lt;/td&gt;
       &lt;td&gt;0.0052&lt;/td&gt;
@@ -690,7 +655,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Gramacy &amp;amp; Lee&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;3&lt;/th&gt;
       &lt;td&gt;-0.0028&lt;/td&gt;
       &lt;td&gt;-0.0883&lt;/td&gt;
       &lt;td&gt;0.0050&lt;/td&gt;
@@ -701,7 +665,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Easom&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;4&lt;/th&gt;
       &lt;td&gt;-0.0001&lt;/td&gt;
       &lt;td&gt;-0.0132&lt;/td&gt;
       &lt;td&gt;0.0054&lt;/td&gt;
@@ -712,7 +675,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Rastrigin&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;5&lt;/th&gt;
       &lt;td&gt;0.0047&lt;/td&gt;
       &lt;td&gt;0.0011&lt;/td&gt;
       &lt;td&gt;0.0051&lt;/td&gt;
@@ -723,7 +685,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Schwefel&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;6&lt;/th&gt;
       &lt;td&gt;0.0002&lt;/td&gt;
       &lt;td&gt;-0.0075&lt;/td&gt;
       &lt;td&gt;0.0058&lt;/td&gt;

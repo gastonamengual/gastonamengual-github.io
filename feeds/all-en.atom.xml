@@ -1090,28 +1090,7 @@
 
 
 &lt;div&gt;
-&lt;style scoped&gt;
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-&lt;/style&gt;
-&lt;table border="1" class="dataframe"&gt;
-  &lt;thead&gt;
-    &lt;tr style="text-align: right;"&gt;
-      &lt;th&gt;&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;th&gt;movie title&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
+&lt;table border="1"&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
       &lt;th&gt;Godfather, The (1972)&lt;/th&gt;
@@ -1498,7 +1477,553 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Optimization"></category></entry><entry><title>Singular Value Decomposition</title><link href="https://gastonamengual.github.io/singular-value-decomposition.html" rel="alternate"></link><published>2020-12-14T00:00:00-03:00</published><updated>2020-12-14T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-14:/singular-value-decomposition.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, from-scratch implementation and application on an image.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;/script&gt;</content><category term="Optimization"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-20T00:00:00-03:00</published><updated>2020-12-20T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-20:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;seaborn&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;sns&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.colors&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ListedColormap&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;1 Definition&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Principal Component Analysis (PCA)&lt;/strong&gt; is a dimensionality reduction method that transforms the data into a new orthogonal (i.e. perpendicular, linearly independent, and non-correlated) coordinate system that &lt;strong&gt;keeps most of the variance&lt;/strong&gt; that was present in the original data. &lt;/p&gt;
+&lt;p&gt;PCA transforms the data &lt;strong&gt;maximizing the variance&lt;/strong&gt; over the projected points. Each new coordinate is called &lt;strong&gt;principal component&lt;/strong&gt;, and is ranked according to how much variance they explain, or by &lt;strong&gt;explained variance&lt;/strong&gt; (the greatest variance lies on the first principal component, the second greatest variance on the second principal component, ...).&lt;/p&gt;
+&lt;p&gt;The data is arranged in a an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix &lt;span class="math"&gt;\(X\)&lt;/span&gt;, where each row represents a different observation or measurement of the experiment, and each column represents a dimension or feature. &lt;/p&gt;
+&lt;p&gt;The principal components are new features constructed as linear combinations of the initial features, allowing to reduce dimensionality while keeping underlying information structure. Since the principal components are ranked, it is possible to discard those with low contribution (i.e. the added explained variance is negligible). However, these new features are harder to interpret than the original ones, as they are a linear combinations that does not necessarily have an intrinsic meaning.&lt;/p&gt;
+&lt;h2&gt;1.1 Assumptions&lt;/h2&gt;
+&lt;p&gt;In order to apply PCA, the following assumptions must be met.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;PCA assumes that the observations have mean &lt;span class="math"&gt;\(0\)&lt;/span&gt; (i.e., &lt;span class="math"&gt;\(X\)&lt;/span&gt; has column-wise zero empirical mean).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The data must be able to be analyzed with a covariance matrix, which in term makes sense when the relation between the data is linear.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The sample taken is large enough and there are no significant outliers (heavy-tailed distributions should be avoided).&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;2 Approaches&lt;/h1&gt;
+&lt;h2&gt;2.1 Geometric approach&lt;/h2&gt;
+&lt;p&gt;A zero-intercept line is to be found such that the variance of the projected data points over the line is maximized. The principal components represent the directions of the data (projection) that explains the maximal amount of variance, and can be thought as new axes providing the best angle to capture the data dispersion.&lt;/p&gt;
+&lt;p&gt;Considering a data point, and a line drawn through the origin, then:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Let &lt;span class="math"&gt;\(a\)&lt;/span&gt; be the position vector of the point. &lt;/li&gt;
+&lt;li&gt;Let &lt;span class="math"&gt;\(b\)&lt;/span&gt; be the perpendicular distance vector from the point to the line.&lt;/li&gt;
+&lt;li&gt;Let &lt;span class="math"&gt;\(c\)&lt;/span&gt; be the position vector of the projected point.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://liorpachter.files.wordpress.com/2014/05/pca_figure1.jpg" style="width: 350px;" /&gt;&lt;/p&gt;
+&lt;p&gt;All three vectors form a square triangle such that, according to the Pythagoras theorem, &lt;span class="math"&gt;\(a^2 = b^2 + c^2\)&lt;/span&gt;. &lt;span class="math"&gt;\(b\)&lt;/span&gt; and &lt;span class="math"&gt;\(c\)&lt;/span&gt; are inversely related and, since &lt;span class="math"&gt;\(a\)&lt;/span&gt; is fixed, if &lt;span class="math"&gt;\(b\)&lt;/span&gt; gets bigger, &lt;span class="math"&gt;\(c\)&lt;/span&gt; gets smaller, and vice versa. As the objective is to maximize variance (dispersion), PCA can either minimize the distance to the line (&lt;span class="math"&gt;\(b\)&lt;/span&gt;) or maximize the distance from the projected point to the origin (&lt;span class="math"&gt;\(c\)&lt;/span&gt;).&lt;/p&gt;
+&lt;p&gt;For more information, relate to &lt;a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title" target="_blank"&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;2.2 Covariance approach&lt;/h2&gt;
+&lt;p&gt;As an alternative, the principal components can be also thought as eigenvectors of the data covariance matrix, and can be computed by eigendecomposition of the data covariance matrix. &lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Calculate &lt;span class="math"&gt;\(B\)&lt;/span&gt;, an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Calculate the covariance matrix &lt;span class="math"&gt;\(C\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Compute the eigenvectors (&lt;span class="math"&gt;\(V\)&lt;/span&gt;) and eigenvalues (&lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt;) of &lt;span class="math"&gt;\(C\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(CV = \Lambda V\)&lt;/span&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Sort the eigenvectors according to their eigenvalues in decreasing order&lt;/strong&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Choose the first &lt;span class="math"&gt;\(r\)&lt;/span&gt; eigenvectors that will be the new &lt;span class="math"&gt;\(r\)&lt;/span&gt; dimensions&lt;/strong&gt;. Select a subset &lt;span class="math"&gt;\(W\)&lt;/span&gt; of the eigenvectors as basis vectors.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Compute the transformed data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = B W\)&lt;/span&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# The function takes a Pandas DataFrame&lt;/span&gt;
+    &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 1 Calculate B: Center data&lt;/span&gt;
+    &lt;span class="n"&gt;B&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="n"&gt;B&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_numpy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 2 Calculate C: Covariance matrix&lt;/span&gt;
+    &lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt; &lt;span class="o"&gt;@&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 3 Eigendecomposition&lt;/span&gt;
+    &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;eig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 4 Sort eigenvectors and eigenvalues&lt;/span&gt;
+    &lt;span class="n"&gt;idxs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argsort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;)[::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;eigenvalues&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# The 5th step will be performed outside this function. The full transformed data matrix will be returned, and the r principal &lt;/span&gt;
+    &lt;span class="c1"&gt;# components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset&lt;/span&gt;
+    &lt;span class="c1"&gt;# of the eigenvectors can be selected here. &lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 6 Compute transformed data matrix and atributes&lt;/span&gt;
+    &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;
+    &lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;
+    &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;singular_values&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="c1"&gt;# Explained in section 4&lt;/span&gt;
+    &lt;span class="n"&gt;transformed_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt; &lt;span class="o"&gt;@&lt;/span&gt; &lt;span class="n"&gt;components&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;singular_values&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;transformed_data&lt;/span&gt;&lt;span class="p"&gt;,}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;2.3 SVD approach&lt;/h2&gt;
+&lt;p&gt;Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD).&lt;/p&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Calculate &lt;span class="math"&gt;\(B\)&lt;/span&gt;, an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Compute the SVD&lt;/strong&gt;. &lt;span class="math"&gt;\(B = U \Sigma V^T\)&lt;/span&gt; &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Choose the first &lt;span class="math"&gt;\(r\)&lt;/span&gt; rows from &lt;span class="math"&gt;\(U\)&lt;/span&gt; and first &lt;span class="math"&gt;\(r\)&lt;/span&gt; singular (new &lt;span class="math"&gt;\(r\)&lt;/span&gt; dimensions)&lt;/strong&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Compute the transformed data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = XV = U \Sigma V^T V = U \Sigma\)&lt;/span&gt;. This form is also the polar decomposition of &lt;span class="math"&gt;\(T\)&lt;/span&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# The function takes a Pandas DataFrame&lt;/span&gt;
+    &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 1 Calculate B: Center data&lt;/span&gt;
+    &lt;span class="n"&gt;B&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="n"&gt;B&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_numpy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 2 Compute SVD&lt;/span&gt;
+    &lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;full_matrices&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# The 3rd step will be performed outside this function. The full transformed data matrix will be returned, and the r principal &lt;/span&gt;
+    &lt;span class="c1"&gt;# components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset&lt;/span&gt;
+    &lt;span class="c1"&gt;# of the eigenvectors can be selected here. &lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 4 Compute transformed data matrix and atributes&lt;/span&gt;
+    &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt;
+    &lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# Explained in section 4&lt;/span&gt;
+    &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;singular_values&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;
+    &lt;span class="n"&gt;transformed_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;U&lt;/span&gt; &lt;span class="o"&gt;@&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;diag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;singular_values&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+            &lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;transformed_data&lt;/span&gt;&lt;span class="p"&gt;,}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;2.4 Relation between Covariance and SVD approaches&lt;/h2&gt;
+&lt;p&gt;According to the SVD, &lt;/p&gt;
+&lt;div class="math"&gt;$$B = U \Sigma V^T$$&lt;/div&gt;
+&lt;div class="math"&gt;$$B^TB = V \Sigma U^T U \Sigma V^T = V \Sigma^2 V^T$$&lt;/div&gt;
+&lt;p&gt;The covariance matrix of &lt;span class="math"&gt;\(B\)&lt;/span&gt; is &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1} = \dfrac{V \Sigma^2 V^T}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; are the eigenvalues of the matrix &lt;span class="math"&gt;\(B\)&lt;/span&gt;, while &lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt; are the eigenvalues of &lt;span class="math"&gt;\(C\)&lt;/span&gt;. The relationship between them is defined as &lt;span class="math"&gt;\(\Lambda = \dfrac{\Sigma^2}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Moreover, the right singular vectors &lt;span class="math"&gt;\(V\)&lt;/span&gt; of &lt;span class="math"&gt;\(B\)&lt;/span&gt; are equivalent to the eigenvectors of &lt;span class="math"&gt;\(B^TB\)&lt;/span&gt;.&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;h1&gt;Application&lt;/h1&gt;
+&lt;h3&gt;Ozone Dataset&lt;/h3&gt;
+&lt;p&gt;Forecasting skewed biased stochastic ozone days: analyses, solutions and beyond, Knowledge and Information Systems, Vol. 14, No. 3, 2008.&lt;/p&gt;
+&lt;p&gt;The dataset contains 2534 observations and 73 features. &lt;strong&gt;Author&lt;/strong&gt;: Kun Zhang, Wei Fan, XiaoJing Yuan. &lt;strong&gt;Source&lt;/strong&gt;: &lt;a href="https://archive.ics.uci.edu/ml/datasets/ozone+level+detection" target="_blank"&gt;UCI&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;dataset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ozone-level-8hr.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="table-div"&gt;
+&lt;table border="1"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;V1&lt;/th&gt;
+      &lt;th&gt;V2&lt;/th&gt;
+      &lt;th&gt;V3&lt;/th&gt;
+      &lt;th&gt;V4&lt;/th&gt;
+      &lt;th&gt;V5&lt;/th&gt;
+      &lt;th&gt;V6&lt;/th&gt;
+      &lt;th&gt;V7&lt;/th&gt;
+      &lt;th&gt;V8&lt;/th&gt;
+      &lt;th&gt;V9&lt;/th&gt;
+      &lt;th&gt;V10&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;V64&lt;/th&gt;
+      &lt;th&gt;V65&lt;/th&gt;
+      &lt;th&gt;V66&lt;/th&gt;
+      &lt;th&gt;V67&lt;/th&gt;
+      &lt;th&gt;V68&lt;/th&gt;
+      &lt;th&gt;V69&lt;/th&gt;
+      &lt;th&gt;V70&lt;/th&gt;
+      &lt;th&gt;V71&lt;/th&gt;
+      &lt;th&gt;V72&lt;/th&gt;
+      &lt;th&gt;Class&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;0.8&lt;/td&gt;
+      &lt;td&gt;1.8&lt;/td&gt;
+      &lt;td&gt;2.4&lt;/td&gt;
+      &lt;td&gt;2.1&lt;/td&gt;
+      &lt;td&gt;2.0&lt;/td&gt;
+      &lt;td&gt;2.1&lt;/td&gt;
+      &lt;td&gt;1.5&lt;/td&gt;
+      &lt;td&gt;1.7&lt;/td&gt;
+      &lt;td&gt;1.9&lt;/td&gt;
+      &lt;td&gt;2.3&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.15&lt;/td&gt;
+      &lt;td&gt;10.67&lt;/td&gt;
+      &lt;td&gt;-1.56&lt;/td&gt;
+      &lt;td&gt;5795&lt;/td&gt;
+      &lt;td&gt;-12.1&lt;/td&gt;
+      &lt;td&gt;17.9&lt;/td&gt;
+      &lt;td&gt;1033&lt;/td&gt;
+      &lt;td&gt;-55&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;2.8&lt;/td&gt;
+      &lt;td&gt;3.2&lt;/td&gt;
+      &lt;td&gt;3.3&lt;/td&gt;
+      &lt;td&gt;2.7&lt;/td&gt;
+      &lt;td&gt;3.3&lt;/td&gt;
+      &lt;td&gt;3.2&lt;/td&gt;
+      &lt;td&gt;2.9&lt;/td&gt;
+      &lt;td&gt;2.8&lt;/td&gt;
+      &lt;td&gt;3.1&lt;/td&gt;
+      &lt;td&gt;3.4&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.48&lt;/td&gt;
+      &lt;td&gt;8.39&lt;/td&gt;
+      &lt;td&gt;3.84&lt;/td&gt;
+      &lt;td&gt;5805&lt;/td&gt;
+      &lt;td&gt;14.05&lt;/td&gt;
+      &lt;td&gt;29&lt;/td&gt;
+      &lt;td&gt;10275&lt;/td&gt;
+      &lt;td&gt;-55&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;2.9&lt;/td&gt;
+      &lt;td&gt;2.8&lt;/td&gt;
+      &lt;td&gt;2.6&lt;/td&gt;
+      &lt;td&gt;2.1&lt;/td&gt;
+      &lt;td&gt;2.2&lt;/td&gt;
+      &lt;td&gt;2.5&lt;/td&gt;
+      &lt;td&gt;2.5&lt;/td&gt;
+      &lt;td&gt;2.7&lt;/td&gt;
+      &lt;td&gt;2.2&lt;/td&gt;
+      &lt;td&gt;2.5&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.6&lt;/td&gt;
+      &lt;td&gt;6.94&lt;/td&gt;
+      &lt;td&gt;9.8&lt;/td&gt;
+      &lt;td&gt;5790&lt;/td&gt;
+      &lt;td&gt;17.9&lt;/td&gt;
+      &lt;td&gt;41.3&lt;/td&gt;
+      &lt;td&gt;10235&lt;/td&gt;
+      &lt;td&gt;-40&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;4.7&lt;/td&gt;
+      &lt;td&gt;3.8&lt;/td&gt;
+      &lt;td&gt;3.7&lt;/td&gt;
+      &lt;td&gt;3.8&lt;/td&gt;
+      &lt;td&gt;2.9&lt;/td&gt;
+      &lt;td&gt;3.1&lt;/td&gt;
+      &lt;td&gt;2.8&lt;/td&gt;
+      &lt;td&gt;2.5&lt;/td&gt;
+      &lt;td&gt;2.4&lt;/td&gt;
+      &lt;td&gt;3.1&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.49&lt;/td&gt;
+      &lt;td&gt;8.73&lt;/td&gt;
+      &lt;td&gt;10.54&lt;/td&gt;
+      &lt;td&gt;5775&lt;/td&gt;
+      &lt;td&gt;31.15&lt;/td&gt;
+      &lt;td&gt;51.7&lt;/td&gt;
+      &lt;td&gt;10195&lt;/td&gt;
+      &lt;td&gt;-40&lt;/td&gt;
+      &lt;td&gt;2.08&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;2.6&lt;/td&gt;
+      &lt;td&gt;2.1&lt;/td&gt;
+      &lt;td&gt;1.6&lt;/td&gt;
+      &lt;td&gt;1.4&lt;/td&gt;
+      &lt;td&gt;0.9&lt;/td&gt;
+      &lt;td&gt;1.5&lt;/td&gt;
+      &lt;td&gt;1.2&lt;/td&gt;
+      &lt;td&gt;1.4&lt;/td&gt;
+      &lt;td&gt;1.3&lt;/td&gt;
+      &lt;td&gt;1.4&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.30&lt;/td&gt;
+      &lt;td&gt;9.87&lt;/td&gt;
+      &lt;td&gt;0.83&lt;/td&gt;
+      &lt;td&gt;5818&lt;/td&gt;
+      &lt;td&gt;10.51&lt;/td&gt;
+      &lt;td&gt;37.38&lt;/td&gt;
+      &lt;td&gt;10164&lt;/td&gt;
+      &lt;td&gt;-0.119&lt;/td&gt;
+      &lt;td&gt;0.58&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br&gt;
+&lt;p&gt;2534 rows × 73 columns&lt;/p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_1.png"&gt;&lt;/p&gt;
+&lt;p&gt;(For more information of the correlogram implementation, please visit &lt;a href="https://gist.github.com/ELC/d2a0c4fdd05fdf61218f35ccc248479d" target="_blank"&gt;this site&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Run PCA&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;pca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;x_ax&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;arange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_ax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;xticks&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;arange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xticks&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;xticks&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_2.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;The plot above is a &lt;strong&gt;scree plot&lt;/strong&gt;, and it shows the contribution of each principal component to the explained variance (ratio). It displays the principal components in descending order of eigenvalues or explained variance. It is useful to analyze which principal components capture most of the variance of the original data. In this case, it can be observed that beyond 5 principal components, no significant amount of data is explained.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Step 5 performed after transforming data.&lt;/span&gt;
+&lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;
+
+&lt;span class="n"&gt;explained_variance_n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;transformed_data_n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;][:,:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;The first &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt; components explain &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;explained_variance_n_components&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3g&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;% of the original dataset variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3g&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;% of the original number of columns are kept&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;columns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PC&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+
+&lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;transformed_data_n_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The first 5 components explain 0.976% of the original dataset variance&lt;/span&gt;
+&lt;span class="err"&gt;0.0685% of the original number of columns are kept&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="table-div"&gt;
+&lt;table border="1"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;PC1&lt;/th&gt;
+      &lt;th&gt;PC2&lt;/th&gt;
+      &lt;th&gt;PC3&lt;/th&gt;
+      &lt;th&gt;PC4&lt;/th&gt;
+      &lt;th&gt;PC5&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;6.626476&lt;/td&gt;
+      &lt;td&gt;-174.944631&lt;/td&gt;
+      &lt;td&gt;103.961564&lt;/td&gt;
+      &lt;td&gt;2.215012&lt;/td&gt;
+      &lt;td&gt;-9.158727&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;15.753434&lt;/td&gt;
+      &lt;td&gt;-107.886011&lt;/td&gt;
+      &lt;td&gt;89.561838&lt;/td&gt;
+      &lt;td&gt;22.584096&lt;/td&gt;
+      &lt;td&gt;-6.403647&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;-7.291178&lt;/td&gt;
+      &lt;td&gt;-66.648771&lt;/td&gt;
+      &lt;td&gt;63.710631&lt;/td&gt;
+      &lt;td&gt;27.268419&lt;/td&gt;
+      &lt;td&gt;-4.361848&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;-31.119019&lt;/td&gt;
+      &lt;td&gt;-22.354213&lt;/td&gt;
+      &lt;td&gt;53.012715&lt;/td&gt;
+      &lt;td&gt;37.152561&lt;/td&gt;
+      &lt;td&gt;4.960774&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;0.369718&lt;/td&gt;
+      &lt;td&gt;0.427355&lt;/td&gt;
+      &lt;td&gt;-0.015712&lt;/td&gt;
+      &lt;td&gt;0.438565&lt;/td&gt;
+      &lt;td&gt;-0.936091&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_3.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Finally, the previous Correlogram verifies how PCA has successfully transformed a correlated data matrix into a linearly independent data matrix, i.e. uncorrelated. The question of how many principal components to keep will highly depend on deciding what matters most, the size the matrix takes or the amount of variance explained, according to the requirements of the application.&lt;/p&gt;
+&lt;h2&gt;Note: Covariance and SVD differences&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;covariance_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;svd_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;covariance_components&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;svd_components&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;The absolute values of the components of both approaches match&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The absolute values of the components of both approaches match&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;percentage_positive&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;covariance_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;svd_components&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;percentage_positive&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3g&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;% of the values of SVD are equally signed with Covariance values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;percentage_positive&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;covariance_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;svd_components&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;percentage_positive&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3g&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;% of the values of SVD have opposite sign than Covariance values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;0.63% of the values of SVD are equally signed with Covariance values&lt;/span&gt;
+&lt;span class="err"&gt;0.37% of the values of SVD have opposite sign than Covariance values&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Both approaches have equal explained variance and singular values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Both approaches have equal explained variance and singular values&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As it can be observed, the principal components of both Covariance and SVD and covariance approaches differ in sign 37% of the times. No further analysis nor examination on the cause of this situation was performed.&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;h1&gt;Appendix: PCA and Clustering&lt;/h1&gt;
+&lt;p&gt;I found it extremely important not to abbreviate names, but to say the full words. That makes us remember what is &lt;em&gt;it&lt;/em&gt; that we are discussing, and forces somehow a desire of understanding those words' meaning. Let's review the name of the central topic of this work: Principal Component Analysis. As discussed in the first section, "PCA transforms the data maximizing the variance over the projected points. Each new coordinate is called principal component". It follows that Principal Component Analysis is nothing more than the Analysis of the Principal Components, and Principal Components are new coordinates built by maximizing the variance. This article showed no visualization of the transformed data, as it most of the cases tempts to use Principal Component Analysis as a clustering technique (and sometimes clear clusters indeed can be seen). However, one must keep in mind that Principal Component Analysis is never trying to discern clusters, but instead it seeks to ANALYZE the PRINCIPAL COMPONENTS, which have nothing to do with clusters, but with keeping the maximum possible variability of the original data in the new coordinates.&lt;/p&gt;
+&lt;p&gt;The Principal-Component-Analysis-like algorithm for clustering is called Linear Discriminant Analysis. For more information of the difference between the two, Gopal Prasad Malakar made an excelent &lt;a href="https://www.youtube.com/watch?v=M4HpyJHPYBY&amp;amp;t=43s"&gt;video&lt;/a&gt;, from which I borrow the following image to illustrate the case.&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://i.stack.imgur.com/Tz5mA.png" style="width: 350px;"&gt;&lt;/p&gt;
+&lt;h1&gt;References&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://builtin.com/data-science/step-step-explanation-principal-component-analysis" target="_blank"&gt;A step-by-step Explanation of Principal Component Analysis&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51" target="_blank"&gt;PCA From Scratch in Python&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/" target="_blank"&gt;How to Calculate Principal Component Analysis (PCA) from Scratch in Python&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385" target="_blank"&gt;Sklearn PCA Implementation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://statistics.laerd.com/spss-tutorials/principal-components-analysis-pca-using-spss-statistics.php" target="_blank"&gt;Assumptions&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=52d7ha-GdV8&amp;amp;t=3s" target="_blank"&gt;PCA (Principal Component Analysis) in Python -  Python Engineer&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title" target="_blank"&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest&lt;/a&gt;.&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Singular Value Decomposition</title><link href="https://gastonamengual.github.io/singular-value-decomposition.html" rel="alternate"></link><published>2020-12-14T00:00:00-03:00</published><updated>2020-12-14T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-14:/singular-value-decomposition.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, from-scratch implementation and application on an image.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.image&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;imread&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -1657,277 +2182,6 @@
 &lt;p&gt;Lecture 48 — Dimensionality Reduction with SVD | Stanford University - &lt;a href="https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;t=314s"&gt;https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;amp;t=314s&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width &lt; 768) ? "left" : align;
-        indent = (screen.width &lt; 768) ? "0em" : indent;
-        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-12T00:00:00-03:00</published><updated>2020-12-12T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-12:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, covering three approaches, from-scratch implementation and application on Iris data set.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual.&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-
-&lt;p&gt;&lt;strong&gt;Principal Component Analysis (PCA)&lt;/strong&gt; is a dimensionality reduction method that transforms a large set of variables into a smaller one while keeping most of the variance present in the original set. &lt;/p&gt;
-&lt;p&gt;PCA is defined as a linear transformation that transforms the data into a new orthogonal coordinate system. The new coordinates are built such that the greatest variance lies on the first coordinate or principal component, the second greatest variance on the second coordinate, and so on. This transformation is found by maximizing the variance over the projected points.&lt;/p&gt;
-&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. However, it is also assumed that the observations have mean &lt;span class="math"&gt;\(0\)&lt;/span&gt; (i.e., &lt;span class="math"&gt;\(X\)&lt;/span&gt; has column-wise zero empirical mean)&lt;/p&gt;
-&lt;p&gt;PCA finds a new set of orthogonal coordinates (i.e. linearly independent, and non-correlated) and ranks each according to the explained variance of the data along them. &lt;/p&gt;
-&lt;p&gt;The new coordinates found are called &lt;strong&gt;principal components&lt;/strong&gt;, which are new features constructed as linear combinations of the initial features. This allows to reduce dimensionality while keeping underlying information structure. Since the principal components are ranked, it is possible to discard those with low contribution (i.e. the added explained variance is negligible). It is important to note that these new features are harder to interpret than the original ones, as they are a linear combinations that does not necessarily have an intrinsic meaning.&lt;/p&gt;
-&lt;p&gt;Each principal component is built as a linear combination of the original features and scaled according to a scalar factor. A &lt;strong&gt;scree plot&lt;/strong&gt; is a line plot of these factors, it is used to show the contribution of each principal component to the explained variance. As a consequence, as the components are ranked, the scree plot always displays the factors in descending order by magnitude.&lt;/p&gt;
-&lt;h2&gt;Geometric approach&lt;/h2&gt;
-&lt;p&gt;A zero-intercept line is to be found such that the variance of the projected data points over the line is maximized. The principal components represent the directions of the data (projection) that explains the maximal amount of variance, and can be thought as new axes providing the best angle to capture the data dispersion.&lt;/p&gt;
-&lt;p&gt;Considering a data point, and a line drawn through the origin, then:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Let &lt;span class="math"&gt;\(a\)&lt;/span&gt; be the position vector of the point. &lt;/li&gt;
-&lt;li&gt;Let &lt;span class="math"&gt;\(b\)&lt;/span&gt; be the perpendicular distance vector from the point to the line.&lt;/li&gt;
-&lt;li&gt;Let &lt;span class="math"&gt;\(c\)&lt;/span&gt; be the position vector of the projected point.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;All three vectors form a square triangle such that, according to the Pythagoras theorem, &lt;span class="math"&gt;\(a^2 = b^2 + c^2\)&lt;/span&gt;. &lt;span class="math"&gt;\(b\)&lt;/span&gt; and &lt;span class="math"&gt;\(c\)&lt;/span&gt; are inversely related and, since &lt;span class="math"&gt;\(a\)&lt;/span&gt; is fixed, if &lt;span class="math"&gt;\(b\)&lt;/span&gt; gets bigger, &lt;span class="math"&gt;\(c\)&lt;/span&gt; gets smaller, and vice versa. As the objective is to maximize variance (dispersion), PCA can either minimize the distance to the line (&lt;span class="math"&gt;\(b\)&lt;/span&gt;) or maximize the distance from the projected point to the origin (&lt;span class="math"&gt;\(c\)&lt;/span&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://liorpachter.files.wordpress.com/2014/05/pca_figure1.jpg" width=500 /&gt;&lt;/p&gt;
-&lt;h2&gt;Covariance approach&lt;/h2&gt;
-&lt;p&gt;As an alternative, the principal components can be also thought as eigenvectors of the data covariance matrix, and can be computed by eigendecomposition of the data covariance matrix. &lt;/p&gt;
-&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
-&lt;p&gt;Let &lt;span class="math"&gt;\(B\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Calculate the covariance matrix &lt;span class="math"&gt;\(C\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the eigenvectors (&lt;span class="math"&gt;\(V\)&lt;/span&gt;) and eigenvalues (&lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt;) of &lt;span class="math"&gt;\(C\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(CV = \Lambda V\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Sort the eigenvectors according to their eigenvalues in decreasing order&lt;/strong&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Choose the first &lt;span class="math"&gt;\(r\)&lt;/span&gt; eigenvectors that will be the new &lt;span class="math"&gt;\(r\)&lt;/span&gt; dimensions&lt;/strong&gt;. Select a subset &lt;span class="math"&gt;\(W\)&lt;/span&gt; of the eigenvectors as basis vectors.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the projected data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = B W\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;SVD approach&lt;/h2&gt;
-&lt;p&gt;Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD).&lt;/p&gt;
-&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
-&lt;p&gt;Let &lt;span class="math"&gt;\(B\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the SVD&lt;/strong&gt;. &lt;span class="math"&gt;\(B = U \Sigma V^T\)&lt;/span&gt; &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Choose the first &lt;span class="math"&gt;\(r\)&lt;/span&gt; rows from &lt;span class="math"&gt;\(U\)&lt;/span&gt; and first &lt;span class="math"&gt;\(r\)&lt;/span&gt; singular (new &lt;span class="math"&gt;\(r\)&lt;/span&gt; dimensions)&lt;/strong&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Compute the projected data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = XV = U \Sigma V^T V = U \Sigma\)&lt;/span&gt;. This form is also the polar decomposition of &lt;span class="math"&gt;\(T\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;Relation between Covariance and SVD approaches&lt;/h2&gt;
-&lt;p&gt;According to the SVD, &lt;/p&gt;
-&lt;div class="math"&gt;$$B = U \Sigma V^T$$&lt;/div&gt;
-&lt;div class="math"&gt;$$B^TB = V \Sigma U^T U \Sigma V^T = V \Sigma^2 V^T$$&lt;/div&gt;
-&lt;p&gt;The covariance matrix of &lt;span class="math"&gt;\(B\)&lt;/span&gt; is &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1} = \dfrac{V \Sigma^2 V^T}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; are the eigenvalues of the matrix &lt;span class="math"&gt;\(B\)&lt;/span&gt;, while &lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt; are the eigenvalues of &lt;span class="math"&gt;\(C\)&lt;/span&gt;. The relationship between them is defined as &lt;span class="math"&gt;\(\Lambda = \dfrac{\Sigma^2}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;Moreover, the right singular vectors &lt;span class="math"&gt;\(V\)&lt;/span&gt; of &lt;span class="math"&gt;\(B\)&lt;/span&gt; are equivalent to the eigenvectors of &lt;span class="math"&gt;\(B^TB\)&lt;/span&gt;.&lt;/p&gt;
-&lt;h2&gt;Implementation&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;scree_variance_explained_plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="c1"&gt;# Scree plot&lt;/span&gt;
-    &lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_axis&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;darkcyan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# Variance explained plot&lt;/span&gt;
-    &lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_axis&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;saddlebrown&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;project_1D&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;linestyle&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;None&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;markersize&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;saddlebrown&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;project_2D&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;130&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;principal_component_analysis&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;svd&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# Center data&lt;/span&gt;
-    &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;-=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-
-    &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_numpy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;covariance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Covariance matrix&lt;/span&gt;
-        &lt;span class="n"&gt;covariance_matrix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt; &lt;span class="o"&gt;@&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Eigendecomposition&lt;/span&gt;
-        &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;eig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;covariance_matrix&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Sort eigenvectors&lt;/span&gt;
-        &lt;span class="n"&gt;idxs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argsort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;)[::&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="n"&gt;eigenvalues&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Keep n components&lt;/span&gt;
-        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;
-
-        &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Transform data&lt;/span&gt;
-        &lt;span class="n"&gt;transformed_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;@&lt;/span&gt; &lt;span class="n"&gt;components&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Attributes &lt;/span&gt;
-        &lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;))])&lt;/span&gt;
-
-        &lt;span class="n"&gt;singular_values&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; 
-
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;singular_values&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;transformed_data&lt;/span&gt;&lt;span class="p"&gt;,}&lt;/span&gt;
-
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;svd&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Compute SVD&lt;/span&gt;
-        &lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;full_matrices&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Keep n components&lt;/span&gt;
-        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Transform data&lt;/span&gt;
-        &lt;span class="n"&gt;transformed_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;@&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;diag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;)[:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;])[:,&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-        &lt;span class="c1"&gt;# Attributes&lt;/span&gt;
-        &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-        &lt;span class="n"&gt;explained_variance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-        &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;))])&lt;/span&gt;
-
-        &lt;span class="n"&gt;singular_values&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;explained_variance_ratio&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;singular_values&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;transformed_data&lt;/span&gt;&lt;span class="p"&gt;,}&lt;/span&gt;
-
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;sklearn&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;        
-        &lt;span class="n"&gt;pca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sklearn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decomposition&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;PCA&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;n_components&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;components_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;explained_variance_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;explained_variance_ratio_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;singular_values_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-                &lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;),}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2&gt;Application&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;sklearn.decomposition&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;iris_df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;iris_df&lt;/span&gt;&lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sepal_length&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;sepal_width&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;petal_length&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;petal_width&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
-&lt;span class="n"&gt;num_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;
-&lt;span class="n"&gt;approaches&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;covariance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;svd&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;sklearn&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# TRANSFORMED DATA&lt;/span&gt;
-
-
-&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;ax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;zip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reshape&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;approaches&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;pca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;num_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;ax&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;][:,&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;transformed_data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;][:,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# EXPLAINED VARIANCE RATIO&lt;/span&gt;
-
-&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;ax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;zip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reshape&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;approaches&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;pca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;num_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;ax&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_axis&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;saddlebrown&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# CUMULATIVE VARIANCE RATIO&lt;/span&gt;
-
-&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;ax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;zip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reshape&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;approaches&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;pca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;num_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;approach&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;cum_variance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cumsum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
-    &lt;span class="n"&gt;ax&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_axis&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cum_variance&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;olivedrab&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_1.png"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_2.png"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_3.png"&gt;&lt;/p&gt;
-&lt;hr&gt;
-
-&lt;h1&gt;References&lt;/h1&gt;
-&lt;p&gt;https://builtin.com/data-science/step-step-explanation-principal-component-analysis&lt;/p&gt;
-&lt;p&gt;https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51&lt;/p&gt;
-&lt;p&gt;https://machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/&lt;/p&gt;
-&lt;p&gt;https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385&lt;/p&gt;
-&lt;p&gt;Eigenvectors and eigenvalues | Essence of linear algebra, chapter 14 - 3Blue1Brown - https://www.youtube.com/watch?v=PFDu9oVAE-g&lt;/p&gt;
-&lt;p&gt;PCA (Principal Component Analysis) in Python -  Python Engineer - https://www.youtube.com/watch?v=52d7ha-GdV8&amp;amp;t=3s&lt;/p&gt;
-&lt;p&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest - https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -2216,7 +2470,8 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Modeling and Simulation"></category></entry><entry><title>Simulated Annealing</title><link href="https://gastonamengual.github.io/simulated-annealing.html" rel="alternate"></link><published>2020-09-25T00:00:00-03:00</published><updated>2020-09-25T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-09-25:/simulated-annealing.html</id><summary type="html">&lt;p&gt;Theoretical framework of the algorithm, including annealing schedules, and acceptance probability function. Implementation and application over benchmark functions. Evaluation with RMSE.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual and &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;/script&gt;</content><category term="Modeling and Simulation"></category></entry><entry><title>Simulated Annealing</title><link href="https://gastonamengual.github.io/simulated-annealing.html" rel="alternate"></link><published>2020-09-25T00:00:00-03:00</published><updated>2020-09-25T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-09-25:/simulated-annealing.html</id><summary type="html">&lt;p&gt;Theoretical framework of the algorithm, including annealing schedules, and acceptance probability function. Implementation and application over benchmark functions. Evaluation with RMSE.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;In collaboration with &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 
 &lt;h1&gt;1 Theoretical Framework&lt;/h1&gt;
@@ -2452,23 +2707,9 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
 
 
 &lt;div&gt;
-&lt;style scoped&gt;
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-&lt;/style&gt;
-&lt;table border="1" class="dataframe"&gt;
+&lt;table border="1"&gt;
   &lt;thead&gt;
-    &lt;tr style="text-align: right;"&gt;
-      &lt;th&gt;&lt;/th&gt;
+    &lt;tr&gt;
       &lt;th&gt;Function&lt;/th&gt;
       &lt;th&gt;Average RMSE (10)&lt;/th&gt;
       &lt;th&gt;Average RMSE (20)&lt;/th&gt;
@@ -2478,7 +2719,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;th&gt;0&lt;/th&gt;
       &lt;td&gt;Linear&lt;/td&gt;
       &lt;td&gt;25.95&lt;/td&gt;
       &lt;td&gt;15.802&lt;/td&gt;
@@ -2486,7 +2726,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.959&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;1&lt;/th&gt;
       &lt;td&gt;Geometric&lt;/td&gt;
       &lt;td&gt;0.179&lt;/td&gt;
       &lt;td&gt;0.066&lt;/td&gt;
@@ -2494,7 +2733,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.066&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;2&lt;/th&gt;
       &lt;td&gt;Slow&lt;/td&gt;
       &lt;td&gt;1.258&lt;/td&gt;
       &lt;td&gt;0.526&lt;/td&gt;
@@ -2502,7 +2740,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.058&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;3&lt;/th&gt;
       &lt;td&gt;Exponential&lt;/td&gt;
       &lt;td&gt;0.919&lt;/td&gt;
       &lt;td&gt;0.045&lt;/td&gt;
@@ -2510,7 +2747,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;0.043&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;4&lt;/th&gt;
       &lt;td&gt;Exponential Multiplicative&lt;/td&gt;
       &lt;td&gt;13.672&lt;/td&gt;
       &lt;td&gt;1.696&lt;/td&gt;
@@ -2560,23 +2796,9 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
 
 
 &lt;div&gt;
-&lt;style scoped&gt;
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-&lt;/style&gt;
-&lt;table border="1" class="dataframe"&gt;
+&lt;table border="1"&gt;
   &lt;thead&gt;
-    &lt;tr style="text-align: right;"&gt;
-      &lt;th&gt;&lt;/th&gt;
+    &lt;tr&gt;
       &lt;th&gt;Solution Abs Error&lt;/th&gt;
       &lt;th&gt;Solution Rel Error&lt;/th&gt;
       &lt;th&gt;Value Abs Error&lt;/th&gt;
@@ -2589,7 +2811,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;th&gt;0&lt;/th&gt;
       &lt;td&gt;-0.0003&lt;/td&gt;
       &lt;td&gt;-0.1276&lt;/td&gt;
       &lt;td&gt;0.0049&lt;/td&gt;
@@ -2600,7 +2821,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Problem 14&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;1&lt;/th&gt;
       &lt;td&gt;0.0002&lt;/td&gt;
       &lt;td&gt;0.0193&lt;/td&gt;
       &lt;td&gt;0.0061&lt;/td&gt;
@@ -2611,7 +2831,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Ackley&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;2&lt;/th&gt;
       &lt;td&gt;0.0001&lt;/td&gt;
       &lt;td&gt;0.0492&lt;/td&gt;
       &lt;td&gt;0.0052&lt;/td&gt;
@@ -2622,7 +2841,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Gramacy &amp;amp; Lee&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;3&lt;/th&gt;
       &lt;td&gt;-0.0028&lt;/td&gt;
       &lt;td&gt;-0.0883&lt;/td&gt;
       &lt;td&gt;0.0050&lt;/td&gt;
@@ -2633,7 +2851,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Easom&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;4&lt;/th&gt;
       &lt;td&gt;-0.0001&lt;/td&gt;
       &lt;td&gt;-0.0132&lt;/td&gt;
       &lt;td&gt;0.0054&lt;/td&gt;
@@ -2644,7 +2861,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Rastrigin&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;5&lt;/th&gt;
       &lt;td&gt;0.0047&lt;/td&gt;
       &lt;td&gt;0.0011&lt;/td&gt;
       &lt;td&gt;0.0051&lt;/td&gt;
@@ -2655,7 +2871,6 @@ e^{-\Delta c / T(k)} &amp;amp; \text{otherwise}
       &lt;td&gt;Schwefel&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;th&gt;6&lt;/th&gt;
       &lt;td&gt;0.0002&lt;/td&gt;
       &lt;td&gt;-0.0075&lt;/td&gt;
       &lt;td&gt;0.0058&lt;/td&gt;
