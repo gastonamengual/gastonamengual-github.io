@@ -1,7 +1,6 @@
-# Simple Linear Regression
-
-**Notebook written by Gastón Amengual**.
-
+Title: Linear Regression - Simple
+Date: 2021-02-18
+Summary: Explanation of Simple Linear Regression. Explanation and verification of Assumptions. Implementation and demonstration of Ordinary Least Squares. Confidence and prediction intervals. Interpolation vs Extrapolation.
 
 ```python
 import numpy as np
@@ -10,19 +9,6 @@ import matplotlib.pyplot as plt
 from scipy import stats
 ```
 
-
-```python
-plt.style.use("bmh")
-config = {'figure.figsize': (16, 4), 
-          'axes.titlesize': 18, 
-          'axes.labelsize': 14, 
-          'lines.linewidth': 2, 
-          'lines.markersize': 10, 
-          'xtick.labelsize': 10,
-          'ytick.labelsize': 10, 
-          'axes.prop_cycle': plt.cycler(color=["darkmagenta", "saddlebrown", "darkcyan", "olivedrab", "darkseagreen", "darkkhaki", "darkgoldenrod", "deepskyblue", "firebrick", "palevioletred"]),}
-plt.rcParams.update(config)
-```
 
 # 1 Regression Analysis
 
@@ -191,12 +177,6 @@ residuals = y - y_estimated
 
 plt.scatter(x, y)
 plt.plot(x, y_estimated, color='darkblue', label='$\hat{y}$')
-plt.title('Simple Linear Regression - Ordinary Least Squares')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.legend(fontsize=18)
-plt.tight_layout()
-plt.show()
 ```
 
 
@@ -211,24 +191,15 @@ $$\hat{y_i} = -0.1622 + 63.2130 x_i + r_i$$
 
 To know for certain that this model is accurate and precise, the four assumptions will be verified.
 
+<br>
+
 **Assumption 1: Linearity**
 
 
 ```python
 fig, axes = plt.subplots(1, 2)
-
 axes[0].scatter(x, y)
-axes[0].set_title('Independent vs Dependent Variable')
-axes[0].set_xlabel('$x$')
-axes[0].set_ylabel('$y$')
-
 axes[1].scatter(x, residuals)
-axes[1].set_title('Independent Variable vs Residuals')
-axes[1].set_xlabel('$x$')
-axes[1].set_ylabel('Residuals')
-
-plt.tight_layout()
-plt.show()
 ```
 
 
@@ -239,6 +210,8 @@ plt.show()
 
 A clear linear relationship can be observed between $x$ and $y$, while most of the residuals are distributed around a horizontal line, with a roughly constant variance. 
 
+<br>
+
 **Assumption 2: Independence of errors**
 
 
@@ -246,9 +219,6 @@ A clear linear relationship can be observed between $x$ and $y$, while most of t
 pd.plotting.autocorrelation_plot(residuals)
 plt.ylim(-0.1, 0.1)
 plt.xlim(0, 100)
-plt.title('Residuals Autocorrelation Plot')
-plt.tight_layout()
-plt.show()
 ```
 
 
@@ -258,6 +228,8 @@ plt.show()
 
 
 It can be seen that the autocorrelation falls between the confidence interval, and I don't know what that means, and what CI we're talking about...
+
+<br>
 
 **Assumption 3: Homoscedasticity**
 
@@ -276,9 +248,6 @@ for i in range(n):
     print(f'CI for Sample {i+1}: {np.percentile(variances, 2.5):.2f} - {np.percentile(variances, 97.5):.2f}')
     plt.hist(variances, alpha=0.6)
     
-plt.title('Histograms for Variance of 3 Contiguous Sets of Residuals')
-plt.tight_layout()
-plt.show()
 ```
 
     CI for Sample 1: 383.50 - 437.50
@@ -293,6 +262,8 @@ plt.show()
 
 
 It can be seen the the three histograms overlap in their CI, show that there is a high probability that the residuals are not heteroscedastic. For the purposes of this work, this conclusion is enough to consider the residuals homoscedastic, while formal testing is encouraged.
+
+<br>
 
 **Assumption 4: Normality**
 
@@ -417,17 +388,9 @@ plt.scatter(x, y, s=3, color="darkgrey")
 # Fitted Line
 plt.plot(x_new, y_estimated_new, color='darkblue', label='$\hat{y}$', lw=1)
 
-plt.xlim(-4, 8)
-plt.xlabel('x')
-plt.ylabel('y')
-plt.title('95% Confidence for Mean and Prediction for Simple Linear Regression')
-plt.legend()
-plt.tight_layout()
-plt.show()
 ```
 
-
-    
+  
 ![image alt text]({static}../images/linear_regression_simple_5.png)
     
 
