@@ -197,7 +197,7 @@ for k in ks:
 
 ### 3.2.2 Optimum *k*
 
-Boxplots for the accuracy for each *k* considering all K folds will be constructed. The optimum *k* will be the one with maximum median. The mean was not used to minimize the effects of outliers.
+Boxplots for the accuracy for each *k* considering all K folds will be constructed. The optimum *k* will be the one with maximum median. The median was used instead of the mean to minimize the effects of outliers.
 
 
 ```python
@@ -306,7 +306,7 @@ The training and validation procedure was performed for several distance metrics
 
 <br>
 
-As it can be observed, the Canberra distance provided the best result, followed by Mahalanobis and Manhattan.
+As can be observed, the five first distances performed similar in both Training and Validation set, with Manhattan performing better in the Training set. The worst distances were Cosine and Chebyshev.
 
 # 5 Prediction Map
 
