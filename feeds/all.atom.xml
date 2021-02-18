@@ -554,7 +554,7 @@
 
 
 &lt;h3&gt;3.2.2 Optimum &lt;em&gt;k&lt;/em&gt;&lt;/h3&gt;
-&lt;p&gt;Boxplots for the accuracy for each &lt;em&gt;k&lt;/em&gt; considering all K folds will be constructed. The optimum &lt;em&gt;k&lt;/em&gt; will be the one with maximum median. The mean was not used to minimize the effects of outliers.&lt;/p&gt;
+&lt;p&gt;Boxplots for the accuracy for each &lt;em&gt;k&lt;/em&gt; considering all K folds will be constructed. The optimum &lt;em&gt;k&lt;/em&gt; will be the one with maximum median. The median was used instead of the mean to minimize the effects of outliers.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;accuracy_training_df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;accuracy_list_training&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;ks&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="n"&gt;best_k_training&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argmax&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;accuracy_training_df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;median&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
@@ -651,7 +651,7 @@
 &lt;/div&gt;
 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;As it can be observed, the Canberra distance provided the best result, followed by Mahalanobis and Manhattan.&lt;/p&gt;
+&lt;p&gt;As can be observed, the five first distances performed similar in both Training and Validation set, with Manhattan performing better in the Training set. The worst distances were Cosine and Chebyshev.&lt;/p&gt;
 &lt;h1&gt;5 Prediction Map&lt;/h1&gt;
 &lt;p&gt;To provide an estimate of the classification of different points in the observed data domain, prediction maps for 4 &lt;em&gt;k&lt;/em&gt; values (including the optimum) will be made.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;xs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;200&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;

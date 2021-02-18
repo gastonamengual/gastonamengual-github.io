@@ -248,7 +248,7 @@
 
 
 <h3>3.2.2 Optimum <em>k</em></h3>
-<p>Boxplots for the accuracy for each <em>k</em> considering all K folds will be constructed. The optimum <em>k</em> will be the one with maximum median. The mean was not used to minimize the effects of outliers.</p>
+<p>Boxplots for the accuracy for each <em>k</em> considering all K folds will be constructed. The optimum <em>k</em> will be the one with maximum median. The median was used instead of the mean to minimize the effects of outliers.</p>
 <div class="highlight"><pre><span></span><code><span class="n">accuracy_training_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">accuracy_list_training</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ks</span><span class="p">)</span>
 
 <span class="n">best_k_training</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">accuracy_training_df</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
@@ -345,7 +345,7 @@
 </div>
 
 <p><br></p>
-<p>As it can be observed, the Canberra distance provided the best result, followed by Mahalanobis and Manhattan.</p>
+<p>As can be observed, the five first distances performed similar in both Training and Validation set, with Manhattan performing better in the Training set. The worst distances were Cosine and Chebyshev.</p>
 <h1>5 Prediction Map</h1>
 <p>To provide an estimate of the classification of different points in the observed data domain, prediction maps for 4 <em>k</em> values (including the optimum) will be made.</p>
 <div class="highlight"><pre><span></span><code><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
