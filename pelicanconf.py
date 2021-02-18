@@ -11,7 +11,7 @@ DEFAULT_LANG = 'en'
 
 RELATIVE_URLS = True
 
-THEME = 'Theme'
+THEME = 'MinimalXY'
 START_YEAR = 2021
 CURRENT_YEAR = 2021
 
