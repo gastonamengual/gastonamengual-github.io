@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG }}">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>{% block title %}{{ SITENAME }}{% endblock title %}</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="{{ SITEURL }}/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ SITEURL }}/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ SITEURL }}/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ SITEURL }}/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="{{ SITEURL }}/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    {% if article %}
+    <meta property="article:author" content="{{ article.author }}" />
+    <meta property="article:section" content="{{ article.category }}" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="{{ article.title|striptags }}"/>
+    <meta property="og:description" content="{{ article.summary|striptags|escape }}"/>
+    <meta property="og:site_name" content="{{ SITENAME }}" />
+    <meta property="og:url" content="{{ SITEURL }}/{{ article.url }}"/>
+
+    {% elif page %}
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="{{ page.title }}"/>
+    <meta property="og:description" content="{{ SITESUBTITLE }}"/>
+    <meta property="og:site_name" content="{{ SITENAME }}" />
+    <meta property="og:url" content="{{ SITEURL }}/{{ page.url }}"/>
+    <meta property="og:image" content="{{ AUTHOR_AVATAR }}"/>
+
+    {% else %}
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{{ SITENAME }}"/>
+    <meta property="og:description" content="{{ SITESUBTITLE }}"/>
+    <meta property="og:site_name" content="{{ SITENAME }}" />
+    <meta property="og:url" content="{{ SITEURL }}"/>
+    <meta property="og:image" content="{{ AUTHOR_AVATAR }}"/>
+    {% endif %}
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="{{ SITEURL }}/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            {% if DISPLAY_PAGES_ON_MENU %}
+              {% for p in pages %}
+                <li class="navbar-li{% if p==page %} active{% endif %}"><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></li>
+              {% endfor %}
+            {% endif %}
+            
+           {% for title, link in MENUITEMS %}
+              <li class="navbar-li"><a href="{{ link }}">{{ title }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+    </div>
+
+    {% block content_title %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        <p>
+          &copy;
+          {{ START_YEAR }}{% if START_YEAR != CURRENT_YEAR %}&dash;{{ CURRENT_YEAR }}{% endif %}
+          {{ AUTHOR }}
+        </p>
+    </footer>
+
+    {% include "ga.html" %}
+  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>

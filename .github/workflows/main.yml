@@ -1,0 +1,30 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+          
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Build
+        run: invoke preview
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: production
+          publish_dir: output
+          full_commit_message: ${{ github.event.head_commit.message }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

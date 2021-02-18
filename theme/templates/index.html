@@ -1,0 +1,61 @@
+    {% extends "base.html" %}
+
+    {% block title %}Home &ndash; {{ SITENAME }}{% endblock %}
+
+    {% block content %}
+
+    <div class="col-main">
+
+      <br>
+
+      <div class="index-header">
+        <h1>AI & Data Science in one place.</h1>
+      </div>
+
+      <hr style="margin: 2rem auto 2rem auto;">
+      <div class="index-header">
+        
+
+        <p class="index-description">My name is Gastón Amengual. I am a Senior Systems Engineering Student with focus on Data Science.</p>
+          
+        <div class="index-contact">
+          <a href="mailto: gastonamengual@icloud.com" class="index-btn mail-btn">Email</a>
+          <a href="theme/cv_gaston_amengual.pdf" target="_blank" class="index-btn cv-btn">CV</a>
+          <a href="https://www.linkedin.com/in/gaston-amengual/" target="_blank" class="index-btn linkedin-btn">LinkedIn</a>
+        </div>
+      </div>
+
+     
+      <hr>
+
+      <div class="index-categories">
+        <a class="index-category-link" href="category/machine-learning.html">
+          <div class="index-category" id="category-ml">
+            <p class="index-category-name">Machine <br> Learning</p>
+          </div>
+        </a>
+
+        <a class="index-category-link" href="category/optimization.html">
+          <div class="index-category" id="category-opt">
+            <p class="index-category-name">Optimization</p>
+          </div>
+        </a>
+
+        <a class="index-category-link" href="category/modeling-and-simulation.html">
+          <div class="index-category" id="category-m-s">
+            <p class="index-category-name">Modeling and Simulation</p>
+          </div>
+        </a>
+
+        <a class="index-category-link" href="category/statistics.html">
+          <div class="index-category" id="category-stats">
+            <p class="index-category-name">Statistics</p>
+          </div>
+        </a>
+      </div>
+
+    <br><br>
+      
+    </div>
+
+    {% endblock content %}

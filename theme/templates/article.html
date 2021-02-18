@@ -1,0 +1,25 @@
+    {% extends "base.html" %}
+
+    {% block title %}{{ article.title|striptags }} &ndash; {{ SITENAME }}{% endblock %}
+
+    {% block content %}
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>{{ article.title }}</h1>
+        <a class="article-category" href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          {{article.content}}
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+    {% endblock content %}
