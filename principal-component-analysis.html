@@ -58,7 +58,8 @@
 
       <div class="col-main">
         <section class="article-content">
-          <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+          <p><meta property="og:image" content="{static}../images/principal_component_analysis_2.png"/></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -141,9 +142,10 @@
     <span class="n">eigenvalues</span> <span class="o">=</span> <span class="n">eigenvalues</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span>
     <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">eigenvectors</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span>
 
-    <span class="c1"># The 5th step will be performed outside this function. The full transformed data matrix will be returned, and the r principal </span>
-    <span class="c1"># components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset</span>
-    <span class="c1"># of the eigenvectors can be selected here. </span>
+    <span class="c1"># The 5th step will be performed outside this function. The full transformed data matrix </span>
+    <span class="c1"># will be returned, and the r principal components will be chosen later. If desired, this</span>
+    <span class="c1"># function could take the number of components as a parameter, and the subset of the </span>
+    <span class="c1"># eigenvectors can be selected here. </span>
 
     <span class="c1"># 6 Compute transformed data matrix and atributes</span>
     <span class="n">components</span> <span class="o">=</span> <span class="n">eigenvectors</span>
@@ -190,9 +192,10 @@
     <span class="c1"># 2 Compute SVD</span>
     <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">VT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># The 3rd step will be performed outside this function. The full transformed data matrix will be returned, and the r principal </span>
-    <span class="c1"># components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset</span>
-    <span class="c1"># of the eigenvectors can be selected here. </span>
+    <span class="c1"># The 3rd step will be performed outside this function. The full transformed data </span>
+    <span class="c1"># matrix will be returned, and the r principal components will be chosen later. If</span>
+    <span class="c1"># desired, this function could take the number of components as a parameter, and </span>
+    <span class="c1"># the subset of the eigenvectors can be selected here. </span>
 
     <span class="c1"># 4 Compute transformed data matrix and atributes</span>
     <span class="n">components</span> <span class="o">=</span> <span class="n">VT</span>

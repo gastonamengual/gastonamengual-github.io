@@ -658,7 +658,8 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-20T00:00:00-03:00</published><updated>2020-12-20T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-20:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-20T00:00:00-03:00</published><updated>2020-12-20T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-20:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;meta property="og:image" content="{static}../images/principal_component_analysis_2.png"/&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;seaborn&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;sns&lt;/span&gt;
@@ -741,9 +742,10 @@
     &lt;span class="n"&gt;eigenvalues&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
     &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# The 5th step will be performed outside this function. The full transformed data matrix will be returned, and the r principal &lt;/span&gt;
-    &lt;span class="c1"&gt;# components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset&lt;/span&gt;
-    &lt;span class="c1"&gt;# of the eigenvectors can be selected here. &lt;/span&gt;
+    &lt;span class="c1"&gt;# The 5th step will be performed outside this function. The full transformed data matrix &lt;/span&gt;
+    &lt;span class="c1"&gt;# will be returned, and the r principal components will be chosen later. If desired, this&lt;/span&gt;
+    &lt;span class="c1"&gt;# function could take the number of components as a parameter, and the subset of the &lt;/span&gt;
+    &lt;span class="c1"&gt;# eigenvectors can be selected here. &lt;/span&gt;
 
     &lt;span class="c1"&gt;# 6 Compute transformed data matrix and atributes&lt;/span&gt;
     &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;
@@ -790,9 +792,10 @@
     &lt;span class="c1"&gt;# 2 Compute SVD&lt;/span&gt;
     &lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;full_matrices&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# The 3rd step will be performed outside this function. The full transformed data matrix will be returned, and the r principal &lt;/span&gt;
-    &lt;span class="c1"&gt;# components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset&lt;/span&gt;
-    &lt;span class="c1"&gt;# of the eigenvectors can be selected here. &lt;/span&gt;
+    &lt;span class="c1"&gt;# The 3rd step will be performed outside this function. The full transformed data &lt;/span&gt;
+    &lt;span class="c1"&gt;# matrix will be returned, and the r principal components will be chosen later. If&lt;/span&gt;
+    &lt;span class="c1"&gt;# desired, this function could take the number of components as a parameter, and &lt;/span&gt;
+    &lt;span class="c1"&gt;# the subset of the eigenvectors can be selected here. &lt;/span&gt;
 
     &lt;span class="c1"&gt;# 4 Compute transformed data matrix and atributes&lt;/span&gt;
     &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt;
