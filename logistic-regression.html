@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Logistic Regression &ndash; Gastón Amengual</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Machine Learning" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Logistic Regression"/>
+    <meta property="og:description" content="Definition of Logistic Regression. Demonstration and explanation of cost function. Optimization with Gradient Descent. From-scratch implementation in Python. Application on dummy data."/>
+    <meta property="og:site_name" content="Gastón Amengual" />
+    <meta property="og:url" content="https://gastonamengual.github.io/logistic-regression.html"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+    </div>
+
+
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>Logistic Regression</h1>
+        <a class="article-category" href="https://gastonamengual.github.io/category/machine-learning.html">Machine Learning</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+</code></pre></div>
+
+
+<h1>Definition</h1>
+<p>Logistic regression is a statistical model that uses a logistic function to model a binary dependent variable in order to estimate the parameters of a logistic model. The goal of binary logistic regression is to train a classifier that can make a binary decision about the class of a new input observation. </p>
+<h1>Model</h1>
+<p>Let <span class="math">\(X\)</span> be an <span class="math">\(n \times m\)</span> matrix with <span class="math">\(n\)</span> observations and <span class="math">\(m\)</span> independent variables or features, <span class="math">\(x\)</span> an individual observation <span class="math">\(1 \times m\)</span> vector, <span class="math">\(y\)</span> the true known output for each observation (which is <span class="math">\(0\)</span> or <span class="math">\(1\)</span>), and <span class="math">\(\hat{y}\)</span> be the prediction of the model for an observation. </p>
+<p>Logistic regression makes a prediction by learning a vector of weights, <span class="math">\(w\)</span>, and a bias term, <span class="math">\(b\)</span>. Each weight <span class="math">\(w_i\)</span> is a real number, and is associated with one of the observation's features <span class="math">\(x_{nm}\)</span>. To make a decision, after the weights and bias have been learned, the the weighted sum of the evidence for the class, <span class="math">\(z\)</span> is calculated:</p>
+<div class="math">$$z = \left ( \sum_{i=1}^{n} w_i x_i \right ) + b = w \cdot x + b$$</div>
+<p>The domain of <span class="math">\(z\)</span> is <span class="math">\(\left [ -\infty, \infty \right ]\)</span>. However, the output of the model is interpreted as the probability of the observation belonging to class 1. As the probability is a real number between 0 and 1, the output of the model must be squashed between 0 and 1. To map from <span class="math">\(\left [ -\infty, \infty \right ]\)</span> to <span class="math">\(\left [ 0, 1 \right ]\)</span>, a sigmoid or logistic function <span class="math">\(\sigma(z)\)</span> is used. The sigmoid has the following equation:</p>
+<div class="math">$$\hat{y} = \sigma(z) = \dfrac{1}{1+e^{-z}}$$</div>
+<p>Why is the sigmoid used?</p>
+<ul>
+<li>It takes real values</li>
+<li>It maps the values into the range <span class="math">\([0, 1]\)</span></li>
+<li>It tends to squash outlier values toward 0 or 1</li>
+<li>It is differentiable</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Sigmoid Function&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_1.png"></p>
+<p>Applying the sigmoid function to <span class="math">\(z\)</span> produces a number between 0 and 1. To make it a probability, it will be verified that the two cases, <span class="math">\(p(y = 1)\)</span> and <span class="math">\(p(y = 0)\)</span> sum to 1:</p>
+<div class="math">$$p(y = 1) = \sigma(w \cdot x + b) \qquad \qquad p(y = 0) = 1 - \sigma(w \cdot x + b)$$</div>
+<div class="math">$$p(y = 1) + p(y = 0) = \sigma(w \cdot x + b) + 1 - \sigma(w \cdot x + b) = 1$$</div>
+<p>Finally, a decision is made as follows</p>
+<div class="math">$$\hat{y} = \left\{\begin{matrix} 1 &amp; \text{if} \; P(y=1 | x) &gt; 0.5\\ 0 &amp; \text{otherwise} \end{matrix}\right.$$</div>
+<p>where <span class="math">\(0.5\)</span> is called the decision boundary.</p>
+<h1>Learning Parameters</h1>
+<h3>Cross-entropy Loss Function</h3>
+<p>To express how close the classifier output <span class="math">\(\hat{y}\)</span> is to the true output <span class="math">\(y\)</span>, a loss function <span class="math">\(L(\hat{y}, y)\)</span> that prefers the correct class labels of the training examples to be more likely. This <strong>conditional maximum likelihood estimation</strong> chooses the parameters that maximize the log probability of the true <span class="math">\(y\)</span> labels in the training data given the observations <span class="math">\(x\)</span>. The resulting loss function is the negative log likelihood loss, generally called the <strong>cross-entropy loss</strong>. This loss function is a Bernoulli distribution, as there are only to discrete outcomes:</p>
+<div class="math">$$p(y | x) = \hat{y}^y (1 - \hat{y})^{1 - y}$$</div>
+<p>Taking the log on both sides is mathematically handy, and whatever values maximize a probability will also maximize the log of the probability.</p>
+<div class="math">$$log p(y | x) = log \left [ \hat{y}^y (1 - \hat{y})^{1 - y} \right ] = y \; log \hat{y} + (1 - y) \; log (1 - \hat{y})$$</div>
+<p>In order to minimize the log likelihood, the sign is fliped:</p>
+<div class="math">$$L_{CE} = - log p(y | x) = - \left [ y \; log \hat{y} + (1 - y) \; log (1 - \hat{y}) \right ]$$</div>
+<p>Finally, plugging the definition of <span class="math">\(\hat{y}\)</span>, the loss function is defined as:</p>
+<div class="math">$$L_{CE} = - \left [ y \; log \; \sigma(w \cdot x + b) + (1 - y) \; log (1 - \sigma(w \cdot x + b)) \right ]$$</div>
+<p>This loss function is convex, and therefore has just one minimum.</p>
+<h3>Gradient Descent</h3>
+<p>In order to find the optimum parameters, gradient descent will be used, as, because the loss function is convex, it is guaranteed to find the minimum. Let <span class="math">\(\theta = w, b\)</span> and <span class="math">\(f(x_i ; \theta) = \hat{y}\)</span>. The goal is to find the set of weights which minimizes the loss function, averaged over all examples:</p>
+<div class="math">$$\hat{\theta} = \underset{\theta}{\text{argmin}} \dfrac{1}{m} \sum_{i=1}^{m} L_{CE} (f(x_i ; \theta), y_i)$$</div>
+<p>In order to update <span class="math">\(\theta\)</span>, the gradient <span class="math">\(\nabla L(f(x_i ; \theta)\)</span> must be defined. The partial derivatives of the cross-entropy loss function are</p>
+<div class="math">$$\frac{\partial L_{CE} (\hat{y}, y)}{\partial w_j} = \left [ \sigma(w \cdot x + b) - y \right ] x_j$$</div>
+<div class="math">$$\frac{\partial L_{CE} (\hat{y}, y)}{\partial b} = \sigma(w \cdot x + b) - y$$</div>
+<h1>Application</h1>
+<h3>Create Dummy Data Set</h3>
+<div class="highlight"><pre><span></span><code><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">200</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
+<span class="n">x</span> <span class="o">+=</span> <span class="o">.</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_2.png"></p>
+<h3>Train and Test Split</h3>
+<div class="highlight"><pre><span></span><code><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+</code></pre></div>
+
+
+<h3>Training: Gradient Descent Optimization</h3>
+<p>Stochastic Gradient Descent will be used with a learning rate of <span class="math">\(0.0001\)</span> and <span class="math">\(7000\)</span> epochs.</p>
+<div class="highlight"><pre><span></span><code><span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">num_observations</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">num_features</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.0001</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">)):</span>
+
+    <span class="n">shuffled_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span> <span class="ow">in</span> <span class="n">shuffled_data</span><span class="p">:</span>
+
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x_</span> <span class="o">*</span> <span class="n">w</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="n">dLdw</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">-</span> <span class="n">y_</span><span class="p">)</span> <span class="o">*</span> <span class="n">x_</span>
+        <span class="n">dLdb</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">-</span> <span class="n">y_</span>
+
+        <span class="n">w</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">dLdw</span>
+        <span class="n">b</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">dLdb</span>
+
+    <span class="n">cost</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">num_observations</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="n">y_</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sigma</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_3.png"></p>
+<div class="highlight"><pre><span></span><code><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;$z = </span><span class="si">{</span><span class="n">w</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> x </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><span class="math">\(z = 3.151 x -0.351\)</span></p>
+<div class="highlight"><pre><span></span><code><span class="n">y_hat</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x_train</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">y_hat</span><span class="p">[</span><span class="n">y_hat</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">y_hat</span><span class="p">[</span><span class="n">y_hat</span> <span class="o">&lt;=</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">train_accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_hat</span> <span class="o">==</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accuracy for Train Set: </span><span class="si">{</span><span class="n">train_accuracy</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Accuracy for Train Set: 0.95625</span>
+</code></pre></div>
+
+
+<h3>Testing</h3>
+<div class="highlight"><pre><span></span><code><span class="n">y_hat</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x_test</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">y_hat</span><span class="p">[</span><span class="n">y_hat</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">y_hat</span><span class="p">[</span><span class="n">y_hat</span> <span class="o">&lt;=</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_hat</span> <span class="o">==</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accuracy for Test Set: </span><span class="si">{</span><span class="n">test_accuracy</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Accuracy for Test Set: 0.95</span>
+</code></pre></div>
+
+
+<h3>Predictions for Whole Data Set</h3>
+<div class="highlight"><pre><span></span><code><span class="n">y_hat</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">y_hat</span><span class="p">[</span><span class="n">y_hat</span> <span class="o">&gt;</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">y_hat</span><span class="p">[</span><span class="n">y_hat</span> <span class="o">&lt;=</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">x_space</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_space</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x_space</span> <span class="o">+</span> <span class="n">b</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_4.png"></p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset_accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_hat</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accuracy for Whole Data Set: </span><span class="si">{</span><span class="n">dataset_accuracy</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Accuracy for Whole Data Set: 0.955</span>
+</code></pre></div>
+
+
+<h1>References</h1>
+<p><a href="https://web.stanford.edu/~jurafsky/slp3/5.pdf" target="_blank">Logistic Regression - Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+
+    <footer>
+        <p>
+          &copy;
+          2021          Gastón Amengual
+        </p>
+    </footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>

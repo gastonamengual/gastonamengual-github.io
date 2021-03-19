@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Gastón Amengual - Gastón Amengual</title><link href="https://gastonamengual.github.io/" rel="alternate"></link><link href="https://gastonamengual.github.io/feeds/gaston-amengual.atom.xml" rel="self"></link><id>https://gastonamengual.github.io/</id><updated>2021-03-19T00:00:00-03:00</updated><entry><title>k-means</title><link href="https://gastonamengual.github.io/k-means.html" rel="alternate"></link><published>2021-03-19T00:00:00-03:00</published><updated>2021-03-19T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-03-19:/k-means.html</id><summary type="html">&lt;p&gt;Definition. Assumptions. Steps. From-Scrath Python implementation. Application on dummy data.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Gastón Amengual - Gastón Amengual</title><link href="https://gastonamengual.github.io/" rel="alternate"></link><link href="https://gastonamengual.github.io/feeds/gaston-amengual.atom.xml" rel="self"></link><id>https://gastonamengual.github.io/</id><updated>2021-03-19T00:00:00-03:00</updated><entry><title>k-Means</title><link href="https://gastonamengual.github.io/k-means.html" rel="alternate"></link><published>2021-03-19T00:00:00-03:00</published><updated>2021-03-19T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-03-19:/k-means.html</id><summary type="html">&lt;p&gt;Definition. Assumptions. Steps. From-Scrath Python implementation. Application on dummy data.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;make_blobs&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy.spatial&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;distance_matrix&lt;/span&gt;
@@ -144,13 +144,13 @@
 
 &lt;p&gt;The measure to evaluate the performance of the algorithm is the value of the function that is minimized. That function only applies when the data meets the assumptions explained above. However, what happens if the data does not meet those assumptions (it is not convex, the clusters have different sizes, it presents outliers, clusters are superposed), or when it is not possible to know for certain its shape? For those cases, SSE will not be an effective performance measure. For those cases, it would be then preferable to measure the performance of the algorithm by analyzing the points assigned to the clusters created in many replicates. This way, even if the above criteria is not met, either because of unawareness or because it cannot be known (e.g. many dimensions), the measure would give more precise information on the accuracy of the results.&lt;/p&gt;
 &lt;h1&gt;References&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/K-means_clustering"&gt;&lt;em&gt;k&lt;/em&gt;-means clustering - Wikipedia&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://realpython.com/k-means-clustering-python/#what-is-clustering"&gt;K-Means Clustering in Python: A Practical Guide&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://scikit-learn.org/stable/modules/clustering.html#k-means"&gt;scikit learn - Clustering - K-means&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://towardsdatascience.com/machine-learning-algorithms-part-9-k-means-example-in-python-f2ad05ed5203"&gt;K-means Clustering Python Example&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="http://cs-people.bu.edu/evimaria/Italy-2015/partitional-clustering.pdf"&gt;Partitional Clustering&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://realpython.com/k-means-clustering-python/#what-is-clustering"&gt;K-Means Clustering in Python: A Practical Guide&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://blog.learningtree.com/assumptions-ruin-k-means-clusters/"&gt;Assumptions Can Ruin Your K-Means Clusters&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/K-means_clustering" target="_blank"&gt;&lt;em&gt;k&lt;/em&gt;-means clustering - Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://realpython.com/k-means-clustering-python/#what-is-clustering" target="_blank"&gt;K-Means Clustering in Python: A Practical Guide&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://scikit-learn.org/stable/modules/clustering.html#k-means" target="_blank"&gt;scikit learn - Clustering - K-means&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://towardsdatascience.com/machine-learning-algorithms-part-9-k-means-example-in-python-f2ad05ed5203" target="_blank"&gt;K-means Clustering Python Example&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://cs-people.bu.edu/evimaria/Italy-2015/partitional-clustering.pdf" target="_blank"&gt;Partitional Clustering&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://realpython.com/k-means-clustering-python/#what-is-clustering" target="_blank"&gt;K-Means Clustering in Python: A Practical Guide&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://blog.learningtree.com/assumptions-ruin-k-means-clusters/" target="_blank"&gt;Assumptions Can Ruin Your K-Means Clusters&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://varianceexplained.org/r/kmeans-free-lunch/"&gt;K-means clustering is not a free lunch&lt;/a&gt;&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
@@ -213,310 +213,187 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Linear Regression - Simple</title><link href="https://gastonamengual.github.io/linear-regression-simple.html" rel="alternate"></link><published>2021-02-18T00:00:00-03:00</published><updated>2021-02-18T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-02-18:/linear-regression-simple.html</id><summary type="html">&lt;p&gt;Explanation of Simple Linear Regression. Explanation and verification of assumptions. Implementation and demonstration of Ordinary Least Squares. Application on dummy data. Confidence and prediction intervals. Interpolation vs extrapolation.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
-&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Logistic Regression</title><link href="https://gastonamengual.github.io/logistic-regression.html" rel="alternate"></link><published>2021-03-19T00:00:00-03:00</published><updated>2021-03-19T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-03-19:/logistic-regression.html</id><summary type="html">&lt;p&gt;Definition of Logistic Regression. Demonstration and explanation of cost function. Optimization with Gradient Descent. From-scratch implementation in Python. Application on dummy data.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
-&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;tqdm.notebook&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;tqdm&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;IPython.display&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Markdown&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.model_selection&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;train_test_split&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h1&gt;1 Regression Analysis&lt;/h1&gt;
-&lt;p&gt;A regression analysis is a set of statistical processes for estimating the relationship between a dependent variable and one or more independent variables. It is widely used for prediction and forecasting, and to infer causal relationships between the independent and dependent variables. Regression models involve a dependent variable, and one or more independent variables. &lt;/p&gt;
-&lt;p&gt;The &lt;strong&gt;dependent or response variable&lt;/strong&gt; is the variable whose value depends on the independent variables, and the variable that is being tested, measured, or forecasted in an experiment. The &lt;strong&gt;independent or explanatory variables&lt;/strong&gt; are variables not influenced by other variables, and are assumed to have a direct effect on the dependent variable.&lt;/p&gt;
-&lt;p&gt;Two other important terms are introduced, the error and the residual. The &lt;strong&gt;error&lt;/strong&gt; is the amount by which an observation differs from its expected population value. The &lt;strong&gt;residual&lt;/strong&gt; is the difference between an observation and the expected estimated or predicted value.&lt;/p&gt;
-&lt;p&gt;The goal of a regression model is to estimate the function that most closely fits the data.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Fun fact: Regress comes from latin "regressus", to go back (to something). In that sense, regression is the technique that allows "to go back" from messy, hard to interpret data, to a clearer and more meaningful model.&lt;/em&gt;&lt;/p&gt;
-&lt;h1&gt;2 Simple Linear Regression Model&lt;/h1&gt;
-&lt;p&gt;Linear regression is the simplest regression type. If the linear regression model has only one independent variable, then it is called Simple Linear Regression (SLR). When it has more than one independent variables, it is called Multiple Linear Regression. &lt;/p&gt;
-&lt;p&gt;The &lt;strong&gt;true SLR model&lt;/strong&gt; describes the true relationship between independent and dependent variables, and it is achieved by carrying out the regression on the whole population, either with complete data or theoretical calculations. It is described by:&lt;/p&gt;
-&lt;div class="math"&gt;$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$&lt;/div&gt;
-&lt;p&gt;where &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; is the independent variable, &lt;span class="math"&gt;\(y_i\)&lt;/span&gt; is the true dependent variable, &lt;span class="math"&gt;\((x_i, y_i)\)&lt;/span&gt; constitute a true data pair or point, &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; are the true parameters, and &lt;span class="math"&gt;\(\epsilon_i\)&lt;/span&gt; is the error term. The &lt;strong&gt;errors&lt;/strong&gt; are the deviations of the dependent variable observations from an unobservable function that relates the independent variable to the dependent variable.&lt;/p&gt;
-&lt;p&gt;However, in most cases the attributes of the whole population cannot be measured, so a sample is taken instead, and an &lt;strong&gt;estimated SLR model&lt;/strong&gt; is constructed instead:&lt;/p&gt;
-&lt;div class="math"&gt;$$\hat{y_i} = \hat{\beta_0} + \hat{\beta_1} x_i + r_i$$&lt;/div&gt;
-&lt;p&gt;where &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; is the independent variable, &lt;span class="math"&gt;\(\hat{y_i}\)&lt;/span&gt; is the estimated dependent variable, &lt;span class="math"&gt;\((x_i, \hat{y_i})\)&lt;/span&gt; constitute a estimated data pair or point, &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\hat{\beta_1}\)&lt;/span&gt; are the estimated parameters, and &lt;span class="math"&gt;\(r_i\)&lt;/span&gt; is the residual term. The &lt;strong&gt;residuals&lt;/strong&gt; are the deviations of the dependent variable observations from the fitted function. The residuals are defined as:&lt;/p&gt;
-&lt;div class="math"&gt;$$\hat{r_i} = \hat{y_i} - \hat{\beta_0} - \hat{\beta_1} x_i$$&lt;/div&gt;
-&lt;p&gt;Finally, the minimization problem, the &lt;strong&gt;sum of squared residuals&lt;/strong&gt;, is:&lt;/p&gt;
-&lt;div class="math"&gt;$$\min\limits_{\hat{\beta_0}, \hat{\beta_1}} Q(\hat{\beta_0}, \hat{\beta_1}) = \sum_{i=1}^{n}{\hat{r}_i^2 = \sum_{i=1}^{n}(\hat{y_i} - \hat{\beta_0} -\hat{\beta_1} x_i)^2}$$&lt;/div&gt;
-&lt;p&gt;As can be observed, the SLR model is a line, and the objective is to find the slope and intercept, i.e. the values of &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\hat{\beta_1}\)&lt;/span&gt; that best fits the data points to the line, minimizing the difference of the true observed dependent variables and the estimated dependent variables. &lt;/p&gt;
-&lt;h1&gt;3 Assumptions&lt;/h1&gt;
-&lt;p&gt;To apply the Simple Linear Regression model (and more generally the Linear Regression model) to a data set, it must meet a set of assumptions. If they are not met, then the results of the model can be mistaken or not precise.  &lt;/p&gt;
-&lt;h2&gt;3.1 Linearity&lt;/h2&gt;
-&lt;p&gt;There is a linear relationship between the independent variable &lt;span class="math"&gt;\(x\)&lt;/span&gt; and the dependent variable &lt;span class="math"&gt;\(y\)&lt;/span&gt;, that is, the expected value of the dependent variable is a straight-line function of the independent variable. &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How to test?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Linearity is usually evident in a plot of the independent variable versus the dependent variable (1), or in a plot of residuals versus the independent variable. In (1) the points should be symmetrically distributed around a diagonal line, while in (2) they should be distributed around a horizontal line, with a roughly constant variance. The latter approach is better, as it removes the visual distraction of a sloping pattern.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;What if the model is nonlinear?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;If the model is nonlinear, the predictions made are likely to be mistaken, especially when extrapolating beyond the range of the sample data. Several transformations can be applied nonlinear data (see &lt;a href="https://people.revoledu.com/kardi/tutorial/Regression/nonlinear/NonLinearTransformation.htm"&gt;here&lt;/a&gt; for more details), or another independent variable can be added.&lt;/p&gt;
-&lt;h2&gt;3.2 Independence&lt;/h2&gt;
-&lt;p&gt;The residuals must be independent.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How to test?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Independence can be tested with an autocorrelation plot of the residuals. Ideally, most of the residuals should fall within the 95% confidence bands around zero, where &lt;span class="math"&gt;\(n\)&lt;/span&gt; is the sample size. For a more formal and precise test, the &lt;a href="https://en.wikipedia.org/wiki/Durbin%E2%80%93Watson_statistic"&gt;Durbin-Watson Test&lt;/a&gt; can be conducted.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;What if the residuals are not independent?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Violations of independence are potentially very serious in time series regression models. To fix the issue, there are several options. For positive serial correlation, add lags of the dependent and/or independent variable to the model. For negative serial correlation, check to make sure that none of the variables are overdifferenced. For seasonal correlation, add seasonal dummy variables to the model.&lt;/p&gt;
-&lt;h2&gt;3.3 Homoscedasticity&lt;/h2&gt;
-&lt;p&gt;The residuals must have constant variance at every level of the independent variable.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How to test?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Formal tests of heteroscedasticity can be studied &lt;a href="https://medium.com/@remycanario17/tests-for-heteroskedasticity-in-python-208a0fdb04ab"&gt;here&lt;/a&gt;. However, for a simpler way to estimate whether the residuals are heteroscedastic, apply resampling to a partition of continuous values of the residuals, and then construct confidence intervals for each of them. If all such CIs overlap with each other, then it is probable that the residuals are not heteroscedastic.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;What if the residuals are not independent?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Transform the dependent variable, e.g., the log of the dependent variable, redefine the dependent variable, e.g., use a rate rather than the raw value, or use weighted regression.&lt;/p&gt;
-&lt;h2&gt;3.4 Normality&lt;/h2&gt;
-&lt;p&gt;The residuals must be normally distributed with mean &lt;span class="math"&gt;\(0\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How to test?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The normality can be checked using statistical tests like Shapiro-Wilk, Kolmogorov-Smironov, Jarque-Barre, or D’Agostino-Pearson. However, they are sensitive to large sample sizes, as they often conclude that the residuals are not normal when the sample size is large. The value of the mean can be tested with the T-test for the mean of ONE group of scores.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;What if the residuals are not independent?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Violations in normality create problems for determining whether model coefficients are significantly different from zero and for calculating confidence intervals for forecasts. Sometimes the residuals distribution is "skewed" by the presence of a few large outliers. To correct this problem, verify that outliers do not have great impact on the distribution, and apply a nonlinear transformation to the independent and/or dependent variable.&lt;/p&gt;
-&lt;h1&gt;4 Ordinary Least Squares&lt;/h1&gt;
-&lt;p&gt;OLS is a type of linear least squares method for estimating the unknown parameters in a linear regression model.&lt;/p&gt;
-&lt;p&gt;The sum of squared residuals function is defined as&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(Q(\hat{\beta_0}, \hat{\beta_1}) = \sum_{i=1}^{n}(y_{i}-\hat{\beta_0} -\hat{\beta_1} x_{i})^2\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The values of &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\hat{\beta_1}\)&lt;/span&gt; that minimizes the function are found as follows:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;1. Take the partial derivatives with respect to &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\hat{\beta_1}\)&lt;/span&gt;.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\frac{\partial }{\partial \hat{\beta_0}}\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i)^2 = -2 \sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i)\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\frac{\partial }{\partial \hat{\beta_1}}\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i)^2 = -2 \sum_{i=1}^{n} x_i(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i)\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;2. Set the partial derivatives equal to 0.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i) = 0 \quad (1)\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n} x_i(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i) = 0 \quad (2)\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;(Note that &lt;span class="math"&gt;\(-2\)&lt;/span&gt; can be simplified)&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3. Solve for  &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\hat{\beta_1}\)&lt;/span&gt;.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Solving for &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; in &lt;span class="math"&gt;\((1)\)&lt;/span&gt;,&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i) = 0\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n} \hat{y_i} - \sum_{i=1}^{n} \hat{\beta_0} - \sum_{i=1}^{n} \hat{\beta_1} x_i = 0\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n} \hat{y_i} - n \hat{\beta_0} - \hat{\beta_1} \sum_{i=1}^{n} x_i = 0\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\hat{\beta_0} = \dfrac{\sum_{i=1}^{n} \hat{y_i}}{n} - \dfrac{\hat{\beta_1} \sum_{i=1}^{n} x_i}{n}\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\hat{\beta_0} = \bar{y} - \hat{\beta_1} \bar{x}\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Replacing &lt;span class="math"&gt;\(\hat{\beta_0}\)&lt;/span&gt; in &lt;span class="math"&gt;\((2)\)&lt;/span&gt; and solving for &lt;span class="math"&gt;\(\hat{\beta_1}\)&lt;/span&gt;,&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n} x_i(\hat{y_i}- \bar{y} + \hat{\beta_1}( \bar{x} - x_i)) = 0\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sum_{i=1}^{n} x_i(\hat{y_i}- \bar{y}) = \hat{\beta_1} \sum_{i=1}^{n} x_i (\bar{x} - x_i)\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\hat{\beta_1} = \dfrac{\sum_{i=1}^{n} x_i (\hat{y_i} - \bar{y})}{\sum_{i=1}^{n} x_i (x_i - \bar{x})}\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;It can be further demonstrated that the expression above equals&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\hat{\beta_1} = \dfrac{\sum_{i=1}^{n} (x_i - \bar{x}) (\hat{y_i} - \bar{y})}{\sum_{i=1}^{n} (x_i - \bar{x})^2}\)&lt;/span&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;ordinary_least_squares&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-
-    &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-    &lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;beta_0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt;
+&lt;h1&gt;Definition&lt;/h1&gt;
+&lt;p&gt;Logistic regression is a statistical model that uses a logistic function to model a binary dependent variable in order to estimate the parameters of a logistic model. The goal of binary logistic regression is to train a classifier that can make a binary decision about the class of a new input observation. &lt;/p&gt;
+&lt;h1&gt;Model&lt;/h1&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix with &lt;span class="math"&gt;\(n\)&lt;/span&gt; observations and &lt;span class="math"&gt;\(m\)&lt;/span&gt; independent variables or features, &lt;span class="math"&gt;\(x\)&lt;/span&gt; an individual observation &lt;span class="math"&gt;\(1 \times m\)&lt;/span&gt; vector, &lt;span class="math"&gt;\(y\)&lt;/span&gt; the true known output for each observation (which is &lt;span class="math"&gt;\(0\)&lt;/span&gt; or &lt;span class="math"&gt;\(1\)&lt;/span&gt;), and &lt;span class="math"&gt;\(\hat{y}\)&lt;/span&gt; be the prediction of the model for an observation. &lt;/p&gt;
+&lt;p&gt;Logistic regression makes a prediction by learning a vector of weights, &lt;span class="math"&gt;\(w\)&lt;/span&gt;, and a bias term, &lt;span class="math"&gt;\(b\)&lt;/span&gt;. Each weight &lt;span class="math"&gt;\(w_i\)&lt;/span&gt; is a real number, and is associated with one of the observation's features &lt;span class="math"&gt;\(x_{nm}\)&lt;/span&gt;. To make a decision, after the weights and bias have been learned, the the weighted sum of the evidence for the class, &lt;span class="math"&gt;\(z\)&lt;/span&gt; is calculated:&lt;/p&gt;
+&lt;div class="math"&gt;$$z = \left ( \sum_{i=1}^{n} w_i x_i \right ) + b = w \cdot x + b$$&lt;/div&gt;
+&lt;p&gt;The domain of &lt;span class="math"&gt;\(z\)&lt;/span&gt; is &lt;span class="math"&gt;\(\left [ -\infty, \infty \right ]\)&lt;/span&gt;. However, the output of the model is interpreted as the probability of the observation belonging to class 1. As the probability is a real number between 0 and 1, the output of the model must be squashed between 0 and 1. To map from &lt;span class="math"&gt;\(\left [ -\infty, \infty \right ]\)&lt;/span&gt; to &lt;span class="math"&gt;\(\left [ 0, 1 \right ]\)&lt;/span&gt;, a sigmoid or logistic function &lt;span class="math"&gt;\(\sigma(z)\)&lt;/span&gt; is used. The sigmoid has the following equation:&lt;/p&gt;
+&lt;div class="math"&gt;$$\hat{y} = \sigma(z) = \dfrac{1}{1+e^{-z}}$$&lt;/div&gt;
+&lt;p&gt;Why is the sigmoid used?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It takes real values&lt;/li&gt;
+&lt;li&gt;It maps the values into the range &lt;span class="math"&gt;\([0, 1]\)&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;It tends to squash outlier values toward 0 or 1&lt;/li&gt;
+&lt;li&gt;It is differentiable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;exp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h1&gt;5 Application&lt;/h1&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;make_regression&lt;/span&gt;
-&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;make_regression&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;5000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_features&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;noise&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random_state&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;flatten&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;z&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;axhline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;axhline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xlim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Sigmoid Function&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tight_layout&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;beta_0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ordinary_least_squares&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Applying the sigmoid function to &lt;span class="math"&gt;\(z\)&lt;/span&gt; produces a number between 0 and 1. To make it a probability, it will be verified that the two cases, &lt;span class="math"&gt;\(p(y = 1)\)&lt;/span&gt; and &lt;span class="math"&gt;\(p(y = 0)\)&lt;/span&gt; sum to 1:&lt;/p&gt;
+&lt;div class="math"&gt;$$p(y = 1) = \sigma(w \cdot x + b) \qquad \qquad p(y = 0) = 1 - \sigma(w \cdot x + b)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$p(y = 1) + p(y = 0) = \sigma(w \cdot x + b) + 1 - \sigma(w \cdot x + b) = 1$$&lt;/div&gt;
+&lt;p&gt;Finally, a decision is made as follows&lt;/p&gt;
+&lt;div class="math"&gt;$$\hat{y} = \left\{\begin{matrix} 1 &amp;amp; \text{if} \; P(y=1 | x) &amp;gt; 0.5\\ 0 &amp;amp; \text{otherwise} \end{matrix}\right.$$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(0.5\)&lt;/span&gt; is called the decision boundary.&lt;/p&gt;
+&lt;h1&gt;Learning Parameters&lt;/h1&gt;
+&lt;h3&gt;Cross-entropy Loss Function&lt;/h3&gt;
+&lt;p&gt;To express how close the classifier output &lt;span class="math"&gt;\(\hat{y}\)&lt;/span&gt; is to the true output &lt;span class="math"&gt;\(y\)&lt;/span&gt;, a loss function &lt;span class="math"&gt;\(L(\hat{y}, y)\)&lt;/span&gt; that prefers the correct class labels of the training examples to be more likely. This &lt;strong&gt;conditional maximum likelihood estimation&lt;/strong&gt; chooses the parameters that maximize the log probability of the true &lt;span class="math"&gt;\(y\)&lt;/span&gt; labels in the training data given the observations &lt;span class="math"&gt;\(x\)&lt;/span&gt;. The resulting loss function is the negative log likelihood loss, generally called the &lt;strong&gt;cross-entropy loss&lt;/strong&gt;. This loss function is a Bernoulli distribution, as there are only to discrete outcomes:&lt;/p&gt;
+&lt;div class="math"&gt;$$p(y | x) = \hat{y}^y (1 - \hat{y})^{1 - y}$$&lt;/div&gt;
+&lt;p&gt;Taking the log on both sides is mathematically handy, and whatever values maximize a probability will also maximize the log of the probability.&lt;/p&gt;
+&lt;div class="math"&gt;$$log p(y | x) = log \left [ \hat{y}^y (1 - \hat{y})^{1 - y} \right ] = y \; log \hat{y} + (1 - y) \; log (1 - \hat{y})$$&lt;/div&gt;
+&lt;p&gt;In order to minimize the log likelihood, the sign is fliped:&lt;/p&gt;
+&lt;div class="math"&gt;$$L_{CE} = - log p(y | x) = - \left [ y \; log \hat{y} + (1 - y) \; log (1 - \hat{y}) \right ]$$&lt;/div&gt;
+&lt;p&gt;Finally, plugging the definition of &lt;span class="math"&gt;\(\hat{y}\)&lt;/span&gt;, the loss function is defined as:&lt;/p&gt;
+&lt;div class="math"&gt;$$L_{CE} = - \left [ y \; log \; \sigma(w \cdot x + b) + (1 - y) \; log (1 - \sigma(w \cdot x + b)) \right ]$$&lt;/div&gt;
+&lt;p&gt;This loss function is convex, and therefore has just one minimum.&lt;/p&gt;
+&lt;h3&gt;Gradient Descent&lt;/h3&gt;
+&lt;p&gt;In order to find the optimum parameters, gradient descent will be used, as, because the loss function is convex, it is guaranteed to find the minimum. Let &lt;span class="math"&gt;\(\theta = w, b\)&lt;/span&gt; and &lt;span class="math"&gt;\(f(x_i ; \theta) = \hat{y}\)&lt;/span&gt;. The goal is to find the set of weights which minimizes the loss function, averaged over all examples:&lt;/p&gt;
+&lt;div class="math"&gt;$$\hat{\theta} = \underset{\theta}{\text{argmin}} \dfrac{1}{m} \sum_{i=1}^{m} L_{CE} (f(x_i ; \theta), y_i)$$&lt;/div&gt;
+&lt;p&gt;In order to update &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;, the gradient &lt;span class="math"&gt;\(\nabla L(f(x_i ; \theta)\)&lt;/span&gt; must be defined. The partial derivatives of the cross-entropy loss function are&lt;/p&gt;
+&lt;div class="math"&gt;$$\frac{\partial L_{CE} (\hat{y}, y)}{\partial w_j} = \left [ \sigma(w \cdot x + b) - y \right ] x_j$$&lt;/div&gt;
+&lt;div class="math"&gt;$$\frac{\partial L_{CE} (\hat{y}, y)}{\partial b} = \sigma(w \cdot x + b) - y$$&lt;/div&gt;
+&lt;h1&gt;Application&lt;/h1&gt;
+&lt;h3&gt;Create Dummy Data Set&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;200&lt;/span&gt;
 
-&lt;span class="n"&gt;y_estimated&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt;
+&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;seed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-&lt;span class="n"&gt;residuals&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;y_estimated&lt;/span&gt;
+&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;astype&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;*=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;normal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
 &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_estimated&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;darkblue&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;$\hat&lt;/span&gt;&lt;span class="si"&gt;{y}&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/linear_regression_simple_1.png"&gt;&lt;/p&gt;
-&lt;p&gt;The SLR model is given then by the line given by the function&lt;/p&gt;
-&lt;div class="math"&gt;$$\hat{y_i} = -0.1622 + 63.2130 x_i + r_i$$&lt;/div&gt;
-&lt;p&gt;To know for certain that this model is accurate and precise, the four assumptions will be verified.&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Assumption 1: Linearity&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;fig&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;subplots&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;axes&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_2.png"&gt;&lt;/p&gt;
+&lt;h3&gt;Train and Test Split&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x_test&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;train_test_split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;test_size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random_state&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;42&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;train_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;column_stack&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;test_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;column_stack&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x_test&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_test&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/linear_regression_simple_2.png"&gt;&lt;/p&gt;
-&lt;p&gt;A clear linear relationship can be observed between &lt;span class="math"&gt;\(x\)&lt;/span&gt; and &lt;span class="math"&gt;\(y\)&lt;/span&gt;, while most of the residuals are distributed around a horizontal line, with a roughly constant variance. &lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Assumption 2: Independence of errors&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plotting&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;autocorrelation_plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ylim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xlim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;h3&gt;Training: Gradient Descent Optimization&lt;/h3&gt;
+&lt;p&gt;Stochastic Gradient Descent will be used with a learning rate of &lt;span class="math"&gt;\(0.0001\)&lt;/span&gt; and &lt;span class="math"&gt;\(7000\)&lt;/span&gt; epochs.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;costs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;span class="n"&gt;num_observations&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;train_data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;num_features&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="n"&gt;learning_rate&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mf"&gt;0.0001&lt;/span&gt;
+&lt;span class="n"&gt;num_epochs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3000&lt;/span&gt;
+&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;tqdm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_epochs&lt;/span&gt;&lt;span class="p"&gt;)):&lt;/span&gt;
+
+    &lt;span class="n"&gt;shuffled_data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;permutation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;train_data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;x_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;shuffled_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+
+        &lt;span class="n"&gt;sigma&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="n"&gt;dLdw&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sigma&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;y_&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_&lt;/span&gt;
+        &lt;span class="n"&gt;dLdb&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sigma&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;y_&lt;/span&gt;
+
+        &lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="o"&gt;-=&lt;/span&gt; &lt;span class="n"&gt;learning_rate&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;dLdw&lt;/span&gt;
+        &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;-=&lt;/span&gt; &lt;span class="n"&gt;learning_rate&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;dLdb&lt;/span&gt;
+
+    &lt;span class="n"&gt;cost&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;num_observations&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="n"&gt;y_&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sigma&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;y_&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;sigma&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;costs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cost&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/linear_regression_simple_3.png"&gt;&lt;/p&gt;
-&lt;p&gt;It can be seen that the autocorrelation falls between the confidence interval, and I don't know what that means, and what CI we're talking about...&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Assumption 3: Homoscedasticity&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
-&lt;span class="n"&gt;sets&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;astype&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-
-    &lt;span class="n"&gt;variances&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
-    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10000&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="n"&gt;resample&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choice&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;sets&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;&lt;span class="n"&gt;sets&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]],&lt;/span&gt; &lt;span class="n"&gt;sets&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
-        &lt;span class="n"&gt;variances&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;resample&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
-
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;CI for Sample &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;percentile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;variances&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;2.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt; - &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;percentile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;variances&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;97.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hist&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;variances&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;0.6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;costs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;CI for Sample 1: 383.50 - 437.50&lt;/span&gt;
-&lt;span class="err"&gt;CI for Sample 2: 378.13 - 436.02&lt;/span&gt;
-&lt;span class="err"&gt;CI for Sample 3: 366.27 - 418.12&lt;/span&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_3.png"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Markdown&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;$z = &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt; x &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/linear_regression_simple_4.png"&gt;&lt;/p&gt;
-&lt;p&gt;It can be seen the the three histograms overlap in their CI, show that there is a high probability that the residuals are not heteroscedastic. For the purposes of this work, this conclusion is enough to consider the residuals homoscedastic, while formal testing is encouraged.&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Assumption 4: Normality&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pvalue&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ttest_1samp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;popmean&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(z = 3.151 x -0.351\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y_hat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;span class="n"&gt;y_hat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
 
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;pvalue&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Null Hypothesis: &amp;quot;The CI for the residual population mean contains 0&amp;quot; rejected.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Null Hypothesis: &amp;quot;The CI for the residual population mean contains 0&amp;quot; not rejected.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pvalue&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;normaltest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;pvalue&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Null Hypothesis: &amp;quot;the residuals sample comes from a normal distribution&amp;quot; rejected.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Null Hypothesis: &amp;quot;the residuals sample comes from a normal distribution&amp;quot; not rejected.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;train_accuracy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Accuracy for Train Set: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;train_accuracy&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Null Hypothesis: &amp;quot;The CI for the residual population mean contains 0&amp;quot; not rejected.&lt;/span&gt;
-&lt;span class="err"&gt;Null Hypothesis: &amp;quot;the residuals sample comes from a normal distribution&amp;quot; not rejected.&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Accuracy for Train Set: 0.95625&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Both Null Hypothesis were not rejected, and it can be concluded that the residuals follow a normal distribution with mean &lt;span class="math"&gt;\(0\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;In conclusion, the data set meets the four SLR assumptions.&lt;/strong&gt;&lt;/p&gt;
-&lt;h1&gt;6 Confidence and Prediction&lt;/h1&gt;
-&lt;p&gt;Suppose a new value of &lt;span class="math"&gt;\(x\)&lt;/span&gt;, &lt;span class="math"&gt;\(x_{new}\)&lt;/span&gt;. There are two questions that can be asked:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Which is the most probable value (mean response) for a new observation &lt;span class="math"&gt;\(x_{new}\)&lt;/span&gt;?&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;What will be the range of possible response values for &lt;span class="math"&gt;\(y_{new}\)&lt;/span&gt; for a new observation &lt;span class="math"&gt;\(x_{new}\)&lt;/span&gt;?&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\hat{y} = \beta_0 + \beta_1 x_{new}\)&lt;/span&gt; is the best answer to the first question, whereas to answer the second question, a confidence interval for &lt;span class="math"&gt;\(y_{new}\)&lt;/span&gt; must be built.&lt;/p&gt;
-&lt;h2&gt;6.1 Confidence interval for mean response&lt;/h2&gt;
-&lt;p&gt;It is also called a &lt;em&gt;t&lt;/em&gt;-interval. The general formula is&lt;/p&gt;
-&lt;div class="math"&gt;$$\text{Sample estimate} \pm (\text{t-multiplier} \times \text{standard error})$$&lt;/div&gt;
-&lt;p&gt;Mathematically, &lt;/p&gt;
-&lt;div class="math"&gt;$$\hat{y}_h \pm t_{(\alpha/2, n-2)} \times \sqrt{MSE \times \left( \frac{1}{n} + \dfrac{(x_{new}-\bar{x})^2}{\sum(x_i-\bar{x})^2}\right)}$$&lt;/div&gt;
-&lt;p&gt;where:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\hat{y}_h\)&lt;/span&gt; is the fitted or predicted value of the response when the predictor is &lt;span class="math"&gt;\(x_h\)&lt;/span&gt;. &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(t_{(\alpha/2, n-2)}\)&lt;/span&gt; is the "t-multiplier." (with n-2 degrees of freedom).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\sqrt{MSE \times \left( \frac{1}{n} + \frac{(x_h-\bar{x})^2}{\sum(x_i-\bar{x})^2}\right)}\)&lt;/span&gt; is the "standard error of the fit," which depends on the mean square error (MSE), the sample size (n), how far in squared units the predictor value &lt;span class="math"&gt;\(x_h\)&lt;/span&gt; is from the average of the predictor values &lt;span class="math"&gt;\(\bar{x}\)&lt;/span&gt;, or &lt;span class="math"&gt;\((x_h-\bar{x})^2\)&lt;/span&gt;, and the sum of the squared distances of the predictor values &lt;span class="math"&gt;\(x_i\)&lt;/span&gt; from the average of the predictor values &lt;span class="math"&gt;\(\bar{x}\)&lt;/span&gt;, or &lt;span class="math"&gt;\(\sum(x_i-\bar{x})^2\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;From the formula above, it can be concluded that:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;As the MSE decreases, the width of the interval decreases.&lt;/li&gt;
-&lt;li&gt;As the sample size increases, the width of the interval decreases. &lt;/li&gt;
-&lt;li&gt;The more spread out the predictor values, the narrower the interval.&lt;/li&gt;
-&lt;li&gt;The closer &lt;span class="math"&gt;\(x_h\)&lt;/span&gt; is to the average of the sample's predictor values, the narrower the interval.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;6.2 Prediction interval for &lt;span class="math"&gt;\(y_{new}\)&lt;/span&gt;&lt;/h2&gt;
-&lt;p&gt;It is similar to the formula explained above, except that an extra MSE term is added:&lt;/p&gt;
-&lt;div class="math"&gt;$$\hat{y}_h \pm t_{(\alpha/2, n-2)} \times \sqrt{MSE \times \left(1+ \frac{1}{n} + \dfrac{(x_{new}-\bar{x})^2}{\sum(x_i-\bar{x})^2}\right)}$$&lt;/div&gt;
-&lt;p&gt;It must be noticed that, because of the extra MSE term, a confidence interval for &lt;span class="math"&gt;\(y_{new}\)&lt;/span&gt; at &lt;span class="math"&gt;\(x_h\)&lt;/span&gt; will always be wider than the corresponding confidence interval for &lt;span class="math"&gt;\(\mu_y\)&lt;/span&gt; at &lt;span class="math"&gt;\(x_h\)&lt;/span&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;mean_response_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;h3&gt;Testing&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x_test&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y_hat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;span class="n"&gt;y_hat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# 95% Confidence: 0.025&lt;/span&gt;
-    &lt;span class="n"&gt;t_multiplier&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ppf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.975&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="n"&gt;mse&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="n"&gt;x_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-    &lt;span class="n"&gt;x_mean&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-
-    &lt;span class="n"&gt;mean_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;t_multiplier&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mse&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;x_size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;x_mean&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;x_mean&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_size&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
-
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;mean_margin&lt;/span&gt;
-
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;prediction_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-
-    &lt;span class="c1"&gt;# 95% Confidence: 0.025&lt;/span&gt;
-    &lt;span class="n"&gt;t_multiplier&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ppf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.975&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="n"&gt;mse&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="n"&gt;x_size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-    &lt;span class="n"&gt;x_mean&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-
-    &lt;span class="n"&gt;prediction_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;t_multiplier&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mse&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;x_size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;x_mean&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;x_mean&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_size&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
-
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;prediction_margin&lt;/span&gt;
+&lt;span class="n"&gt;test_accuracy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;y_test&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Accuracy for Test Set: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;test_accuracy&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;x_new&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;y_estimated_new&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;x_new&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt;
-
-&lt;span class="n"&gt;mean_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;mean_response_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;prediction_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;prediction_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Confidence Interval&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_estimated_new&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;mean_margin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;forestgreen&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Confidence Interval&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_estimated_new&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;mean_margin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;--&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;forestgreen&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Prediction Interval&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_estimated_new&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;prediction_margin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;darkmagenta&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Prediction Interval&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_estimated_new&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;prediction_margin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;darkmagenta&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Data Points&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;darkgrey&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Fitted Line&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_estimated_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;darkblue&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;$\hat&lt;/span&gt;&lt;span class="si"&gt;{y}&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lw&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Accuracy for Test Set: 0.95&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/linear_regression_simple_5.png"&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-&lt;span class="n"&gt;y_predicted_x_new&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_new_single&lt;/span&gt;
-&lt;span class="n"&gt;prediction_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;prediction_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Prediction for &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; =&amp;gt; &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;y_predicted_x_new&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; ± &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;prediction_margin&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;x_new_single&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
-&lt;span class="n"&gt;y_predicted_x_new&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_new_single&lt;/span&gt;
-&lt;span class="n"&gt;prediction_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;prediction_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Prediction for &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; =&amp;gt; &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;y_predicted_x_new&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; ± &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;prediction_margin&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;x_new_single&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt;
-&lt;span class="n"&gt;y_predicted_x_new&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_new_single&lt;/span&gt;
-&lt;span class="n"&gt;prediction_margin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;prediction_interval&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Prediction for &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;x_new_single&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; =&amp;gt; &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;y_predicted_x_new&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; ± &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;prediction_margin&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;95% CI for Residuals: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; ± &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;residuals&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;.2f&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;h3&gt;Predictions for Whole Data Set&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y_hat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;span class="n"&gt;y_hat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Prediction for 1 =&amp;gt; 10.56 ± 56.52&lt;/span&gt;
-&lt;span class="err"&gt;Prediction for 10 =&amp;gt; 107.54 ± 402.09&lt;/span&gt;
-&lt;span class="err"&gt;Prediction for 30 =&amp;gt; 323.07 ± 1199.95&lt;/span&gt;
-&lt;span class="err"&gt;95% CI for Residuals: -0.00 ± 40.16&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;x_space&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linspace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;max&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_space&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sigmoid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;x_space&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;axhline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;From the previous analysis, it can be concluded that any prediction constructed must be reported as a value with a confidence interval, rather than as a single number. Moreover, as the value of &lt;span class="math"&gt;\(x_{new}\)&lt;/span&gt; moves away from the center of the explanatory variables (in this case the mean), the prediction interval grows wider, making the model not suitable for extrapolation, but rather for interpolation (with the corresponding CI). Then, interpolated values are much more reliable than are extrapolated values.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/logistic_regression_4.png"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;dataset_accuracy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y_hat&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Accuracy for Whole Data Set: &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;dataset_accuracy&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Accuracy for Whole Data Set: 0.955&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;h1&gt;References&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Simple_linear_regression"&gt;Simple Linear Regression&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=ewnc1cXJmGA"&gt;Deriving the least squares estimators&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://www.statology.org/linear-regression-assumptions/"&gt;The four assumptions of linear regression&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="http://people.duke.edu/~rnau/testing.htm"&gt;Testing the assumptions of linear regression&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://stats.stackexchange.com/questions/219579/what-is-wrong-with-extrapolation"&gt;What is wrong with extrapolation?&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="http://www2.stat.duke.edu/~tjl13/s101/slides/unit6lec3H.pdf"&gt;Confidence and prediction intervals for SLR&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://online.stat.psu.edu/stat501/lesson/3/3.3"&gt;Prediction Interval for a New Response&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://web.stanford.edu/~jurafsky/slp3/5.pdf" target="_blank"&gt;Logistic Regression - Speech and Language Processing. Daniel Jurafsky &amp;amp; James H. Martin&lt;/a&gt;&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -911,13 +788,13 @@
 &lt;p&gt;As can be observed, Manhattan and Euclidean distance provide the best predictions for all points. The cosine distance might be useful when the divisions are not Cartesian but angular and fails to classify the data in the present data set. Moreover, the Manhattan distance has horizontal or vertical lines as boundaries.&lt;/p&gt;
 &lt;p&gt;Also, it can be seen that adding the minimum distance and tie restriction, although not part of the original algorithm, makes the predictions more real, as the algorithm cannot predict points that are far enough from the rest of the data, as the basic assumption of &lt;em&gt;k&lt;/em&gt;-NN is that similar points are close to each other, and a point far apart may belong to a new category not yet observed nor labeled. Furthermore, the two-labels restriction prevents the algorithm from classifying points for which two or more labels are equally possible. It can be noticed that, for all distances metrics, all optimum &lt;em&gt;k&lt;/em&gt; values are odd numbers, meaning that these "cannot predict" areas are unlikely to exist between two labeled areas. This gray areas can be seen instead in the intersection between three labeled areas, as depicted in the Canberra and Euclidean cases.&lt;/p&gt;
 &lt;h1&gt;References&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm"&gt;k-nearest neighbors algorithm&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://towardsdatascience.com/machine-learning-basics-with-the-k-nearest-neighbors-algorithm-6a6e71d01761"&gt;Machine Learning Basics with the K-Nearest Neighbors Algorithm
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm" target="_blank"&gt;k-nearest neighbors algorithm&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://towardsdatascience.com/machine-learning-basics-with-the-k-nearest-neighbors-algorithm-6a6e71d01761" target="_blank"&gt;Machine Learning Basics with the K-Nearest Neighbors Algorithm
 &lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://stats.stackexchange.com/questions/81240/why-is-knn-not-model-based"&gt;Why is KNN not “model-based”?
+&lt;p&gt;&lt;a href="https://stats.stackexchange.com/questions/81240/why-is-knn-not-model-based" target="_blank"&gt;Why is KNN not “model-based”?
 &lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="http://theprofessionalspoint.blogspot.com/2019/02/advantages-and-disadvantages-of-knn.html"&gt;Advantages and Disadvantages of KNN&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://levelup.gitconnected.com/knn-failure-cases-limitations-and-strategy-to-pick-right-k-45de1b986428"&gt;KNN: Failure cases, Limitations&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://theprofessionalspoint.blogspot.com/2019/02/advantages-and-disadvantages-of-knn.html" target="_blank"&gt;Advantages and Disadvantages of KNN&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://levelup.gitconnected.com/knn-failure-cases-limitations-and-strategy-to-pick-right-k-45de1b986428" target="_blank"&gt;KNN: Failure cases, Limitations&lt;/a&gt;&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -2109,8 +1986,8 @@
 &lt;hr&gt;
 
 &lt;h1&gt;References&lt;/h1&gt;
-&lt;p&gt;https://www.wikiwand.com/en/Collaborative_filtering&lt;/p&gt;
-&lt;p&gt;https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.wikiwand.com/en/Collaborative_filtering" target="_blank"&gt;Collaborative Filtering - Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings" target="_blank"&gt;Build a Recommendation Engine With Collaborative Filtering&lt;/a&gt;&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -2938,13 +2815,13 @@
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src="https://i.stack.imgur.com/Tz5mA.png" style="width: 350px;"&gt;&lt;/p&gt;
 &lt;h1&gt;References&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://builtin.com/data-science/step-step-explanation-principal-component-analysis" target="_blank"&gt;A step-by-step Explanation of Principal Component Analysis&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51" target="_blank"&gt;PCA From Scratch in Python&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/" target="_blank"&gt;How to Calculate Principal Component Analysis (PCA) from Scratch in Python&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385" target="_blank"&gt;Sklearn PCA Implementation&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://statistics.laerd.com/spss-tutorials/principal-components-analysis-pca-using-spss-statistics.php" target="_blank"&gt;Assumptions&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=52d7ha-GdV8&amp;amp;t=3s" target="_blank"&gt;PCA (Principal Component Analysis) in Python -  Python Engineer&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title" target="_blank"&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://builtin.com/data-science/step-step-explanation-principal-component-analysis" target="_blank"&gt;A step-by-step Explanation of Principal Component Analysis&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51" target="_blank"&gt;PCA From Scratch in Python&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/" target="_blank"&gt;How to Calculate Principal Component Analysis (PCA) from Scratch in Python&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385" target="_blank"&gt;Sklearn PCA Implementation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://statistics.laerd.com/spss-tutorials/principal-components-analysis-pca-using-spss-statistics.php" target="_blank"&gt;Assumptions&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=52d7ha-GdV8&amp;amp;t=3s" target="_blank"&gt;PCA (Principal Component Analysis) in Python -  Python Engineer&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title" target="_blank"&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest&lt;/a&gt;&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -3145,26 +3022,12 @@
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/singular_value_decomposition_2.png"&gt;&lt;/p&gt;
 &lt;h1&gt;References&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Singular_value_decomposition"&gt;https://en.wikipedia.org/wiki/Singular_value_decomposition&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href="https://blog.statsbot.co/singular-value-decomposition-tutorial-52c695315254"&gt;https://blog.statsbot.co/singular-value-decomposition-tutorial-52c695315254&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Singular_value_decomposition" target="_blank"&gt;Singular Value Decomposition - Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://blog.statsbot.co/singular-value-decomposition-tutorial-52c695315254" target="_blank"&gt;Singular Value Decomposition (SVD) Tutorial: Applications, Examples, Exercises&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Data Driven Science &amp;amp; Engineering Machine Learning, Dynamical Systems, and Control - Brunton &amp;amp; Kutz&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Singular Value Decomposition - Steve Brunton -  &lt;a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv"&gt;https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Lecture 47 — Singular Value Decomposition | Stanford University - &lt;a href="https://www.youtube.com/watch?v=P5mlg91as1c&amp;t=819s"&gt;https://www.youtube.com/watch?v=P5mlg91as1c&amp;amp;t=819s&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Lecture 48 — Dimensionality Reduction with SVD | Stanford University - &lt;a href="https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;t=314s"&gt;https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;amp;t=314s&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv" target="_blank"&gt;Singular Value Decomposition - Steve Brunton&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=P5mlg91as1c&amp;amp;t=819s" target="_blank"&gt;Lecture 47 — Singular Value Decomposition | Stanford University&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=UyAfmAZU_WI&amp;amp;t=314s" target="_blank"&gt;Lecture 48 — Dimensionality Reduction with SVD | Stanford University&lt;/a&gt;&lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
