@@ -364,14 +364,14 @@ Also, it can be seen that adding the minimum distance and tie restriction, altho
 
 # References
 
-[k-nearest neighbors algorithm](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
+[k-nearest neighbors algorithm](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm){: target="_blank"}
 
 [Machine Learning Basics with the K-Nearest Neighbors Algorithm
-](https://towardsdatascience.com/machine-learning-basics-with-the-k-nearest-neighbors-algorithm-6a6e71d01761)
+](https://towardsdatascience.com/machine-learning-basics-with-the-k-nearest-neighbors-algorithm-6a6e71d01761){: target="_blank"}
 
 [Why is KNN not “model-based”?
-](https://stats.stackexchange.com/questions/81240/why-is-knn-not-model-based)
+](https://stats.stackexchange.com/questions/81240/why-is-knn-not-model-based){: target="_blank"}
 
-[Advantages and Disadvantages of KNN](http://theprofessionalspoint.blogspot.com/2019/02/advantages-and-disadvantages-of-knn.html)
+[Advantages and Disadvantages of KNN](http://theprofessionalspoint.blogspot.com/2019/02/advantages-and-disadvantages-of-knn.html){: target="_blank"}
 
-[KNN: Failure cases, Limitations](https://levelup.gitconnected.com/knn-failure-cases-limitations-and-strategy-to-pick-right-k-45de1b986428)
+[KNN: Failure cases, Limitations](https://levelup.gitconnected.com/knn-failure-cases-limitations-and-strategy-to-pick-right-k-45de1b986428){: target="_blank"}

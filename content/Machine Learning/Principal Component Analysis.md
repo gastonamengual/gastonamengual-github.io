@@ -527,16 +527,16 @@ The Principal-Component-Analysis-like algorithm for clustering is called Linear 
 
 # References
 
-[A step-by-step Explanation of Principal Component Analysis](https://builtin.com/data-science/step-step-explanation-principal-component-analysis){: target="_blank"}.
+[A step-by-step Explanation of Principal Component Analysis](https://builtin.com/data-science/step-step-explanation-principal-component-analysis){: target="_blank"}
 
-[PCA From Scratch in Python](https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51){: target="_blank"}.
+[PCA From Scratch in Python](https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51){: target="_blank"}
 
-[How to Calculate Principal Component Analysis (PCA) from Scratch in Python](https://machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/){: target="_blank"}.
+[How to Calculate Principal Component Analysis (PCA) from Scratch in Python](https://machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/){: target="_blank"}
 
-[Sklearn PCA Implementation](https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385){: target="_blank"}.
+[Sklearn PCA Implementation](https://github.com/scikit-learn/scikit-learn/blob/14031f6/sklearn/decomposition/pca.py#L385){: target="_blank"}
 
-[Assumptions](https://statistics.laerd.com/spss-tutorials/principal-components-analysis-pca-using-spss-statistics.php){: target="_blank"}.
+[Assumptions](https://statistics.laerd.com/spss-tutorials/principal-components-analysis-pca-using-spss-statistics.php){: target="_blank"}
 
-[PCA (Principal Component Analysis) in Python -  Python Engineer](https://www.youtube.com/watch?v=52d7ha-GdV8&t=3s){: target="_blank"}.
+[PCA (Principal Component Analysis) in Python -  Python Engineer](https://www.youtube.com/watch?v=52d7ha-GdV8&t=3s){: target="_blank"}
 
-[Principal Component Analysis (PCA), Step-by-Step - StatQuest](https://www.youtube.com/watch?v=FgakZw6K1QQ&feature=emb_title){: target="_blank"}.
+[Principal Component Analysis (PCA), Step-by-Step - StatQuest](https://www.youtube.com/watch?v=FgakZw6K1QQ&feature=emb_title){: target="_blank"}

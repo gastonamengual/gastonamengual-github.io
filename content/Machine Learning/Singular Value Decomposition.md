@@ -178,17 +178,16 @@ plt.show()
 ![image alt text]({static}../images/singular_value_decomposition_2.png)
     
 
-
 # References
 
-* <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a>
+[Singular Value Decomposition - Wikipedia](https://en.wikipedia.org/wiki/Singular_value_decomposition){: target="_blank"}
 
-* <a href="https://blog.statsbot.co/singular-value-decomposition-tutorial-52c695315254">https://blog.statsbot.co/singular-value-decomposition-tutorial-52c695315254</a>
+[Singular Value Decomposition (SVD) Tutorial: Applications, Examples, Exercises](https://blog.statsbot.co/singular-value-decomposition-tutorial-52c695315254){: target="_blank"}
 
-* Data Driven Science & Engineering Machine Learning, Dynamical Systems, and Control - Brunton & Kutz
+Data Driven Science & Engineering Machine Learning, Dynamical Systems, and Control - Brunton & Kutz
 
-* Singular Value Decomposition - Steve Brunton -  <a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv">https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv</a>
+[Singular Value Decomposition - Steve Brunton](https://www.youtube.com/playlist?list=PLMrJAkhIeNNSVjnsviglFoY2nXildDCcv){: target="_blank"}
 
-* Lecture 47 — Singular Value Decomposition | Stanford University - <a href="https://www.youtube.com/watch?v=P5mlg91as1c&t=819s">https://www.youtube.com/watch?v=P5mlg91as1c&t=819s</a>
+[Lecture 47 — Singular Value Decomposition | Stanford University](https://www.youtube.com/watch?v=P5mlg91as1c&t=819s){: target="_blank"}
 
-* Lecture 48 — Dimensionality Reduction with SVD | Stanford University - <a href="https://www.youtube.com/watch?v=UyAfmAZU_WI&t=314s">https://www.youtube.com/watch?v=UyAfmAZU_WI&t=314s</a>
+[Lecture 48 — Dimensionality Reduction with SVD | Stanford University](https://www.youtube.com/watch?v=UyAfmAZU_WI&t=314s){: target="_blank"}

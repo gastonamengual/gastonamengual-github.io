@@ -1,4 +1,4 @@
-Title: <em>k</em>-means
+Title: <em>k</em>-Means
 Date: 2021.3.19
 Summary: Definition. Assumptions. Steps. From-Scrath Python implementation. Application on dummy data.
 
@@ -206,18 +206,18 @@ The measure to evaluate the performance of the algorithm is the value of the fun
 
 # References
 
-[*k*-means clustering - Wikipedia](https://en.wikipedia.org/wiki/K-means_clustering)
+[*k*-means clustering - Wikipedia](https://en.wikipedia.org/wiki/K-means_clustering){: target="_blank"}
 
-[K-Means Clustering in Python: A Practical Guide](https://realpython.com/k-means-clustering-python/#what-is-clustering)
+[K-Means Clustering in Python: A Practical Guide](https://realpython.com/k-means-clustering-python/#what-is-clustering){: target="_blank"}
 
-[scikit learn - Clustering - K-means](https://scikit-learn.org/stable/modules/clustering.html#k-means)
+[scikit learn - Clustering - K-means](https://scikit-learn.org/stable/modules/clustering.html#k-means){: target="_blank"}
 
-[K-means Clustering Python Example](https://towardsdatascience.com/machine-learning-algorithms-part-9-k-means-example-in-python-f2ad05ed5203)
+[K-means Clustering Python Example](https://towardsdatascience.com/machine-learning-algorithms-part-9-k-means-example-in-python-f2ad05ed5203){: target="_blank"}
 
-[Partitional Clustering](http://cs-people.bu.edu/evimaria/Italy-2015/partitional-clustering.pdf)
+[Partitional Clustering](http://cs-people.bu.edu/evimaria/Italy-2015/partitional-clustering.pdf){: target="_blank"}
 
-[K-Means Clustering in Python: A Practical Guide](https://realpython.com/k-means-clustering-python/#what-is-clustering)
+[K-Means Clustering in Python: A Practical Guide](https://realpython.com/k-means-clustering-python/#what-is-clustering){: target="_blank"}
 
-[Assumptions Can Ruin Your K-Means Clusters](https://blog.learningtree.com/assumptions-ruin-k-means-clusters/)
+[Assumptions Can Ruin Your K-Means Clusters](https://blog.learningtree.com/assumptions-ruin-k-means-clusters/){: target="_blank"}
 
 [K-means clustering is not a free lunch](http://varianceexplained.org/r/kmeans-free-lunch/)

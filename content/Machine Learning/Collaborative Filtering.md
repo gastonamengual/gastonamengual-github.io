@@ -683,6 +683,6 @@ recommended_movies
 
 # References
 
-https://www.wikiwand.com/en/Collaborative_filtering
+[Collaborative Filtering - Wikipedia](https://www.wikiwand.com/en/Collaborative_filtering){: target="_blank"}
 
-https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings
+[Build a Recommendation Engine With Collaborative Filtering](https://realpython.com/build-recommendation-engine-collaborative-filtering/#how-to-find-similar-users-on-the-basis-of-ratings){: target="_blank"}
