@@ -1,6 +1,6 @@
 Title: Singular Value Decomposition
 Date: 2020.12.14 
-Summary: Theoretical explanation of the SVD, from-scratch implementation and application on an image.
+Summary: Theoretical explanation of the SVD. From-scratch Python implementation. Application example on an image.
 
 
 ```python

@@ -1,6 +1,6 @@
 Title: Linear Regression - Simple
 Date: 2021-02-18
-Summary: Explanation of Simple Linear Regression. Explanation and verification of Assumptions. Implementation and demonstration of Ordinary Least Squares. Confidence and prediction intervals. Interpolation vs Extrapolation.
+Summary: Explanation of Simple Linear Regression. Explanation and verification of assumptions. Implementation and demonstration of Ordinary Least Squares. Application on dummy data. Confidence and prediction intervals. Interpolation vs extrapolation.
 
 ```python
 import numpy as np

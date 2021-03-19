@@ -1,6 +1,6 @@
 Title: <em>k</em>-Nearest Neighbors
 Date: 2021-02-17
-Summary: Explanation of *k*-NN algorithm, finding of optimum *k* with K-folds Cross-validation, testing of different distance metrics, and application and analysis on Iris dataset.
+Summary: Definition. Assumptions. Finding of optimum *k* with K-folds Cross-validation. Testing of different distance metrics, including Euclidean, Manhattan and Cosine. Application and analysis on Iris dataset.
 
 ```python
 import numpy as np
