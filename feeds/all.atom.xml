@@ -1,5 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Gastón Amengual</title><link href="https://gastonamengual.github.io/" rel="alternate"></link><link href="https://gastonamengual.github.io/feeds/all.atom.xml" rel="self"></link><id>https://gastonamengual.github.io/</id><updated>2021-02-18T00:00:00-03:00</updated><entry><title>Linear Regression - Simple</title><link href="https://gastonamengual.github.io/linear-regression-simple.html" rel="alternate"></link><published>2021-02-18T00:00:00-03:00</published><updated>2021-02-18T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-02-18:/linear-regression-simple.html</id><summary type="html">&lt;p&gt;Explanation of Simple Linear Regression. Explanation and verification of Assumptions. Implementation and demonstration of Ordinary Least Squares. Confidence and prediction intervals. Interpolation vs Extrapolation.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Gastón Amengual</title><link href="https://gastonamengual.github.io/" rel="alternate"></link><link href="https://gastonamengual.github.io/feeds/all.atom.xml" rel="self"></link><id>https://gastonamengual.github.io/</id><updated>2021-03-19T00:00:00-03:00</updated><entry><title>k-means</title><link href="https://gastonamengual.github.io/k-means.html" rel="alternate"></link><published>2021-03-19T00:00:00-03:00</published><updated>2021-03-19T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-03-19:/k-means.html</id><summary type="html">&lt;p&gt;Definition. Assumptions. Steps. From-Scrath Python implementation. Application on dummy data.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;make_blobs&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy.spatial&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;distance_matrix&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy.spatial.distance&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;pdist&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;Definition&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;k&lt;/em&gt;-means is a method of vector quantization (originally from signal processing) that aims to partition &lt;span class="math"&gt;\(n\)&lt;/span&gt; observations into &lt;span class="math"&gt;\(k\)&lt;/span&gt; clusters, in which each observation belongs to the cluster with the nearest mean (cluster centers or centroids). It is however most commonly defined as an unsupervised machine learning algorithm for clustering. &lt;/p&gt;
+&lt;h3&gt;Characteristics&lt;/h3&gt;
+&lt;p&gt;As a partitional clustering algorithm, it has the following characteristics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It divides data objects into non-overlapping groups: no object can be a member of more than one cluster.&lt;/li&gt;
+&lt;li&gt;Every cluster must have at least one object.&lt;/li&gt;
+&lt;li&gt;It finds a grouping so that similar objects are in the same cluster and dissimilar objects are in different clusters.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Assumptions&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;k&lt;/em&gt;-means should be applied to data sets that meet the following conditions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Clusters are spatially grouped, convex, spherical, and isotropic.&lt;/li&gt;
+&lt;li&gt;Clusters are of a similar size and density.&lt;/li&gt;
+&lt;li&gt;There are no outliers.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Model&lt;/h3&gt;
+&lt;p&gt;Let X be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix, with &lt;span class="math"&gt;\(n\)&lt;/span&gt; observations vectors of &lt;span class="math"&gt;\(m\)&lt;/span&gt; features. The algorithm divides a &lt;span class="math"&gt;\(X\)&lt;/span&gt; into &lt;span class="math"&gt;\(k\)&lt;/span&gt; disjoint clusters &lt;span class="math"&gt;\(C_j\)&lt;/span&gt; &lt;span class="math"&gt;\((j=1,2,\dotsc,k)\)&lt;/span&gt;, each described by the mean or centroid &lt;span class="math"&gt;\(\mu_j\)&lt;/span&gt; of the samples in the cluster. These centroids are chosen so that they minimize the &lt;strong&gt;within-cluster sum-of-squares (WCSS)&lt;/strong&gt; criterion. Namely,&lt;/p&gt;
+&lt;div class="math"&gt;$$\sum_{i=1}^{n} \underset{\mu_j \in C_j}{\min} = (||x_i - \mu_{j}||)^2$$&lt;/div&gt;
+&lt;p&gt;The optimization problem then consists on minimizing the sum of the norm (distance) of the vector that results from the difference of each centroid and its its assigned samples. &lt;/p&gt;
+&lt;h3&gt;Steps&lt;/h3&gt;
+&lt;p&gt;The most basic &lt;em&gt;k&lt;/em&gt;-means algorithm is called Lloyd's algorithm. It requires a number &lt;span class="math"&gt;\(k\)&lt;/span&gt; of clusters to assign as a parameter, and it has the following steps:&lt;/p&gt;
+&lt;h3&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\quad\)&lt;/span&gt; &lt;strong&gt;1.&lt;/strong&gt; Randomly initialize &lt;span class="math"&gt;\(k\)&lt;/span&gt; centroids, either as &lt;span class="math"&gt;\(k\)&lt;/span&gt; random samples from the data, or as &lt;span class="math"&gt;\(k\)&lt;/span&gt; random points in the domain of the data.&lt;/p&gt;
+&lt;h3&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;repeat&lt;/em&gt;&lt;/p&gt;
+&lt;h3&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\quad\)&lt;/span&gt; &lt;strong&gt;2.&lt;/strong&gt; Assign each point to its nearest centroid.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\quad\)&lt;/span&gt; &lt;strong&gt;3.&lt;/strong&gt; Create the new centroids as the mean of the samples assigned to each previous centroid.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\quad\)&lt;/span&gt; &lt;strong&gt;4.&lt;/strong&gt; Calculate the difference between the old and the new centroids.&lt;/p&gt;
+&lt;h3&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;until convergence&lt;/em&gt;.&lt;/p&gt;
+&lt;h3&gt;Initialization&lt;/h3&gt;
+&lt;p&gt;Given enough time, K-means will always converge. However, depending on the initialization of the centroids, this may be to a local minimum. As a result, the computation is often done several times, with different initializations of the centroids. One method to help address this issue consists on initializing the centroids to be (generally) distant from each other, leading to provably better results than random initialization.&lt;/p&gt;
+&lt;h3&gt;Convergence&lt;/h3&gt;
+&lt;p&gt;Convergence is reached when the difference between old and new centroids is less than a threshold &lt;span class="math"&gt;\(\epsilon\)&lt;/span&gt;, meaning that the centroids do not move significantly.&lt;/p&gt;
+&lt;h1&gt;Implementation&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;k_means&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;epsilon&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;1e-4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;max_iterations&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# Step 1 - Initialize centroids as random sample points&lt;/span&gt;
+    &lt;span class="n"&gt;centroids&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;randint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+
+    &lt;span class="n"&gt;centroids_list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;max_iterations&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+        &lt;span class="c1"&gt;# Step 2&lt;/span&gt;
+        &lt;span class="c1"&gt;# Calculate distances from each point to all centroids&lt;/span&gt;
+        &lt;span class="n"&gt;distances&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;distance_matrix&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c1"&gt;# Calculate nearest centroid to each point&lt;/span&gt;
+        &lt;span class="n"&gt;estimations&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argmin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;distances&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="n"&gt;previous_centroids&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+        &lt;span class="c1"&gt;# Step 3 - Calculate new centroid as mean of samples&lt;/span&gt;
+        &lt;span class="n"&gt;centroids&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;estimations&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;)])&lt;/span&gt;
+        &lt;span class="n"&gt;centroids_list&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c1"&gt;# Step 4 - Check for convergence&lt;/span&gt;
+        &lt;span class="n"&gt;difference_between_previous_absolute&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;norm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;centroids&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;previous_centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;difference_between_previous_relative&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;difference_between_previous_absolute&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;norm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;previous_centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;difference_between_previous_relative&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;epsilon&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;break&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;centroids_list&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;calculate_wcss&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;wcss&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;norm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;norm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;estimations&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+        &lt;span class="n"&gt;norm_squared&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;norm&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;
+        &lt;span class="n"&gt;wcss&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;norm_squared&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;wcss&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1&gt;Application&lt;/h1&gt;
+&lt;h3&gt;Create Dummy Data Set&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;num_samples&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;
+&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;make_blobs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_samples&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;num_samples&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n_features&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random_state&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;9&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/k_means_1.png"&gt;&lt;/p&gt;
+&lt;h3&gt;Find optimum &lt;em&gt;k&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;In order to choose the optimum value of clusters, the WCSS will be calculated for different values of &lt;em&gt;k&lt;/em&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ks&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;arange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;wcss_list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;ks&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids_list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;k_means&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;wcss&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;calculate_wcss&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;wcss_list&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;wcss&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wcss_list&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/k_means_2.png"&gt;&lt;/p&gt;
+&lt;p&gt;From applying the elbow method, it can be observed that &lt;span class="math"&gt;\(k=3\)&lt;/span&gt; results in a lower WCSS than &lt;span class="math"&gt;\(k=1\)&lt;/span&gt; and &lt;span class="math"&gt;\(k=2\)&lt;/span&gt;, and increasing the number of clusters from &lt;span class="math"&gt;\(k=3\)&lt;/span&gt; does not improve the WCSS significantly, for what it is not necessary to add more clusters. It is concluded than the optimum value of clusters is &lt;span class="math"&gt;\(k=3\)&lt;/span&gt;. &lt;/p&gt;
+&lt;h3&gt;Run &lt;em&gt;k&lt;/em&gt;-means with optimum &lt;em&gt;k&lt;/em&gt;&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;optimum_k&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids_list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;k_means&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;optimum_k&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;wcss&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;calculate_wcss&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;optimum_k&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;colors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;darkmagenta&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;saddlebrown&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;darkcyan&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="n"&gt;estimated_colors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;choose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;estimations&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;colors&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;estimated_colors&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;centroids&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;colors&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="n"&gt;optimum_k&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;optimum_k&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;centroids_list&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/k_means_3.png"&gt;&lt;/p&gt;
+&lt;p&gt;The algorithm has successfully divided the data into three clusters.&lt;/p&gt;
+&lt;h1&gt;Observations&lt;/h1&gt;
+&lt;p&gt;The 2 dimensional application described is useful to provide a simple understanding of the algorithm, of how to find the optimum &lt;em&gt;k&lt;/em&gt;, and how to evaluate the performance of the algorithm. However, in real application, it is hardly dealt with 2D data sets where the clusters are clearly visible or detectable using edge detection methods. The goal of clustering algorithms is to find clusters when humans cannot, like, for example, in cases with multidimensional data.&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;p&gt;The measure to evaluate the performance of the algorithm is the value of the function that is minimized. That function only applies when the data meets the assumptions explained above. However, what happens if the data does not meet those assumptions (it is not convex, the clusters have different sizes, it presents outliers, clusters are superposed), or when it is not possible to know for certain its shape? For those cases, SSE will not be an effective performance measure. For those cases, it would be then preferable to measure the performance of the algorithm by analyzing the points assigned to the clusters created in many replicates. This way, even if the above criteria is not met, either because of unawareness or because it cannot be known (e.g. many dimensions), the measure would give more precise information on the accuracy of the results.&lt;/p&gt;
+&lt;h1&gt;References&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/K-means_clustering"&gt;&lt;em&gt;k&lt;/em&gt;-means clustering - Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://realpython.com/k-means-clustering-python/#what-is-clustering"&gt;K-Means Clustering in Python: A Practical Guide&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://scikit-learn.org/stable/modules/clustering.html#k-means"&gt;scikit learn - Clustering - K-means&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://towardsdatascience.com/machine-learning-algorithms-part-9-k-means-example-in-python-f2ad05ed5203"&gt;K-means Clustering Python Example&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://cs-people.bu.edu/evimaria/Italy-2015/partitional-clustering.pdf"&gt;Partitional Clustering&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://realpython.com/k-means-clustering-python/#what-is-clustering"&gt;K-Means Clustering in Python: A Practical Guide&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://blog.learningtree.com/assumptions-ruin-k-means-clusters/"&gt;Assumptions Can Ruin Your K-Means Clusters&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://varianceexplained.org/r/kmeans-free-lunch/"&gt;K-means clustering is not a free lunch&lt;/a&gt;&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Linear Regression - Simple</title><link href="https://gastonamengual.github.io/linear-regression-simple.html" rel="alternate"></link><published>2021-02-18T00:00:00-03:00</published><updated>2021-02-18T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-02-18:/linear-regression-simple.html</id><summary type="html">&lt;p&gt;Explanation of Simple Linear Regression. Explanation and verification of assumptions. Implementation and demonstration of Ordinary Least Squares. Application on dummy data. Confidence and prediction intervals. Interpolation vs extrapolation.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;scipy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;stats&lt;/span&gt;
@@ -364,7 +578,7 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>k-Nearest Neighbors</title><link href="https://gastonamengual.github.io/k-nearest-neighbors.html" rel="alternate"></link><published>2021-02-17T00:00:00-03:00</published><updated>2021-02-17T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-02-17:/k-nearest-neighbors.html</id><summary type="html">&lt;p&gt;Explanation of &lt;em&gt;k&lt;/em&gt;-NN algorithm, finding of optimum &lt;em&gt;k&lt;/em&gt; with K-folds Cross-validation, testing of different distance metrics, and application and analysis on Iris dataset.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>k-Nearest Neighbors</title><link href="https://gastonamengual.github.io/k-nearest-neighbors.html" rel="alternate"></link><published>2021-02-17T00:00:00-03:00</published><updated>2021-02-17T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-02-17:/k-nearest-neighbors.html</id><summary type="html">&lt;p&gt;Definition. Assumptions. Finding of optimum &lt;em&gt;k&lt;/em&gt; with K-folds Cross-validation. Testing of different distance metrics, including Euclidean, Manhattan and Cosine. Application and analysis on Iris dataset.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;seaborn&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;sns&lt;/span&gt;
@@ -1299,7 +1513,7 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Statistics"></category></entry><entry><title>Collaborative Filtering</title><link href="https://gastonamengual.github.io/collaborative-filtering.html" rel="alternate"></link><published>2021-01-07T00:00:00-03:00</published><updated>2021-01-07T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-01-07:/collaborative-filtering.html</id><summary type="html">&lt;p&gt;Application of Collaborative Filtering with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-Validation.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual and &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt; as the base for Watch This! app (see second portfolio project).&lt;/strong&gt;&lt;/p&gt;
+&lt;/script&gt;</content><category term="Statistics"></category></entry><entry><title>Collaborative Filtering</title><link href="https://gastonamengual.github.io/collaborative-filtering.html" rel="alternate"></link><published>2021-01-07T00:00:00-03:00</published><updated>2021-01-07T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2021-01-07:/collaborative-filtering.html</id><summary type="html">&lt;p&gt;Definition. Data Preparation. Application of Collaborative Filtering with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-validation, using Python.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;Notebook written by Gastón Amengual and &lt;a href="https://elc.github.io" target="_blank"&gt;Ezequiel L. Castaño&lt;/a&gt; as the base for Watch This! app (see second portfolio project).&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 
 &lt;p&gt;&lt;strong&gt;Collaborative filtering&lt;/strong&gt; is a technique used by recommender systems. It is a method of making automatic predictions (filtering) about the interests of a user by collecting preferences or taste information from many users (collaborative). The underlying assumption is that if a person A has the same opinion as person B on an issue, A is more likely to have B's opinion on a different issue than that of a randomly chosen person.&lt;/p&gt;
@@ -2792,7 +3006,7 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Singular Value Decomposition</title><link href="https://gastonamengual.github.io/singular-value-decomposition.html" rel="alternate"></link><published>2020-12-14T00:00:00-03:00</published><updated>2020-12-14T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-14:/singular-value-decomposition.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD, from-scratch implementation and application on an image.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;/script&gt;</content><category term="Machine Learning"></category></entry><entry><title>Singular Value Decomposition</title><link href="https://gastonamengual.github.io/singular-value-decomposition.html" rel="alternate"></link><published>2020-12-14T00:00:00-03:00</published><updated>2020-12-14T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-14:/singular-value-decomposition.html</id><summary type="html">&lt;p&gt;Theoretical explanation of the SVD. From-scratch Python implementation. Application example on an image.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.image&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;imread&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
