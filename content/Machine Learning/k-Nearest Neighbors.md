@@ -7,7 +7,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+
 from scipy.spatial import distance_matrix
 from scipy.spatial import distance
 ```
@@ -57,21 +61,21 @@ The observed data is the input of the algorithm, and it consists of the all the 
 
 
 ```python
-def k_nearest_neighbors(k, train_x, train_y, test, metric='euclidean'):
+def k_nearest_neighbors(k, train_x, train_y, test_x, metric='euclidean'):
     '''
     Train_x can be considered as the training points (cross-validation) or the original data (prediction)
     Train_y can be considered as the training labels of the orginal points (cross-validation) or the labels of the original data (prediction)
-    Test can be considered as the testing points (cross-validation) or the new points (prediction)    
+    Test_x can be considered as the testing points (cross-validation) or the new points (prediction)    
     '''
     
     # Scale data between 0 and 1 (min-max normalization)
     train_x_min = train_x.min(axis=0)
     train_x_max = train_x.max(axis=0)
     train_x = (train_x - train_x_min) / (train_x_max - train_x_min)
-    test = (test - train_x_min) / (train_x_max - train_x_min)
+    test_x = (test_x - train_x_min) / (train_x_max - train_x_min)
     
     # Calculate distance from each test point to train points
-    distances_matrix = distance.cdist(test, train_x, metric=metric)
+    distances_matrix = distance.cdist(test_x, train_x, metric=metric)
     threshold = np.quantile(distances_matrix, 0.05) 
     
     estimations = []
@@ -115,14 +119,15 @@ The [iris dataset](https://archive.ics.uci.edu/ml/datasets/iris) will be used to
 
 ```python
 iris = datasets.load_iris()
-data = np.column_stack((iris.data[:, :2], iris.target))
+X = iris.data[:, :2]
+y = iris.target
 ```
 
 
 ```python
 colors = ['mediumpurple', 'lightsalmon', 'lightskyblue', 'darkgrey']
 
-plt.scatter(*data[:,:2].T, color=np.choose(data[:,2].astype(int), colors))
+plt.scatter(*X.T, color=np.choose(y.astype(int), colors))
 
 ```
 
@@ -136,60 +141,41 @@ plt.scatter(*data[:,:2].T, color=np.choose(data[:,2].astype(int), colors))
 
 The *k*-NN algorithm will be trained using K-folds Cross-validation and accuracy (percentage of successes) as the error measure. K-folds will be run for 30 values of *k*. For each *k*, the accuracy for each fold will be recorded. The optimum *k* value will be set as the one which presented the highest accuracy median for every K.
 
-(Terminology alert: *k* and K)
+(Note that *k* refers to *k*-NN, and K refers to Cross-validation)
+
+<br>
+
+**Train-Validation Split**
+
+```python
+X_train, X_validation, y_train, y_validation = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+**K-folds Cross-validation**
 
 
 ```python
-np.random.seed(42) # For permutation
-
 metric = 'euclidean'
 
 folds = 7
+kf = KFold(n_splits=folds)
 
-# For k-folds. Use 80% for train and 20% for validation
-train_test_split = 0.8 
-
-# Shuffle data
-shuffled_data = np.random.permutation(data)
-
-# Select cut index according to split proportion
-cut_index = int(data.shape[0] * train_test_split)
-
-# Create train and validation sets
-train_set = shuffled_data[:cut_index]
-validation_set = shuffled_data[cut_index:]
-
-# Split train set into points (X) and labels (y) 
-X = train_set[:, :2]
-y = train_set[:, 2]
-
-# Set range of k values
-ks = np.arange(1, 31)
+k_values = np.arange(1, 31)
 
 accuracy_list_training = []
 
-for k in ks:
-    
-    # Divide train set into 'folds' parts
-    cut_indexes = np.linspace(0, train_set.shape[0], folds + 1).astype(int)
+for k in k_values:
     
     folds_accuracy = []
     
-    for i in range(folds):
+    for train_index, test_index in kf.split(X_train):
         
-        # X
-        train_x1, test_x, train_x2 = np.split(X, [cut_indexes[i], cut_indexes[i+1]])
-        train_x = np.concatenate([train_x1, train_x2])
+        X_train_fold, X_test_fold = X_train[train_index], X_train[test_index]
+        y_train_fold, y_test_fold = y_train[train_index], y_train[test_index]
         
-        # Y
-        train_y1, test_y, train_y2 = np.split(y, [cut_indexes[i], cut_indexes[i+1]])
-        train_y = np.concatenate([train_y1, train_y2])
+        estimations = k_nearest_neighbors(k, X_train_fold, y_train_fold, X_test_fold, metric=metric)
         
-        # Get labels estimations
-        estimations = k_nearest_neighbors(k, train_x, train_y, test_x, metric=metric)
-        
-        # Calculate accuracy
-        accuracy = np.mean(estimations == test_y)
+        accuracy = np.mean(estimations == y_test_fold)
         folds_accuracy.append(accuracy)
         
     accuracy_list_training.append(folds_accuracy)
@@ -201,7 +187,7 @@ Boxplots for the accuracy for each *k* considering all K folds will be construct
 
 
 ```python
-accuracy_training_df = pd.DataFrame(data=accuracy_list_training, index=ks)
+accuracy_training_df = pd.DataFrame(data=accuracy_list_training, index=k_values)
 
 best_k_training = np.argmax(accuracy_training_df.median(axis=1)) + 1
 best_accuracy_training = np.max(accuracy_training_df.median(axis=1))
@@ -226,19 +212,14 @@ Once the optimum *k* was found using Cross-validation, the production environmen
 
 
 ```python
-validation_set_x = validation_set[:, :2]
-validation_set_y = validation_set[:, 2]
+estimations = k_nearest_neighbors(best_k_training, X, y, X_validation, metric=metric)
 
-# Test the model with validation set
-estimations = k_nearest_neighbors(best_k_training, X, y, validation_set_x, metric=metric)
-
-# Calculate accuracy
-accuracy_validation = np.mean(estimations == validation_set_y)
+accuracy_validation = np.mean(estimations == y_validation)
 
 print(f'Validation Set Accuracy for k={best_k_training}: {accuracy_validation:.3g}')
 ```
 
-    Validation Set Accuracy for k=3: 0.667
+    Validation Set Accuracy for k=3: 0.967
     
 
 # 4 Distance Metrics Comparison
@@ -317,38 +298,20 @@ To provide an estimate of the classification of different points in the observed
 xs = np.linspace(4, 8, 200)
 ys = np.linspace(1.5, 5, 175)
 
-X, Y = np.meshgrid(xs, ys)
-X = np.ndarray.flatten(X)
-Y = np.ndarray.flatten(Y)
+X_space, Y_space = np.meshgrid(xs, ys)
+X_space = np.ndarray.flatten(X_space)
+Y_space = np.ndarray.flatten(Y_space)
 
-points = np.dstack([X, Y])[0]
+points = np.dstack([X_space, Y_space])[0]
 
 ks = [9, 29, 3, 17]
 
 fig, axes = plt.subplots(2, 2, figsize=(16, 7), sharex=True, sharey=True)
 
 for ax, k, metric in zip(axes.flatten(), ks, ['Canberra', 'Cityblock', 'Euclidean', 'Cosine']):
-    predictions = k_nearest_neighbors(k, data[:,:2], data[:,2], points, metric).astype(int)
+    predictions = k_nearest_neighbors(k, X, y, points, metric).astype(int)
     ax.scatter(*points.T, color=np.choose(predictions, colors), s=10, alpha=0.4)
-    ax.scatter(*data[:,:2].T, color='black', s=50)
-    ax.set_xlim(4, 8)
-    ax.set_ylim(1.5, 5)
-    ax.set_title(f'{metric} distance - $k={k}$')
-
-    if metric == 'Cityblock':
-        ax.set_title(f'Manhattan distance - $k={k}$')
-
-    ax.grid(b=None)
-    ax.axis('off')
-
-plt.figtext(0.36, -0.02, s='Setosa', fontsize=15, color='white', bbox=dict(facecolor=colors[0]), weight="bold", ha='center', va='center')
-plt.figtext(0.45, -0.02, s='Virginica', fontsize=15, color='white', bbox=dict(facecolor=colors[1]), weight="bold", ha='center', va='center')
-plt.figtext(0.55, -0.02, s='Versicolor', fontsize=15, color='white', bbox=dict(facecolor=colors[2]), weight="bold", ha='center', va='center')
-plt.figtext(0.67, -0.02, s='Cannot Predict', fontsize=15, color='white', bbox=dict(facecolor=colors[3]), weight="bold", ha='center', va='center')
-
-plt.suptitle('KNN Flower Type Prediction Map', fontsize=22, y=0.98)
-plt.tight_layout()
-plt.show()
+    ax.scatter(*X.T, color='black', s=50)
 ```
 
 
