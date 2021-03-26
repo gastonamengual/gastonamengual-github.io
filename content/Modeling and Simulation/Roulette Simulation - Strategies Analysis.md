@@ -2,7 +2,7 @@ Title: Roulette Simulation: Strategies Analysis
 Date: 2020.05.01
 Summary: Simulation of Martingale, d'Alembert and All-in Strategies in a Casino Roulette, for which the capital flow is analyzed.
 
-## <a href="{static}../documents/roulette_simulation_strategies_analysis_paper.pdf">Read the paper here!</a>
+## <a target="blank" href="{static}../documents/roulette_simulation_strategies_analysis_paper.pdf">Read the paper here!</a>
 
 <hr>
 

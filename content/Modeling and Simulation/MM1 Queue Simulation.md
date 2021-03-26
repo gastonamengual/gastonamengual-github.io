@@ -2,10 +2,8 @@ Title: M/M/1 Queue Simulation
 Date: 2020.06.24
 Summary: Simulation of a MM1 Queue and analysis of average delay in queue, average customers in queue, server busy proportion, and total time it takes for n users to get service. 
 
-## <a href="{static}../documents/mm1_queue_simulation_paper.pdf">Read the paper here!</a>
+## <a target="blank" href="{static}../documents/mm1_queue_simulation_paper.pdf">Read the paper here!</a>
 
-
-**Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).**
 
 <hr>
 

@@ -2,7 +2,7 @@ Title: Roulette Simulation: Statistical Analysis
 Date: 2020.04.15
 Summary: Simulation of a Casino Roulette, for which the mean and variance are analyzed, and empirical demonstration of the Law of Great Numbers.
 
-## <a href="{static}../documents/roulette_simulation_statistical_analysis_paper.pdf">Read the paper here!</a>
+## <a target="blank" href="{static}../documents/roulette_simulation_statistical_analysis_paper.pdf">Read the paper here!</a>
 
 <hr>
 
