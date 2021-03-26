@@ -4,8 +4,6 @@ Summary: Simulation of a Casino Roulette, for which the mean and variance are an
 
 ## <a href="{static}../documents/roulette_simulation_statistical_analysis_paper.pdf">Read the paper here!</a>
 
-**Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).**
-
 <hr>
 
 First, the roulette size and the analytical (henceforth *theoretical*) or population parameters are calculated.

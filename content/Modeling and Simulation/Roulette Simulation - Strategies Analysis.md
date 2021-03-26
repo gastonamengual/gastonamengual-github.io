@@ -4,8 +4,6 @@ Summary: Simulation of Martingale, d'Alembert and All-in Strategies in a Casino 
 
 ## <a href="{static}../documents/roulette_simulation_strategies_analysis_paper.pdf">Read the paper here!</a>
 
-**Notebook written by Gastón Amengual as a part of the Simulation Course at the National Technology University (UTN).**
-
 <hr>
 
 # Strategies
