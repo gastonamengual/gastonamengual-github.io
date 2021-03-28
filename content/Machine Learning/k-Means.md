@@ -220,4 +220,4 @@ The measure to evaluate the performance of the algorithm is the value of the fun
 
 [Assumptions Can Ruin Your K-Means Clusters](https://blog.learningtree.com/assumptions-ruin-k-means-clusters/){: target="_blank"}
 
-[K-means clustering is not a free lunch](http://varianceexplained.org/r/kmeans-free-lunch/)
+[K-means clustering is not a free lunch](http://varianceexplained.org/r/kmeans-free-lunch/){: target="_blank"}
