@@ -29,7 +29,7 @@ Title: PORTFOLIO
         <i>June 2020 - November 2020</i>
     </div>
     <div class="portfolio-project-header-links">
-        <a href="https://github.com/gastonamengual/Monte-Carlo-Simulation-Economic-Impact-s-S-Inventory-Policy">Code <i class="fa fa-github"></i></a> - <a href="{static}../documents/project_1_paper.pdf">Paper</a> - <a href="{static}../documents/project_1_poster.pdf">Poster</a> - <a href="{static}../documents/project_1_certification.pdf">Certification</a>
+        <a target="/blank" href="https://github.com/gastonamengual/Monte-Carlo-Simulation-Economic-Impact-s-S-Inventory-Policy">Code <i class="fa fa-github"></i></a> - <a target="/blank" href="{static}../documents/project_1_paper.pdf">Paper</a> - <a target="/blank" href="{static}../documents/project_1_poster.pdf">Poster</a> - <a target="/blank" href="{static}../documents/project_1_certification.pdf">Certification</a>
     </div>
 </div>
 
