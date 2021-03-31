@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Decision Trees &ndash; Gastón Amengual</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Machine Learning" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Decision Trees"/>
+    <meta property="og:description" content=""/>
+    <meta property="og:site_name" content="Gastón Amengual" />
+    <meta property="og:url" content="https://gastonamengual.github.io/decision-trees.html"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+    </div>
+
+
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>Decision Trees</h1>
+        <a class="article-category" href="https://gastonamengual.github.io/category/machine-learning.html">Machine Learning</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          <h3>Table of Contents</h3>
+<p><a href="#Definition">1 Definition</a></p>
+<p><a href="#General-Steps">2 General Steps</a></p>
+<p><a href="#Decision-Tree-Classifier">3 Decision Tree Classifier</a></p>
+<p><a href="#Decision-Tree-Regressor">4 Decision Tree Regressor</a></p>
+<p><a href="#Pruning">5 Pruning</a></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+</code></pre></div>
+
+
+<h1 id="Definition">1 Definition</h1>
+
+<p>A decision tree is a predictive modeling approach used in statistics, data mining, and machine learning to go from observations about an item to conclusions about the item's target value, and to visually and explicitly represent decisions, and to describe data. </p>
+<p>There two major types of decision tree models, integrated by the name of <strong>CART</strong> (Classification And Regression Tree). In <strong>classification trees</strong>, the predicted outcome is a discrete class to which the data belongs. In <strong>regression trees</strong>, the predicted outcome is a real number.</p>
+<p>A decision tree consists of:</p>
+<ul>
+<li>Root: it indicates the entire data sample.</li>
+<li>Nodes: indicate two possible outcomes according to a certain probability, and are split into two nodes, one for each result.</li>
+<li>Leaves: indicate a final outcome, the "decision" taken after visiting all previous nodes.</li>
+</ul>
+<h1 id="General-Steps">2 General Steps</h1>
+
+<p><strong>1.</strong> Validate the stop conditions (number of unique labels, minimum number of samples, tree maximum depth). </p>
+<p><em>If one condition is met, stop the algorithm and return the prediction. If no condition is met, follow step 2.</em></p>
+<p><strong>2.</strong> Iterate over each feature and each unique value of the feature. For each pair, split the labels in two according to the following rule: </p>
+<div class="math">$$\text{The left split contains the labels of the points smaller or equal than the value of the feature.}$$</div>
+<div class="math">$$\text{The right split contains the labels of the points bigger than value of the feature.}$$</div>
+<p><strong>3.</strong> Choose the best feature and value according to some metric (see Section 3.1 and 4.1).</p>
+<p><strong>4.</strong> Split the data into two branches, left and right, using the best feature and value.</p>
+<p><em>Repeat Steps 1, 2, 3 and 4 for both branches.</em></p>
+<h1 id="Decision-Tree-Classifier">3 Decision Tree Classifier</h1>
+
+<p>In classification decision trees, the target variables are categorical or discrete. Categorical variables contain a finite number of categories or distinct groups, which might not have a logical order (e.g. gender, material type, and payment method). Discrete variables are numeric variables that have a countable number of values between any two values (e.g. the number of customer complaints or the number of flaws or defects).</p>
+<p>The data input of a decision tree is defined as an <span class="math">\(m \times n\)</span> feature matrix <span class="math">\(X\)</span>, containing <span class="math">\(m\)</span> samples described by <span class="math">\(n\)</span> features, and an <span class="math">\(m \times 1\)</span> vector <span class="math">\(y\)</span> that contains the corresponding categorical or discrete property values (label or classes) to the samples in <span class="math">\(X\)</span>.</p>
+<h2>3.1 Metrics</h2>
+<p>The best feature and value in which to split the data in Classification Decision Trees is decided according to a metric. These metrics include Entropy, Gini impurity, Variance reduction, and Measure of Goodness.</p>
+<h3>3.1.1 Entropy</h3>
+<p>In information theory, the entropy of a random variable is the average level of information or uncertainty inherent in the variable's possible outcomes. It was introduced by Claude Shannon in 1948. Given a discrete random variable <span class="math">\(X\)</span> with possible outcomes <span class="math">\(x_1, x_2, \dotsc, x_n\)</span> which occur with probabilities <span class="math">\(P(x_1), P(x_2), \dotsc, P(x_n)\)</span>, the entropy of <span class="math">\(X\)</span> is defined as:</p>
+<div class="math">$$H(X) = - \sum_{i=1}^{n} P(x_i) \text{log} P(x_i)$$</div>
+<p>The choice of the logarithm's base <span class="math">\(b\)</span> defines the unit: bits or shannons for <span class="math">\(b=2\)</span>, nats for <span class="math">\(b=e\)</span>, bans for <span class="math">\(b=10\)</span>. Let <span class="math">\(X\)</span> be a random variable such that <span class="math">\(x \sim Binomial(1, p)\)</span> (Bernoulli). <span class="math">\(X\)</span> can have only two possible outcomes, the first with probability <span class="math">\(p\)</span> and the second with probability <span class="math">\(1-p\)</span>. Then, the entropy can be written as:</p>
+<div class="math">$$H(p) = -p \cdot \text{log}_2(p) - (1 - p) \cdot \text{log}_2(1 - p)$$</div>
+<p>Computing the derivative of <span class="math">\(H(p)\)</span> and setting it equal to <span class="math">\(0\)</span>, the global maximum is found at <span class="math">\(p = 0.5\)</span>, point at which the entropy is maximized with value <span class="math">\(1\)</span>, as both outcomes are equally possible and the level of information is maximum. In <span class="math">\(p=0\)</span> and <span class="math">\(p=1\)</span>, however, the entropy is <span class="math">\(0\)</span>, as it is known beforehand which value will be the outcome. </p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/decision_trees_1.png"></p>
+<p><strong>Overall Entropy</strong></p>
+<p>In decision trees, a leaf (that is, a group in which all samples belong to one class) has minimum impurity, a probability of <span class="math">\(1\)</span>, and an entropy of <span class="math">\(0\)</span>. A node with 50% of each class has maximum impurity, a probability of <span class="math">\(0.5\)</span>, and an entropy of <span class="math">\(1\)</span>. The entropy increases as the number of classes increases. The Overall Entropy is calculated as the sum of the entropy of both splits:</p>
+<div class="math">$$H_{\text{overall}} = \sum_{j=1}^2 p_j H(p_j)$$</div>
+<p>The best overall entropy will be the minimum value found in all splits made, as the associated uncertainty with making predictions must be the lowest possible.</p>
+<p><strong>Information gain</strong></p>
+<p>It is another metric used to calculate how important a feature is, and to decide the ordering of features in the nodes of the decision tree.</p>
+<div class="math">$$\text{Information gain} = \text{entropy}_{\text{parent}} - \text{weighted average entropy}_{\text{children}}$$</div>
+<p>For more information, read <a href="https://www.wikiwand.com/en/Information_gain_in_decision_trees">Information gain in decision trees</a>.</p>
+<h3>3.1.2 Gini impurity</h3>
+<p>Gini impurity is a measure of how often  a randomly chosen element from the set would be incorrectly labeled if it was randomly labeled according to the distribution of labels in the subset. For a set of items with <span class="math">\(J\)</span> classes, let <span class="math">\(p_i\)</span> with <span class="math">\(i \in \{1, 2, \dotsc, J\}\)</span> be the fraction of items labeld with class <span class="math">\(i\)</span> in the set, the Gini impurity is defined as</p>
+<div class="math">$$I_G(p) = 1 - \sum_{i=1}^{J} p_i^2$$</div>
+<p>A Gini Impurity of 0 is the lowest and best possible impurity. It can only be achieved when everything is the same class.</p>
+<h2>3.2 Implementation</h2>
+<p>The algorithm implemented considers both continuous/discrete and categorical features, and two stopping conditions (minimum number of samples - maximum tree depth).</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">decision_tree_classifier</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">features_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">depth_count</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+    <span class="c1"># Transpose X: one vector for each feature</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># STEP 1: Validate Stopping Conditions</span>
+    <span class="c1"># No more splits can be done - Min number of samples reached - Maximum depth reached</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">min_samples</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">depth_count</span> <span class="o">==</span> <span class="n">max_depth</span><span class="p">):</span>
+        <span class="n">y_label_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">leaf</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">y_label_index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">leaf</span>
+
+    <span class="n">depth_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Unique values for each feature</span>
+    <span class="n">unique_per_feature</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>
+
+    <span class="c1"># Set best entropy as infinity</span>
+    <span class="n">overall_entropy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+    <span class="c1"># STEP 2: Iterate over each feature and each unique value of the feature</span>
+    <span class="k">for</span> <span class="n">feature_index</span><span class="p">,</span> <span class="n">split_points</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_per_feature</span><span class="p">):</span>
+
+        <span class="n">feature</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">feature_index</span><span class="p">]</span>
+
+        <span class="c1"># Iterate over all split points of one feature</span>
+        <span class="k">for</span> <span class="n">split_point</span> <span class="ow">in</span> <span class="n">split_points</span><span class="p">:</span>
+
+            <span class="c1"># Split y in two</span>
+            <span class="n">left_split_indexes</span> <span class="o">=</span> <span class="n">feature</span> <span class="o">&lt;=</span> <span class="n">split_point</span>
+
+            <span class="n">left_split</span><span class="p">,</span> <span class="n">right_split</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">left_split_indexes</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="o">~</span><span class="n">left_split_indexes</span><span class="p">]</span>
+
+            <span class="c1"># Calculate overall entropy</span>
+            <span class="n">probabilities_per_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">left_split</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">right_split</span><span class="p">)])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+            <span class="n">counts_per_split</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="p">(</span><span class="n">left_split</span><span class="p">,</span> <span class="n">right_split</span><span class="p">)]</span>
+            <span class="n">entropies_per_split</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts_per_split</span><span class="p">]</span>
+
+            <span class="n">current_overall_entropy</span> <span class="o">=</span> <span class="n">probabilities_per_split</span> <span class="o">@</span> <span class="n">entropies_per_split</span>
+
+            <span class="c1"># STEP 3: Choose the best feature and value</span>
+            <span class="c1"># Check best overall entropy</span>
+            <span class="k">if</span> <span class="n">current_overall_entropy</span> <span class="o">&lt;=</span> <span class="n">overall_entropy</span><span class="p">:</span>
+                <span class="n">overall_entropy</span> <span class="o">=</span> <span class="n">current_overall_entropy</span>
+                <span class="n">best_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">feature_index</span><span class="p">,</span> <span class="n">split_point</span><span class="p">)</span>
+
+    <span class="c1"># STEP 4</span>
+    <span class="c1"># Split data according to best feature and best split point</span>
+    <span class="n">best_feature_index</span><span class="p">,</span> <span class="n">best_split_point</span> <span class="o">=</span> <span class="n">best_pair</span>
+
+    <span class="n">left_split_indexes</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">best_feature_index</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">best_split_point</span> 
+
+    <span class="n">left_split_X</span><span class="p">,</span> <span class="n">right_split_X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">left_split_indexes</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="o">~</span><span class="n">left_split_indexes</span><span class="p">]</span>
+    <span class="n">left_split_y</span><span class="p">,</span> <span class="n">right_split_y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">left_split_indexes</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="o">~</span><span class="n">left_split_indexes</span><span class="p">]</span>
+
+    <span class="c1"># Find left and right branches</span>
+    <span class="n">left_branch</span> <span class="o">=</span> <span class="n">decision_tree_classifier</span><span class="p">(</span><span class="n">left_split_X</span><span class="p">,</span> <span class="n">left_split_y</span><span class="p">,</span> <span class="n">features_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">depth_count</span><span class="p">)</span>
+    <span class="n">right_branch</span> <span class="o">=</span> <span class="n">decision_tree_classifier</span><span class="p">(</span><span class="n">right_split_X</span><span class="p">,</span> <span class="n">right_split_y</span><span class="p">,</span> <span class="n">features_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">depth_count</span><span class="p">)</span>
+
+    <span class="c1"># Make decision tree</span>
+    <span class="n">feature_name</span> <span class="o">=</span> <span class="n">features_name</span><span class="p">[</span><span class="n">best_feature_index</span><span class="p">]</span>
+    <span class="n">decision_tree</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feature_name</span><span class="si">}</span><span class="s1"> ≤ </span><span class="si">{</span><span class="n">best_split_point</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">left_branch</span><span class="p">,</span> <span class="n">right_branch</span><span class="p">]}</span>
+
+    <span class="k">return</span> <span class="n">decision_tree</span>
+</code></pre></div>
+
+
+<p>Once the tree is built, predictions can be done for a certain new point. For that, the decision tree must be searched, following a specific branch depending on the satisfaction of the conditions.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">classify_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">decision_tree</span><span class="p">,</span> <span class="n">features_names</span><span class="p">):</span>
+
+    <span class="n">question</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">decision_tree</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">feature_name</span><span class="p">,</span> <span class="n">comparison_operator</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>     
+
+    <span class="n">feature_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">features_names</span> <span class="o">==</span> <span class="n">feature_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">point</span><span class="p">[</span><span class="n">feature_index</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">decision_tree</span><span class="p">[</span><span class="n">question</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">decision_tree</span><span class="p">[</span><span class="n">question</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="n">answer</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">classify_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">answer</span><span class="p">,</span> <span class="n">features_names</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h2>3.3 Application</h2>
+<div class="highlight"><pre><span></span><code><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<span class="n">features_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span><span class="s1">&#39;petal_length&#39;</span><span class="p">,</span><span class="s1">&#39;petal_width&#39;</span><span class="p">,</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;setosa&#39;</span><span class="p">,</span> <span class="s1">&#39;versicolor&#39;</span><span class="p">,</span> <span class="s1">&#39;virginica&#39;</span><span class="p">])</span>
+
+<span class="n">train_set_X</span><span class="p">,</span> <span class="n">test_set_X</span><span class="p">,</span> <span class="n">train_set_y</span><span class="p">,</span> <span class="n">test_set_y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1333</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h3>Train Decision Tree</h3>
+<div class="highlight"><pre><span></span><code><span class="n">decision_tree</span> <span class="o">=</span> <span class="n">decision_tree_classifier</span><span class="p">(</span><span class="n">train_set_X</span><span class="p">,</span> <span class="n">train_set_y</span><span class="p">,</span> <span class="n">features_names</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">decision_tree</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">{&#39;petal_width ≤ 0.6&#39;: [&#39;setosa&#39;,</span>
+<span class="err">                       {&#39;petal_width ≤ 1.7&#39;: [{&#39;petal_length ≤ 4.9&#39;: [{&#39;petal_width ≤ 1.6&#39;: [&#39;versicolor&#39;,</span>
+<span class="err">                                                                                             &#39;virginica&#39;]},</span>
+<span class="err">                                                                      {&#39;petal_width ≤ 1.5&#39;: [&#39;virginica&#39;,</span>
+<span class="err">                                                                                             {&#39;petal_length ≤ 5.1&#39;: [&#39;versicolor&#39;,</span>
+<span class="err">                                                                                                                     &#39;virginica&#39;]}]}]},</span>
+<span class="err">                                              {&#39;petal_length ≤ 4.8&#39;: [{&#39;sepal_width ≤ 3.0&#39;: [&#39;virginica&#39;,</span>
+<span class="err">                                                                                             &#39;versicolor&#39;]},</span>
+<span class="err">                                                                      &#39;virginica&#39;]}]}]}</span>
+</code></pre></div>
+
+
+<h2>3.4 Visualization</h2>
+<p>For visualizing the tree, Sklearn's plot_tree will be used. <strong><em>value</em></strong> represents how many samples at that node fall into each category, it adds up to <strong><em>samples</em></strong>, which represents the number of samples at that node. The prediction corresponds to the most common category.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plot_tree</span><span class="p">(</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;entropy&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/decision_trees_2.png"></p>
+<h3>Testing</h3>
+<div class="highlight"><pre><span></span><code><span class="n">predictions</span> <span class="o">=</span> <span class="p">[</span><span class="n">classify_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">decision_tree</span><span class="p">,</span> <span class="n">features_names</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">test_set_X</span><span class="p">]</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">predictions</span> <span class="o">==</span> <span class="n">test_set_y</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">Accuracy</span><span class="o">:</span> <span class="mf">1.0</span>
+</code></pre></div>
+
+
+<h3>Predictions</h3>
+<div class="highlight"><pre><span></span><code><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">pairs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">pair_index</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">pairs</span><span class="p">):</span>
+
+    <span class="n">pair</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">pair_index</span><span class="p">]</span>
+
+    <span class="c1"># Train decision tree</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;entropy&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pair</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">pair</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pair</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">pair</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pair</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">))</span>
+
+    <span class="c1"># Calculate and plot decision map</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xx</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">flatten</span><span class="p">())))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+
+    <span class="c1"># Plot pair points</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">pair</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/decision_trees_3.png"></p>
+<h1 id="Decision-Tree-Regressor">4 Decision Tree Regressor</h1>
+
+<p>Decision trees where the target variable can take continuous values are called regression trees. Continuous variables are numeric variables that have an infinite number of values between any two values. A continuous variable can be numeric or date/time. For example, the length of a part or the date and time a payment is received.</p>
+<p>The data input of a decision tree is defined as an <span class="math">\(m \times n\)</span> feature matrix <span class="math">\(X\)</span>, containing <span class="math">\(m\)</span> samples described by <span class="math">\(n\)</span> features, and an <span class="math">\(m \times 1\)</span> vector <span class="math">\(y\)</span> that contains the values of the dependent variable.</p>
+<h2>4.1 Metrics</h2>
+<p>There are several metrics that can be used to split the data, such as MSE, MAE, Friedman MSE, and Poisson deviance.</p>
+<h4>MSE</h4>
+<p>One metric that can be used to split the data is the MSE. The data is split in two branches, and the MSE of each branch is calculated, taking the <em>true y</em> as the mean of the dependent variable, and the <em>predicted y</em> as the values of the points in the branch. Finally, the Total MSE is computed as the sum of the MSE of both branches. The RMSE can be likewise used.</p>
+<h2>4.2 Application</h2>
+<h3>Create dummy data set</h3>
+<div class="highlight"><pre><span></span><code><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">y</span><span class="p">[::</span><span class="mi">5</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">40</span><span class="p">))</span>
+
+<span class="n">features_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+</code></pre></div>
+
+
+<h3>Train Decision Tree</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span><span class="p">,</span> <span class="n">plot_tree</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plot_tree</span><span class="p">(</span><span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/decision_trees_4.png"></p>
+<h3>Find Optimum Depth</h3>
+<p><strong>Test Data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><strong>Train Decision Tree and calculate RMSE for different depths on Train and Test Data</strong> </p>
+<div class="highlight"><pre><span></span><code><span class="n">depths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">rmses_train</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">rmses_test</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="n">depths</span><span class="p">:</span>
+
+    <span class="c1"># RMSE on train data</span>
+    <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rmses_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rmse</span><span class="p">)</span>
+
+    <span class="c1"># RMSE on test data</span>
+    <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rmses_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rmse</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">depths</span><span class="p">,</span> <span class="n">rmses_test</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">depths</span><span class="p">,</span> <span class="n">rmses_train</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">rmses_test</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">rmses_test</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/decision_trees_5.png"></p>
+<p>It can be observed that, as the error on the train set decreases towards 0, the error on the test set increases. This is due to an overfitting produced by high values of maximum depth. The optimum depth was chosen as that with the minimum RMSE on the test data.</p>
+<h3>Predictions</h3>
+<div class="highlight"><pre><span></span><code><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">depths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">depth</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">depths</span><span class="p">):</span>
+
+    <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/decision_trees_6.png"></p>
+<h1 id="Pruning">5 Pruning</h1>
+
+<p>Pruning is a data compression technique that reduces the size of a decision tree by removing sections of the tree that are non-critical or redundant to classify instances, reducing the complexity of the final classifier and improving predicting accuracy by the reduction of overfitting. It deals with the decision on the optimal size of the final tree.</p>
+<p>Decision trees are the most susceptible algorithms to overfitting, as a tree that is too large risks overfitting the training data and poorly generalizing to new samples. On the other hand, a small tree might not capture important structural information about the sample space.</p>
+<p>There are two types of pruning.</p>
+<h2>Pre-pruning</h2>
+<p>Also called early-stopping, it consist on stopping the tree before it has completed classifying the training set. At each point in which the tree is split, the error is checked. If it does not decrease significantly, then the algorithm is stopped. It can produce underfitting.</p>
+<h2>Post-pruning</h2>
+<p>It consists on pruning the tree after it has finished, that is, cutting back the tree. After the tree has been built, and in absence of pre-pruning, it may be overfitted, as the final leaves can consist of only one or a few data points: the tree has learned the data exactly, and may fail to predict new data.</p>
+<h1>References</h1>
+<p><a href="https://en.wikipedia.org/wiki/Decision_tree_learning">Decision Tree Learning - Wikipedia</a></p>
+<p><a href="https://github.com/SebastianMantey/Decision-Tree-from-Scratch">Decision Tree from Scratch - Sebastian Mantey</a></p>
+<p><a href="https://medium.com/udacity/shannon-entropy-information-gain-and-picking-balls-from-buckets-5810d35d54b4">Shannon Entropy, Information Gain, and Picking Balls from Buckets
+</a></p>
+<p><a href="https://scikit-learn.org/stable/auto_examples/tree/plot_iris_dtc.html">Plot the decision surface of a decision tree on the iris dataset</a></p>
+<p><a href="https://www.displayr.com/machine-learning-pruning-decision-trees/">Machine Learning: Pruning Decision Trees</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+
+    <footer>
+        <p>
+          &copy;
+          2021          Gastón Amengual
+        </p>
+    </footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>
