@@ -1,6 +1,6 @@
 Title: Decision Trees
 Date: 2021.03.30
-Summary: 
+Summary: Definition. General steps. Decision tree classifier implementation from scratch. Application of classifier and regressor. Definition of pruning.
 
 ### Table of Contents
 
@@ -431,13 +431,13 @@ It consists on pruning the tree after it has finished, that is, cutting back the
 
 # References
 
-[Decision Tree Learning - Wikipedia](https://en.wikipedia.org/wiki/Decision_tree_learning)
+[Decision Tree Learning - Wikipedia](https://en.wikipedia.org/wiki/Decision_tree_learning){: target="_blank"}
 
-[Decision Tree from Scratch - Sebastian Mantey](https://github.com/SebastianMantey/Decision-Tree-from-Scratch)
+[Decision Tree from Scratch - Sebastian Mantey](https://github.com/SebastianMantey/Decision-Tree-from-Scratch){: target="_blank"}
 
 [Shannon Entropy, Information Gain, and Picking Balls from Buckets
-](https://medium.com/udacity/shannon-entropy-information-gain-and-picking-balls-from-buckets-5810d35d54b4)
+](https://medium.com/udacity/shannon-entropy-information-gain-and-picking-balls-from-buckets-5810d35d54b4){: target="_blank"}
 
-[Plot the decision surface of a decision tree on the iris dataset](https://scikit-learn.org/stable/auto_examples/tree/plot_iris_dtc.html)
+[Plot the decision surface of a decision tree on the iris dataset](https://scikit-learn.org/stable/auto_examples/tree/plot_iris_dtc.html){: target="_blank"}
 
-[Machine Learning: Pruning Decision Trees](https://www.displayr.com/machine-learning-pruning-decision-trees/)
+[Machine Learning: Pruning Decision Trees](https://www.displayr.com/machine-learning-pruning-decision-trees/){: target="_blank"}
