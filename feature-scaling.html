@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Feature Scaling &ndash; Gastón Amengual</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Machine Learning" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Feature Scaling"/>
+    <meta property="og:description" content="Definition. Explanation and implementation of min-max normalization, mean normalization, and standardization. Application to data set."/>
+    <meta property="og:site_name" content="Gastón Amengual" />
+    <meta property="og:url" content="https://gastonamengual.github.io/feature-scaling.html"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+    </div>
+
+
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>Feature Scaling</h1>
+        <a class="article-category" href="https://gastonamengual.github.io/category/machine-learning.html">Machine Learning</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span>
+</code></pre></div>
+
+
+<h1>Definition</h1>
+<p>Feature scaling is a part of the data pre-processing stage. It is applied when the range of the values of the input data are very different in each feature. If the value of certain features is very high in comparison to others, this may produce, in some cases, that they have greater impact on the algorithm, which will give them more importance and weight, than other more important features that have lower magnitude. The algorithm then will fail to give precise estimations.</p>
+<p>Some algorithms sensitive to feature scaling are Linear and Logistic Regression, <em>k</em>-Means, <em>k</em>-NN, PCA, and SVM. On the other hand, other algorithms like Decision Trees are insensitive to feature scaling.</p>
+<p>There are two kinds of Feature Scaling, normalization and standardization. </p>
+<p>Let <span class="math">\(x_i\)</span> be an observation of a feature vector <span class="math">\(x\)</span>, <span class="math">\(\bar{x}\)</span> the mean of <span class="math">\(x\)</span>, and <span class="math">\(x_{min}\)</span> and <span class="math">\(x_{max}\)</span> the minimum and maximum value of <span class="math">\(x\)</span>, respectively.</p>
+<h1>Normalization</h1>
+<p>Normalization is a scaling technique in which values are shifted and rescaled to be between two numbers. Typically, the values are scaled to the range <span class="math">\([0,1]\)</span> or <span class="math">\([-1,1]\)</span>. It is useful when the distribution of the data does not follow a Gaussian distribution and is sensible to outliers.</p>
+<h2>Min-Max Normalization</h2>
+<p>It consists in scaling <span class="math">\(x_i\)</span> to the range <span class="math">\([a, b]\)</span>. The general formula is</p>
+<div class="math">$$x_i' = a + \dfrac{(x_i - x_{min})(b-a)}{x_{max} - x_{min}}$$</div>
+<p>Intuitively, if <span class="math">\(a=0\)</span> and <span class="math">\(b=1\)</span>, when <span class="math">\(x_i\)</span> is the minimum value, the numerator will be 0, and hence <span class="math">\(x_i' = 0\)</span>; when <span class="math">\(x_i\)</span> is the maximum value, the numerator is equal to the denominator and thus the value of <span class="math">\(x_i' = 1\)</span>. If <span class="math">\(x_i\)</span> is between the minimum and the maximum value, then the <span class="math">\(x_i'\)</span> is between <span class="math">\(0\)</span> and <span class="math">\(1\)</span>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">min_max_normalization</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">scaled_data</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">scaled_data</span>
+</code></pre></div>
+
+
+<h2>Mean Normalization</h2>
+<p>Another form of normalization consists of subtracting the mean from the observation. The formula is</p>
+<div class="math">$$x' = \dfrac{x_i - \bar{x}}{x_{max} - x_{min}}$$</div>
+<p>This method scales the data between -1 and 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">mean_normalization</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">scaled_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">scaled_data</span>
+</code></pre></div>
+
+
+<h1>Standardization</h1>
+<p>Standardization transforms the data to have a mean equal to <span class="math">\(0\)</span> (subtracting the mean in the numerator) and a variance equal to <span class="math">\(1\)</span>, and it makes the data have no units. It is especially useful in cases where the data follows a Gaussian distribution. Also, unlike normalization, standardization does not have a bounding range, so, even if there are outliers in the data, they will have less impact on the standardization process. The formula is</p>
+<div class="math">$$x' = \dfrac{x_i - \bar{x}}{\sigma}$$</div>
+<p>where <span class="math">\(\sigma\)</span> is the standard deviation of the feature observations.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">standardization</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">scaled_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scaled_data</span>
+</code></pre></div>
+
+
+<h1>Application</h1>
+<p>The Wine data set will be used to illustrate how feature scaling works. From this data sets, 6 features will be chosen, whose range of values varies significantly in scale.</p>
+<div class="highlight"><pre><span></span><code><span class="n">wine</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_wine</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">wine</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">)]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Alcohol&#39;</span><span class="p">,</span> <span class="s1">&#39;Malic Acid&#39;</span><span class="p">,</span> <span class="s1">&#39;Alcalinity Of Ash&#39;</span><span class="p">,</span> <span class="s1">&#39;Magnesium&#39;</span><span class="p">,</span> <span class="s1">&#39;Nonflavanoid Phenols&#39;</span><span class="p">,</span> <span class="s1">&#39;Proline&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">X</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;**Original Ranges**&#39;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1"> = $[</span><span class="si">{</span><span class="n">min_value</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">}</span><span class="s1">]$&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><strong>Original Ranges</strong></p>
+<p>Alcohol = <span class="math">\([11.03, 14.83]\)</span></p>
+<p>Malic Acid = <span class="math">\([0.74, 5.8]\)</span></p>
+<p>Alcalinity Of Ash = <span class="math">\([10.6, 30.0]\)</span></p>
+<p>Magnesium = <span class="math">\([70.0, 162.0]\)</span></p>
+<p>Nonflavanoid Phenols = <span class="math">\([0.13, 0.66]\)</span></p>
+<p>Proline = <span class="math">\([278.0, 1680.0]\)</span></p>
+<div class="highlight"><pre><span></span><code><span class="n">scaled_data</span> <span class="o">=</span> <span class="n">min_max_normalization</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span> <span class="o">=</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;**Min-Max Normalization**&#39;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1"> = $[</span><span class="si">{</span><span class="n">min_value</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">}</span><span class="s1">]$&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><strong>Min-Max Normalization</strong></p>
+<p>Alcohol = <span class="math">\([0.0, 1.0]\)</span></p>
+<p>Malic Acid = <span class="math">\([0.0, 1.0]\)</span></p>
+<p>Alcalinity Of Ash = <span class="math">\([0.0, 1.0]\)</span></p>
+<p>Magnesium = <span class="math">\([0.0, 1.0]\)</span></p>
+<p>Nonflavanoid Phenols = <span class="math">\([0.0, 1.0]\)</span></p>
+<p>Proline = <span class="math">\([0.0, 1.0]\)</span></p>
+<div class="highlight"><pre><span></span><code><span class="n">scaled_data</span> <span class="o">=</span> <span class="n">mean_normalization</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span> <span class="o">=</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;**Mean Normalization**&#39;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1"> = $[</span><span class="si">{</span><span class="n">min_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">]$&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><strong>Mean Normalization</strong></p>
+<p>Alcohol = <span class="math">\([-0.52, 0.48]\)</span></p>
+<p>Malic Acid = <span class="math">\([-0.32, 0.68]\)</span></p>
+<p>Alcalinity Of Ash = <span class="math">\([-0.46, 0.54]\)</span></p>
+<p>Magnesium = <span class="math">\([-0.32, 0.68]\)</span></p>
+<p>Nonflavanoid Phenols = <span class="math">\([-0.44, 0.56]\)</span></p>
+<p>Proline = <span class="math">\([-0.33, 0.67]\)</span></p>
+<div class="highlight"><pre><span></span><code><span class="n">scaled_data</span> <span class="o">=</span> <span class="n">standardization</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span> <span class="o">=</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">scaled_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;**Standardization**&#39;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">min_values</span><span class="p">,</span> <span class="n">max_values</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1"> = $[</span><span class="si">{</span><span class="n">min_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">]$&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+
+<p><strong>Standardization</strong></p>
+<p>Alcohol = <span class="math">\([-2.43, 2.26]\)</span></p>
+<p>Malic Acid = <span class="math">\([-1.43, 3.11]\)</span></p>
+<p>Alcalinity Of Ash = <span class="math">\([-2.67, 3.15]\)</span></p>
+<p>Magnesium = <span class="math">\([-2.09, 4.37]\)</span></p>
+<p>Nonflavanoid Phenols = <span class="math">\([-1.87, 2.40]\)</span></p>
+<p>Proline = <span class="math">\([-1.49, 2.97]\)</span></p>
+<p><br></p>
+<p>In conclusion, using one of the methods described, all the features values are on the same scale, and the scaled data can be used as input of the algorithms that require feature scaling as a pre-processing step.</p>
+<h1>References</h1>
+<p><a href="https://en.wikipedia.org/wiki/Feature_scaling">Feature Scaling</a></p>
+<p><a href="https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/">Feature Scaling for Machine Learning</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+
+    <footer>
+        <p>
+          &copy;
+          2021          Gastón Amengual
+        </p>
+    </footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>
