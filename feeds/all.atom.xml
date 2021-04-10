@@ -4279,8 +4279,7 @@ Hierarchical Clustering require a certain amount of observations to perform corr
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="Optimization"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-20T00:00:00-03:00</published><updated>2020-12-20T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-20:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;meta property="og:image" content="{static}../images/principal_component_analysis_2.png"/&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;/script&gt;</content><category term="Optimization"></category></entry><entry><title>Principal Component Analysis</title><link href="https://gastonamengual.github.io/principal-component-analysis.html" rel="alternate"></link><published>2020-12-20T00:00:00-03:00</published><updated>2020-12-20T00:00:00-03:00</updated><author><name>Gastón Amengual</name></author><id>tag:gastonamengual.github.io,2020-12-20:/principal-component-analysis.html</id><summary type="html">&lt;p&gt;Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;seaborn&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;sns&lt;/span&gt;
@@ -4288,16 +4287,19 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h1&gt;1 Definition&lt;/h1&gt;
+&lt;h1&gt;Definition&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;Principal Component Analysis (PCA)&lt;/strong&gt; is a dimensionality reduction method that transforms the data into a new orthogonal (i.e. perpendicular, linearly independent, and non-correlated) coordinate system that &lt;strong&gt;keeps most of the variance&lt;/strong&gt; that was present in the original data. &lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;PCA transforms the data &lt;strong&gt;maximizing the variance&lt;/strong&gt; over the projected points. Each new coordinate is called &lt;strong&gt;principal component&lt;/strong&gt;, and is ranked according to how much variance they explain, or by &lt;strong&gt;explained variance&lt;/strong&gt; (the greatest variance lies on the first principal component, the second greatest variance on the second principal component, ...).&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;The data is arranged in a an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix &lt;span class="math"&gt;\(X\)&lt;/span&gt;, where each row represents a different observation or measurement of the experiment, and each column represents a dimension or feature. &lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;The principal components are new features constructed as linear combinations of the initial features, allowing to reduce dimensionality while keeping underlying information structure. Since the principal components are ranked, it is possible to discard those with low contribution (i.e. the added explained variance is negligible). However, these new features are harder to interpret than the original ones, as they are a linear combinations that does not necessarily have an intrinsic meaning.&lt;/p&gt;
-&lt;h2&gt;1.1 Assumptions&lt;/h2&gt;
+&lt;h2&gt;Assumptions&lt;/h2&gt;
 &lt;p&gt;In order to apply PCA, the following assumptions must be met.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;PCA assumes that the observations have mean &lt;span class="math"&gt;\(0\)&lt;/span&gt; (i.e., &lt;span class="math"&gt;\(X\)&lt;/span&gt; has column-wise zero empirical mean).&lt;/p&gt;
+&lt;p&gt;The observations have mean &lt;span class="math"&gt;\(0\)&lt;/span&gt; (i.e., &lt;span class="math"&gt;\(X\)&lt;/span&gt; has column-wise zero empirical mean).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;The data must be able to be analyzed with a covariance matrix, which in term makes sense when the relation between the data is linear.&lt;/p&gt;
@@ -4306,8 +4308,8 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;p&gt;The sample taken is large enough and there are no significant outliers (heavy-tailed distributions should be avoided).&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h1&gt;2 Approaches&lt;/h1&gt;
-&lt;h2&gt;2.1 Geometric approach&lt;/h2&gt;
+&lt;h1&gt;Approaches&lt;/h1&gt;
+&lt;h2&gt;Geometric approach&lt;/h2&gt;
 &lt;p&gt;A zero-intercept line is to be found such that the variance of the projected data points over the line is maximized. The principal components represent the directions of the data (projection) that explains the maximal amount of variance, and can be thought as new axes providing the best angle to capture the data dispersion.&lt;/p&gt;
 &lt;p&gt;Considering a data point, and a line drawn through the origin, then:&lt;/p&gt;
 &lt;ul&gt;
@@ -4317,8 +4319,8 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src="https://liorpachter.files.wordpress.com/2014/05/pca_figure1.jpg" style="width: 350px;" /&gt;&lt;/p&gt;
 &lt;p&gt;All three vectors form a square triangle such that, according to the Pythagoras theorem, &lt;span class="math"&gt;\(a^2 = b^2 + c^2\)&lt;/span&gt;. &lt;span class="math"&gt;\(b\)&lt;/span&gt; and &lt;span class="math"&gt;\(c\)&lt;/span&gt; are inversely related and, since &lt;span class="math"&gt;\(a\)&lt;/span&gt; is fixed, if &lt;span class="math"&gt;\(b\)&lt;/span&gt; gets bigger, &lt;span class="math"&gt;\(c\)&lt;/span&gt; gets smaller, and vice versa. As the objective is to maximize variance (dispersion), PCA can either minimize the distance to the line (&lt;span class="math"&gt;\(b\)&lt;/span&gt;) or maximize the distance from the projected point to the origin (&lt;span class="math"&gt;\(c\)&lt;/span&gt;).&lt;/p&gt;
-&lt;p&gt;For more information, relate to &lt;a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title" target="_blank"&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest&lt;/a&gt;.&lt;/p&gt;
-&lt;h2&gt;2.2 Covariance approach&lt;/h2&gt;
+&lt;p&gt;For more information, relate to &lt;a href="https://www.youtube.com/watch?v=FgakZw6K1QQ&amp;amp;feature=emb_title"&gt;Principal Component Analysis (PCA), Step-by-Step - StatQuest&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Covariance approach&lt;/h2&gt;
 &lt;p&gt;As an alternative, the principal components can be also thought as eigenvectors of the data covariance matrix, and can be computed by eigendecomposition of the data covariance matrix. &lt;/p&gt;
 &lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
 &lt;ol&gt;
@@ -4363,10 +4365,9 @@ Hierarchical Clustering require a certain amount of observations to perform corr
     &lt;span class="n"&gt;eigenvalues&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvalues&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
     &lt;span class="n"&gt;eigenvectors&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idxs&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# The 5th step will be performed outside this function. The full transformed data matrix &lt;/span&gt;
-    &lt;span class="c1"&gt;# will be returned, and the r principal components will be chosen later. If desired, this&lt;/span&gt;
-    &lt;span class="c1"&gt;# function could take the number of components as a parameter, and the subset of the &lt;/span&gt;
-    &lt;span class="c1"&gt;# eigenvectors can be selected here. &lt;/span&gt;
+    &lt;span class="c1"&gt;# The 5th step will be performed outside this function. The full transformed data matrix will be returned, and the r principal &lt;/span&gt;
+    &lt;span class="c1"&gt;# components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset&lt;/span&gt;
+    &lt;span class="c1"&gt;# of the eigenvectors can be selected here. &lt;/span&gt;
 
     &lt;span class="c1"&gt;# 6 Compute transformed data matrix and atributes&lt;/span&gt;
     &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;eigenvectors&lt;/span&gt;
@@ -4383,9 +4384,8 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h2&gt;2.3 SVD approach&lt;/h2&gt;
-&lt;p&gt;Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD).&lt;/p&gt;
-&lt;p&gt;Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
+&lt;h2&gt;SVD approach&lt;/h2&gt;
+&lt;p&gt;Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD). Let &lt;span class="math"&gt;\(X\)&lt;/span&gt; be an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. &lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Calculate &lt;span class="math"&gt;\(B\)&lt;/span&gt;, an &lt;span class="math"&gt;\(n \times m\)&lt;/span&gt; matrix where each column is computed by subtracting the column-wise mean &lt;span class="math"&gt;\(\bar{X}\)&lt;/span&gt; from each column of &lt;span class="math"&gt;\(X\)&lt;/span&gt;, namely, &lt;span class="math"&gt;\(B = X - \bar{X}\)&lt;/span&gt;.&lt;/strong&gt;&lt;/p&gt;
@@ -4400,6 +4400,8 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;p&gt;&lt;strong&gt;Compute the transformed data matrix &lt;span class="math"&gt;\(T\)&lt;/span&gt;&lt;/strong&gt;, such that &lt;span class="math"&gt;\(T = XV = U \Sigma V^T V = U \Sigma\)&lt;/span&gt;. This form is also the polar decomposition of &lt;span class="math"&gt;\(T\)&lt;/span&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;(For more information on SVD, relate to &lt;a href="https://gastonamengual.github.io/singular-value-decomposition.html" target="_blank"&gt;Singular Value Decomposition&lt;/a&gt;)&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
 
     &lt;span class="c1"&gt;# The function takes a Pandas DataFrame&lt;/span&gt;
@@ -4413,10 +4415,9 @@ Hierarchical Clustering require a certain amount of observations to perform corr
     &lt;span class="c1"&gt;# 2 Compute SVD&lt;/span&gt;
     &lt;span class="n"&gt;U&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;S&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linalg&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;full_matrices&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# The 3rd step will be performed outside this function. The full transformed data &lt;/span&gt;
-    &lt;span class="c1"&gt;# matrix will be returned, and the r principal components will be chosen later. If&lt;/span&gt;
-    &lt;span class="c1"&gt;# desired, this function could take the number of components as a parameter, and &lt;/span&gt;
-    &lt;span class="c1"&gt;# the subset of the eigenvectors can be selected here. &lt;/span&gt;
+    &lt;span class="c1"&gt;# The 3rd step will be performed outside this function. The full transformed data matrix will be returned, and the r principal &lt;/span&gt;
+    &lt;span class="c1"&gt;# components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset&lt;/span&gt;
+    &lt;span class="c1"&gt;# of the eigenvectors can be selected here. &lt;/span&gt;
 
     &lt;span class="c1"&gt;# 4 Compute transformed data matrix and atributes&lt;/span&gt;
     &lt;span class="n"&gt;components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;VT&lt;/span&gt;
@@ -4433,26 +4434,23 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h2&gt;2.4 Relation between Covariance and SVD approaches&lt;/h2&gt;
+&lt;h3&gt;Relation between Covariance and SVD approaches&lt;/h3&gt;
 &lt;p&gt;According to the SVD, &lt;/p&gt;
 &lt;div class="math"&gt;$$B = U \Sigma V^T$$&lt;/div&gt;
 &lt;div class="math"&gt;$$B^TB = V \Sigma U^T U \Sigma V^T = V \Sigma^2 V^T$$&lt;/div&gt;
 &lt;p&gt;The covariance matrix of &lt;span class="math"&gt;\(B\)&lt;/span&gt; is &lt;span class="math"&gt;\(C = \dfrac{B^TB}{n-1} = \dfrac{V \Sigma^2 V^T}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(\Sigma\)&lt;/span&gt; are the eigenvalues of the matrix &lt;span class="math"&gt;\(B\)&lt;/span&gt;, while &lt;span class="math"&gt;\(\Lambda\)&lt;/span&gt; are the eigenvalues of &lt;span class="math"&gt;\(C\)&lt;/span&gt;. The relationship between them is defined as &lt;span class="math"&gt;\(\Lambda = \dfrac{\Sigma^2}{n-1}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Moreover, the right singular vectors &lt;span class="math"&gt;\(V\)&lt;/span&gt; of &lt;span class="math"&gt;\(B\)&lt;/span&gt; are equivalent to the eigenvectors of &lt;span class="math"&gt;\(B^TB\)&lt;/span&gt;.&lt;/p&gt;
-&lt;hr&gt;
-
 &lt;h1&gt;Application&lt;/h1&gt;
-&lt;h3&gt;Ozone Dataset&lt;/h3&gt;
-&lt;p&gt;Forecasting skewed biased stochastic ozone days: analyses, solutions and beyond, Knowledge and Information Systems, Vol. 14, No. 3, 2008.&lt;/p&gt;
-&lt;p&gt;The dataset contains 2534 observations and 73 features. &lt;strong&gt;Author&lt;/strong&gt;: Kun Zhang, Wei Fan, XiaoJing Yuan. &lt;strong&gt;Source&lt;/strong&gt;: &lt;a href="https://archive.ics.uci.edu/ml/datasets/ozone+level+detection" target="_blank"&gt;UCI&lt;/a&gt;.&lt;/p&gt;
-&lt;hr&gt;
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;dataset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ozone-level-8hr.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;p&gt;PCA will be applied to the ozone data set (Forecasting skewed biased stochastic ozone days: analyses, solutions and beyond, Knowledge and Information Systems, Vol. 14, No. 3, 2008). This data set contains 2534 observations and 73 features. &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Kun Zhang, Wei Fan, XiaoJing Yuan. &lt;strong&gt;Source&lt;/strong&gt;: &lt;a href="https://archive.ics.uci.edu/ml/datasets/ozone+level+detection"&gt;UCI&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Import data set&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;dataset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;datasets/principal_component_analysis_ozone.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;div&gt;
 &lt;div class="table-div"&gt;
 &lt;table border="1"&gt;
   &lt;thead&gt;
@@ -4608,24 +4606,19 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 
 &lt;p&gt;&lt;br&gt;
 &lt;p&gt;2534 rows × 73 columns&lt;/p&gt;&lt;/p&gt;
+&lt;h3&gt;Correlation Matrix&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_1.png"&gt;&lt;/p&gt;
-&lt;p&gt;(For more information of the correlogram implementation, please visit &lt;a href="https://gist.github.com/ELC/d2a0c4fdd05fdf61218f35ccc248479d" target="_blank"&gt;this site&lt;/a&gt;)&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Run PCA&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;Perform Dimensionality Reduction&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;pca&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;x_ax&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;arange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_ax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;marker&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;xticks&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;arange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xticks&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;xticks&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_ax&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pca&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance_ratio&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_2.png"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;The plot above is a &lt;strong&gt;scree plot&lt;/strong&gt;, and it shows the contribution of each principal component to the explained variance (ratio). It displays the principal components in descending order of eigenvalues or explained variance. It is useful to analyze which principal components capture most of the variance of the original data. In this case, it can be observed that beyond 5 principal components, no significant amount of data is explained.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Step 5 performed after transforming data.&lt;/span&gt;
 &lt;span class="n"&gt;n_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;
@@ -4704,11 +4697,10 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/table&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;h3&gt;Resulting Correlation Matrix&lt;/h3&gt;
 &lt;p&gt;&lt;img alt="image alt text" src="https://gastonamengual.github.io/images/principal_component_analysis_3.png"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;Finally, the previous Correlogram verifies how PCA has successfully transformed a correlated data matrix into a linearly independent data matrix, i.e. uncorrelated. The question of how many principal components to keep will highly depend on deciding what matters most, the size the matrix takes or the amount of variance explained, according to the requirements of the application.&lt;/p&gt;
-&lt;h2&gt;Note: Covariance and SVD differences&lt;/h2&gt;
+&lt;p&gt;The previous Correlogram verifies how PCA has successfully transformed a correlated data matrix into a linearly independent data matrix, i.e. uncorrelated. The question of how many principal components to keep will highly depend on deciding what matters most, the size the matrix takes or the amount of variance explained, according to the requirements of the application.&lt;/p&gt;
+&lt;h2&gt;Covariance and SVD differences&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;covariance_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="n"&gt;svd_components&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;components&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -4720,10 +4712,7 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;The absolute values of the components of both approaches match&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;p&gt;The absolute values of the components of both approaches match&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;percentage_positive&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;covariance_components&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;svd_components&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 
 &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;percentage_positive&lt;/span&gt;&lt;span class="si"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;.3g&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s1"&gt;% of the values of SVD are equally signed with Covariance values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -4734,11 +4723,8 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;0.63% of the values of SVD are equally signed with Covariance values&lt;/span&gt;
-&lt;span class="err"&gt;0.37% of the values of SVD have opposite sign than Covariance values&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;p&gt;0.63% of the values of SVD are equally signed with Covariance values
+0.37% of the values of SVD have opposite sign than Covariance values&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;explained_variance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
 
 &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isclose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;principal_component_analysis_covariance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;principal_component_analysis_svd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;singular_values&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
@@ -4747,18 +4733,12 @@ Hierarchical Clustering require a certain amount of observations to perform corr
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Both approaches have equal explained variance and singular values&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;p&gt;Both approaches have equal explained variance and singular values&lt;/p&gt;
+&lt;p&gt;&lt;br&gt; &lt;/p&gt;
 &lt;p&gt;As it can be observed, the principal components of both Covariance and SVD and covariance approaches differ in sign 37% of the times. No further analysis nor examination on the cause of this situation was performed.&lt;/p&gt;
-&lt;hr&gt;
-
-&lt;h1&gt;Appendix: PCA and Clustering&lt;/h1&gt;
-&lt;p&gt;I found it extremely important not to abbreviate names, but to say the full words. That makes us remember what is &lt;em&gt;it&lt;/em&gt; that we are discussing, and forces somehow a desire of understanding those words' meaning. Let's review the name of the central topic of this work: Principal Component Analysis. As discussed in the first section, "PCA transforms the data maximizing the variance over the projected points. Each new coordinate is called principal component". It follows that Principal Component Analysis is nothing more than the Analysis of the Principal Components, and Principal Components are new coordinates built by maximizing the variance. This article showed no visualization of the transformed data, as it most of the cases tempts to use Principal Component Analysis as a clustering technique (and sometimes clear clusters indeed can be seen). However, one must keep in mind that Principal Component Analysis is never trying to discern clusters, but instead it seeks to ANALYZE the PRINCIPAL COMPONENTS, which have nothing to do with clusters, but with keeping the maximum possible variability of the original data in the new coordinates.&lt;/p&gt;
-&lt;p&gt;The Principal-Component-Analysis-like algorithm for clustering is called Linear Discriminant Analysis. For more information of the difference between the two, Gopal Prasad Malakar made an excelent &lt;a href="https://www.youtube.com/watch?v=M4HpyJHPYBY&amp;amp;t=43s"&gt;video&lt;/a&gt;, from which I borrow the following image to illustrate the case.&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://i.stack.imgur.com/Tz5mA.png" style="width: 350px;"&gt;&lt;/p&gt;
+&lt;h1&gt;PCA and Classification/Clustering&lt;/h1&gt;
+&lt;p&gt;Principal Component Analysis is an unsupervised learning algorithm that, as discussed in the first section, transforms the data maximizing the variance over the projected points. In such process, there is no attempt to separate the data based on their labels, and therefore PCA will fail to divide the data according to which class each point belongs to. &lt;/p&gt;
+&lt;p&gt;The Principal-Component-Analysis-like supervised learning algorithm for classification is called Linear Discriminant Analysis. For more information, relate to &lt;a href="https://gastonamengual.github.io/discriminant-analysis.html" target="_blank"&gt;Discriminant Analysis&lt;/a&gt;.&lt;/p&gt;
 &lt;h1&gt;References&lt;/h1&gt;
 &lt;p&gt;&lt;a href="https://builtin.com/data-science/step-step-explanation-principal-component-analysis" target="_blank"&gt;A step-by-step Explanation of Principal Component Analysis&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://towardsdatascience.com/principal-component-analysis-pca-from-scratch-in-python-7f3e2a540c51" target="_blank"&gt;PCA From Scratch in Python&lt;/a&gt;&lt;/p&gt;
