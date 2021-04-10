@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Train-Test Split Evaluation &ndash; Gastón Amengual</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Machine Learning" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Train-Test Split Evaluation"/>
+    <meta property="og:description" content="Summary. Train-test split procedure. Cross-validation: K-folds, leave-p-out, leave-one-out. import numpy as np Train-Test Split General Procedure The train-test split is a technique for evaluating the performance of a machine learning algorithm, used for supervised learning algorithms. Learning the parameters of a prediction function and testing it on the same data …"/>
+    <meta property="og:site_name" content="Gastón Amengual" />
+    <meta property="og:url" content="https://gastonamengual.github.io/train-test-split-evaluation.html"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+    </div>
+
+
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>Train-Test Split Evaluation</h1>
+        <a class="article-category" href="https://gastonamengual.github.io/category/machine-learning.html">Machine Learning</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          <p>Summary. Train-test split procedure. Cross-validation: K-folds, leave-p-out, leave-one-out.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</code></pre></div>
+
+
+<h1>Train-Test Split General Procedure</h1>
+<p>The train-test split is a technique for evaluating the performance of a machine learning algorithm, used for supervised learning algorithms. </p>
+<p>Learning the parameters of a prediction function and testing it on the same data is a methodological mistake: a model that would just repeat the labels of the samples that it has just seen would have a perfect score but would fail to predict anything useful on yet-unseen data. Train-test split is then used to:</p>
+<ul>
+<li>Estimate how accurately a predictive model will perform in practice and will generalize to an independent dataset (i.e., an unknown dataset). </li>
+<li>Flag problems like overfitting or selection bias.</li>
+</ul>
+<p>The procedure involves taking a data set and dividing it into two subsets:</p>
+<ul>
+<li><strong>Train Set</strong>: it is used to fit the model. It represents the known data.</li>
+<li><strong>Test/Validation Set</strong>: it is used to evaluate the model. The model makes predictions about the Test Set, and they are compared to the expected true values. It represents the unknown data.</li>
+</ul>
+<p>The train-test split procedure is appropriate when the data set available is sufficiently large (in relation to the predictive modeling problem), meaning that there is enough data to split the data set into a train and test set that are suitable representations of the problem domain, covering all common cases and most uncommon cases in the domain. To ensure that both data sets are a representative sample of the original data set, the data points are assigned randomly to each set. For example, for classification problems that do not have a balanced number of examples for each class label, a stratified train-test split is used, which divides the data into train and test sets in a way that preserves the same proportions of examples in each class as observed in the original data.</p>
+<p>The procedure has one main configuration parameter: the size of either the train or the test set. It is usually expressed as the percentage for the set. Although there is no optimal split percentage, the following configuration are common:</p>
+<ul>
+<li>Train: 80%, Test: 20%</li>
+<li>Train: 67%, Test: 33%</li>
+<li>Train: 50%, Test: 50%</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_proportion</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+    <span class="c1"># Shuffle the data randomly</span>
+    <span class="n">shuffled_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Set the split point</span>
+    <span class="n">num_observations</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">split_point</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_observations</span> <span class="o">*</span> <span class="n">train_proportion</span><span class="p">)</span>
+
+    <span class="c1"># Train set</span>
+    <span class="n">train_set</span> <span class="o">=</span> <span class="n">shuffled_data</span><span class="p">[:</span><span class="n">split_point</span><span class="p">]</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">train_set</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Test set</span>
+    <span class="n">test_set</span> <span class="o">=</span> <span class="n">shuffled_data</span><span class="p">[</span><span class="n">split_point</span><span class="p">:]</span>
+    <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">test_set</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">test_set</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">],</span> <span class="p">[</span><span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;X Train set: </span><span class="si">{</span><span class="n">X_train</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;X Test set: </span><span class="si">{</span><span class="n">X_test</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;y Train set: </span><span class="si">{</span><span class="n">y_train</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;y Test set: </span><span class="si">{</span><span class="n">y_test</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">X Train set: [[10 11]</span>
+<span class="err"> [ 2  3]</span>
+<span class="err"> [16 17]</span>
+<span class="err"> [ 0  1]</span>
+<span class="err"> [ 4  5]</span>
+<span class="err"> [18 19]</span>
+<span class="err"> [ 6  7]]</span>
+<span class="err">X Test set: [[ 8  9]</span>
+<span class="err"> [12 13]</span>
+<span class="err"> [14 15]]</span>
+<span class="err">y Train set: [5 1 8 0 2 9 3]</span>
+<span class="err">y Test set: [4 6 7]</span>
+</code></pre></div>
+
+
+<h1>Cross-validation</h1>
+<p>Cross-validation is a model evaluation procedure that allows to build confidence intervals for the evaluation metrics of an algorithm. It is applied to the train set after performing the train-validation split.</p>
+<p>The procedure works as follows. The train set is split into <span class="math">\(n\)</span> different pairs of sets: a subtrain set and a subtest set. The model is then applied to every pair of sets, i.e. is trained with the subtrain set, and tested with the subtest set. By doing this, all of the points of the train set are part of both the subtrain and the subtest sets, allowing the algorithm to make predictions on all of the data. Then, for each pair a chosen evaluation metric is calculated. At the end of the procedure, <span class="math">\(n\)</span> values for the metric were calculating, which allows the construction of a confidence interval of the metrics, instead of one single value as in the traditional train-test split. </p>
+<p>Cross-validation is also used for hyperparameter tuning, i.e. estimate the optimal parameter for an algorithm, such as the number of nearest neighbors in <span class="math">\(k\)</span>-NN, the optimal number of trees in Random Forests, and the type of kernel in an SVM. After performing cross-validation for several values of the hyperparameter, the one with the best confidence interval is chosen as the optimal. Afterwards, the algorithm is applied on the validation set with the optimal parameter, to get an estimate on the performance of the algorithm when it sees new data.</p>
+<h2><span class="math">\(k\)</span>-Fold</h2>
+<p>In this approach, the training set is split into <span class="math">\(k\)</span> smaller sets or folds. For each of the <span class="math">\(k\)</span> folds, the following procedure is followed:</p>
+<ul>
+<li>
+<p>Train the model using <span class="math">\(k - 1\)</span> of the folds as training data.</p>
+</li>
+<li>
+<p>Validate the resulting model on the remaining part of the data.</p>
+</li>
+</ul>
+<p>The performance measure reported by k-fold cross-validation is then the average of the values computed in the loop. This approach can be computationally expensive, but does not waste too much data.</p>
+<p>The data should be previously shuffled. These methods do not compute all ways of splitting the original sample.</p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/cross_validation_1.png"></p>
+<p>The two following figures show a K-Fold Cross-validation for the number of trees in a Random Forest, and the <span class="math">\(k\)</span> parameter in <span class="math">\(k\)</span>-NN, respectively. It can be seen that, for each value of the parameter, a boxplot can be constructed, as several (in this case, 7) metrics are calculated, one for each fold, giving a wider estimation on the behavior of the algorithm with unseen data.</p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/random_forests_3.png"></p>
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/k_nearest_neighbors_2.png">   </p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">k_folds_generator</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">folds</span><span class="p">):</span>
+
+    <span class="n">cut_indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">folds</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">folds</span><span class="p">):</span>
+
+        <span class="n">train_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cut_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">train_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cut_indexes</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">train_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_1</span><span class="p">,</span> <span class="n">train_2</span><span class="p">)</span>
+
+        <span class="n">test_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cut_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cut_indexes</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">yield</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">],</span> <span class="p">[</span><span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">110</span><span class="p">,</span> <span class="mi">120</span><span class="p">]])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">k_folds_generator</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">X_train_folds</span><span class="p">,</span> <span class="n">X_test_folds</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">y_train_folds</span><span class="p">,</span> <span class="n">y_test_folds</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y_train</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Train set index: </span><span class="si">{</span><span class="n">train_index</span><span class="si">}</span><span class="s1"> - Test set index: </span><span class="si">{</span><span class="n">test_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Train set index: [2 3 4 5] - Test set index: [0 1]</span>
+<span class="err">Train set index: [0 1 4 5] - Test set index: [2 3]</span>
+<span class="err">Train set index: [0 1 2 3] - Test set index: [4 5]</span>
+</code></pre></div>
+
+
+<h2>Leave-<em>p</em>-Out</h2>
+<p>Leave-<em>p</em>-Out involves using <span class="math">\(p\)</span> observations as the test set, and the remaining observations as the training set, repeated on all the possible ways to divide the original sample into a training and validation set. </p>
+<p>This method require training and testing the model <span class="math">\(C_{n}^{p}\)</span> (binomial coefficient) times, where <span class="math">\(n\)</span> is the number of observations of the data set, which can be highly computationally expensive. For example, for <span class="math">\(C_{40}^{10}\)</span>, that is, 40 observations leaving 10 out, it would take 847,660,528 sets.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeavePOut</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">comb</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">],</span> <span class="p">[</span><span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">110</span><span class="p">,</span> <span class="mi">120</span><span class="p">]])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">])</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Number of sets: </span><span class="si">{</span><span class="n">comb</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">LeavePOut</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_train</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Train set index: </span><span class="si">{</span><span class="n">train_index</span><span class="si">}</span><span class="s1"> - Test set index: </span><span class="si">{</span><span class="n">test_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Number of sets: 15</span>
+<span class="err">Train set index: [2 3 4 5] - Test set index: [0 1]</span>
+<span class="err">Train set index: [1 3 4 5] - Test set index: [0 2]</span>
+<span class="err">Train set index: [1 2 4 5] - Test set index: [0 3]</span>
+<span class="err">Train set index: [1 2 3 5] - Test set index: [0 4]</span>
+<span class="err">Train set index: [1 2 3 4] - Test set index: [0 5]</span>
+<span class="err">Train set index: [0 3 4 5] - Test set index: [1 2]</span>
+<span class="err">Train set index: [0 2 4 5] - Test set index: [1 3]</span>
+<span class="err">Train set index: [0 2 3 5] - Test set index: [1 4]</span>
+<span class="err">Train set index: [0 2 3 4] - Test set index: [1 5]</span>
+<span class="err">Train set index: [0 1 4 5] - Test set index: [2 3]</span>
+<span class="err">Train set index: [0 1 3 5] - Test set index: [2 4]</span>
+<span class="err">Train set index: [0 1 3 4] - Test set index: [2 5]</span>
+<span class="err">Train set index: [0 1 2 5] - Test set index: [3 4]</span>
+<span class="err">Train set index: [0 1 2 4] - Test set index: [3 5]</span>
+<span class="err">Train set index: [0 1 2 3] - Test set index: [4 5]</span>
+</code></pre></div>
+
+
+<h2>Leave-One-Out</h2>
+<p>Leave-One-Out is equivalent to K-Fold with <span class="math">\(n\)</span> folds, where <span class="math">\(n\)</span> is the number of samples. Although it requieres less computation time than leave-<em>p</em>-Out, as there are only <span class="math">\(C_{n}^{1}\)</span> sets, rather than <span class="math">\(C_{n}^{p}\)</span>, it may still take a large computation time.</p>
+<div class="highlight"><pre><span></span><code><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">],</span> <span class="p">[</span><span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">110</span><span class="p">,</span> <span class="mi">120</span><span class="p">]])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">])</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">k_folds_generator</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">X_train_folds</span><span class="p">,</span> <span class="n">X_test_folds</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">y_train_folds</span><span class="p">,</span> <span class="n">y_test_folds</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y_train</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Train set index: </span><span class="si">{</span><span class="n">train_index</span><span class="si">}</span><span class="s1"> - Test set index: </span><span class="si">{</span><span class="n">test_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Train set index: [1 2 3 4 5] - Test set index: [0]</span>
+<span class="err">Train set index: [0 2 3 4 5] - Test set index: [1]</span>
+<span class="err">Train set index: [0 1 3 4 5] - Test set index: [2]</span>
+<span class="err">Train set index: [0 1 2 4 5] - Test set index: [3]</span>
+<span class="err">Train set index: [0 1 2 3 5] - Test set index: [4]</span>
+<span class="err">Train set index: [0 1 2 3 4] - Test set index: [5]</span>
+</code></pre></div>
+
+
+<h1>References</h1>
+<p><a href="https://machinelearningmastery.com/train-test-split-for-evaluating-machine-learning-algorithms/" target="_blank">Train-Test Split for Evaluating Machine Learning Algorithms</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)" target="_blank">Cross-validation - Wikipedia</a></p>
+<p><a href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank">scikit-learn - 3.1. Cross-validation: evaluating estimator performance</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+
+    <footer>
+        <p>
+          &copy;
+          2021          Gastón Amengual
+        </p>
+    </footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>
