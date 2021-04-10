@@ -41,8 +41,11 @@ $$X = U\Sigma V^* = \hat{U} \hat{\Sigma} V^*$$
 
 where $\hat{U}$ are the first $m$ columns of $U$. The columns of $U$ are called **left singular vectors of X** and the columns of V are **right singular vectors**. The diagonal elements of $\Sigma$, $\sigma_i$, are called **singular values**, and they are ordered so that $\sigma_{i+1} \leq \sigma_i$, i.e., from largest to smallest. The rank of $X$ is equal to the number of non-zero singular values.
 
+<br>
+
 SVD generalizes the eigendecomposition of a square normal matrix to any $m \times n$ matrix via an extension of the polar decomposition. It is numerically stable and provides a hierarchical representation of the data in terms of a new coordinate system defined by dominant correlations within the data. Moreover, the SVD is guaranteed to exist for any matrix, unlike the eigendecomposition.
 
+<br>
 
 **Geometric Interpretation**
 
@@ -52,11 +55,11 @@ If $M$ is an $n \times n$ real square matrix, the matrices $U$ and $V^T$ can be 
 
 The SVD is related to an eigenvalue problem involving the correlation matrices $XX^T$ and $X^TX$:
 
-$X^T = V \Sigma U^T$
+$$X^T = V \Sigma U^T$$
 
-$XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T$
+$$XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T$$
 
-$X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T$
+$$X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T$$
 
 Recalling that $U$ and $V$ are unitary, multiplying each equation's side by $U$ and $V$, respectively, $U$; $\Sigma$; and $V$ are solutions to the following eigenvalue problems:
 
@@ -75,6 +78,8 @@ $X^T X V = V \hat{\Sigma^2} \quad (3)$
 **Conjugate transpose**
 
 The conjugate transpose or Hermitian transpose of an $n \times m$ matrix $A$ with complex entries is the $n \times m$ matrix obtained from $A$ by taking the transpose and then taking the complex conjugate of each entry (the complex conjugate of $a+ib$ is $a-ib$, for real numbers $a$ and $b$). It is denoted as $A^H$ or $A^*$. For real matrices, the conjugate transpose is just the transpose, $A^*=A^T$.
+
+<br>
 
 **[1] Unitary vs orthogonal matrix**
 
