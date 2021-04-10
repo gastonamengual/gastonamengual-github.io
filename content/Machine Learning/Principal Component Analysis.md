@@ -3,9 +3,6 @@ Date: 12.20.2020
 Summary: Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.
 
 
-<meta property="og:image" content="{static}../images/principal_component_analysis_2.png"/>
-
-
 ```python
 import numpy as np
 import pandas as pd
@@ -15,29 +12,35 @@ from matplotlib.colors import ListedColormap
 ```
 
 
-# 1 Definition
+# Definition
 
 **Principal Component Analysis (PCA)** is a dimensionality reduction method that transforms the data into a new orthogonal (i.e. perpendicular, linearly independent, and non-correlated) coordinate system that **keeps most of the variance** that was present in the original data. 
 
+<br>
+
 PCA transforms the data **maximizing the variance** over the projected points. Each new coordinate is called **principal component**, and is ranked according to how much variance they explain, or by **explained variance** (the greatest variance lies on the first principal component, the second greatest variance on the second principal component, ...).
+
+<br>
 
 The data is arranged in a an $n \times m$ matrix $X$, where each row represents a different observation or measurement of the experiment, and each column represents a dimension or feature. 
 
+<br>
+
 The principal components are new features constructed as linear combinations of the initial features, allowing to reduce dimensionality while keeping underlying information structure. Since the principal components are ranked, it is possible to discard those with low contribution (i.e. the added explained variance is negligible). However, these new features are harder to interpret than the original ones, as they are a linear combinations that does not necessarily have an intrinsic meaning.
 
-## 1.1 Assumptions
+## Assumptions
 
 In order to apply PCA, the following assumptions must be met.
 
-1. PCA assumes that the observations have mean $0$ (i.e., $X$ has column-wise zero empirical mean).
+1. The observations have mean $0$ (i.e., $X$ has column-wise zero empirical mean).
 
 2. The data must be able to be analyzed with a covariance matrix, which in term makes sense when the relation between the data is linear.
 
 3. The sample taken is large enough and there are no significant outliers (heavy-tailed distributions should be avoided).
 
-# 2 Approaches
+# Approaches
 
-## 2.1 Geometric approach
+## Geometric approach
 
 A zero-intercept line is to be found such that the variance of the projected data points over the line is maximized. The principal components represent the directions of the data (projection) that explains the maximal amount of variance, and can be thought as new axes providing the best angle to capture the data dispersion.
 
@@ -51,9 +54,9 @@ Considering a data point, and a line drawn through the origin, then:
 
 All three vectors form a square triangle such that, according to the Pythagoras theorem, $a^2 = b^2 + c^2$. $b$ and $c$ are inversely related and, since $a$ is fixed, if $b$ gets bigger, $c$ gets smaller, and vice versa. As the objective is to maximize variance (dispersion), PCA can either minimize the distance to the line ($b$) or maximize the distance from the projected point to the origin ($c$).
 
-For more information, relate to [Principal Component Analysis (PCA), Step-by-Step - StatQuest](https://www.youtube.com/watch?v=FgakZw6K1QQ&feature=emb_title){: target="_blank"}.
+For more information, relate to [Principal Component Analysis (PCA), Step-by-Step - StatQuest](https://www.youtube.com/watch?v=FgakZw6K1QQ&feature=emb_title)
 
-## 2.2 Covariance approach
+## Covariance approach
 
 As an alternative, the principal components can be also thought as eigenvectors of the data covariance matrix, and can be computed by eigendecomposition of the data covariance matrix. 
 
@@ -95,10 +98,9 @@ def principal_component_analysis_covariance(dataset):
     eigenvalues = eigenvalues[idxs]
     eigenvectors = eigenvectors[idxs]
     
-    # The 5th step will be performed outside this function. The full transformed data matrix 
-    # will be returned, and the r principal components will be chosen later. If desired, this
-    # function could take the number of components as a parameter, and the subset of the 
-    # eigenvectors can be selected here. 
+    # The 5th step will be performed outside this function. The full transformed data matrix will be returned, and the r principal 
+    # components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset
+    # of the eigenvectors can be selected here. 
     
     # 6 Compute transformed data matrix and atributes
     components = eigenvectors
@@ -114,11 +116,9 @@ def principal_component_analysis_covariance(dataset):
             'transformed_data': transformed_data,}
 ```
 
-## 2.3 SVD approach
+## SVD approach
 
-Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD).
-
-Let $X$ be an $n \times m$ matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. 
+Another approach based on eigendecomposition is calculating PCA as a subset of the Singular Value Decomposition (SVD). Let $X$ be an $n \times m$ matrix where each row represents a different observation or measurement of the experiment, and each column a dimension or feature. 
 
 1. **Calculate $B$, an $n \times m$ matrix where each column is computed by subtracting the column-wise mean $\bar{X}$ from each column of $X$, namely, $B = X - \bar{X}$.**
 
@@ -127,6 +127,10 @@ Let $X$ be an $n \times m$ matrix where each row represents a different observat
 3. **Choose the first $r$ rows from $U$ and first $r$ singular (new $r$ dimensions)**.
 
 4. **Compute the transformed data matrix $T$**, such that $T = XV = U \Sigma V^T V = U \Sigma$. This form is also the polar decomposition of $T$.
+
+<br>
+
+(For more information on SVD, relate to [Singular Value Decomposition](https://gastonamengual.github.io/singular-value-decomposition.html){: target="_blank"})
 
 
 ```python
@@ -143,10 +147,9 @@ def principal_component_analysis_svd(dataset):
     # 2 Compute SVD
     U, S, VT = np.linalg.svd(B, full_matrices=False)
 
-    # The 3rd step will be performed outside this function. The full transformed data 
-    # matrix will be returned, and the r principal components will be chosen later. If
-    # desired, this function could take the number of components as a parameter, and 
-    # the subset of the eigenvectors can be selected here. 
+    # The 3rd step will be performed outside this function. The full transformed data matrix will be returned, and the r principal 
+    # components will be chosen later. If desired, this function could take the number of components as a parameter, and the subset
+    # of the eigenvectors can be selected here. 
     
     # 4 Compute transformed data matrix and atributes
     components = VT
@@ -162,7 +165,7 @@ def principal_component_analysis_svd(dataset):
             'transformed_data': transformed_data,}
 ```
 
-## 2.4 Relation between Covariance and SVD approaches 
+### Relation between Covariance and SVD approaches 
 
 According to the SVD, 
 
@@ -176,24 +179,22 @@ $\Sigma$ are the eigenvalues of the matrix $B$, while $\Lambda$ are the eigenval
 
 Moreover, the right singular vectors $V$ of $B$ are equivalent to the eigenvectors of $B^TB$.
 
-<hr>
-
 # Application
 
-### Ozone Dataset
+PCA will be applied to the ozone data set (Forecasting skewed biased stochastic ozone days: analyses, solutions and beyond, Knowledge and Information Systems, Vol. 14, No. 3, 2008). This data set contains 2534 observations and 73 features. 
 
-Forecasting skewed biased stochastic ozone days: analyses, solutions and beyond, Knowledge and Information Systems, Vol. 14, No. 3, 2008.
+**Author**: Kun Zhang, Wei Fan, XiaoJing Yuan. **Source**: [UCI](https://archive.ics.uci.edu/ml/datasets/ozone+level+detection).
 
-The dataset contains 2534 observations and 73 features. **Author**: Kun Zhang, Wei Fan, XiaoJing Yuan. **Source**: [UCI](https://archive.ics.uci.edu/ml/datasets/ozone+level+detection){: target="_blank"}.
 
-<hr>
+### Import data set
 
 
 ```python
-dataset = pd.read_csv('ozone-level-8hr.csv')
+dataset = pd.read_csv('datasets/principal_component_analysis_ozone.csv')
 dataset.head()
 ```
 
+<div>
 <div class="table-div">
 <table border="1">
   <thead>
@@ -351,13 +352,16 @@ dataset.head()
 <p>2534 rows × 73 columns</p>
 
 
+
+### Correlation Matrix
+
+
 ![image alt text]({static}../images/principal_component_analysis_1.png)
     
-(For more information of the correlogram implementation, please visit [this site](https://gist.github.com/ELC/d2a0c4fdd05fdf61218f35ccc248479d){: target="_blank"})
 
-<br>
 
-**Run PCA**
+### Perform Dimensionality Reduction
+
 
 ```python
 pca = principal_component_analysis_covariance(dataset)
@@ -366,18 +370,14 @@ pca = principal_component_analysis_covariance(dataset)
 
 ```python
 x_ax = np.arange(1, pca['explained_variance_ratio'].size + 1, 1)
-plt.plot(x_ax, pca['explained_variance_ratio'], marker='o')
-
-xticks = np.arange(1, pca['explained_variance_ratio'].size + 1, 4)
-plt.xticks(xticks)
-
+plt.plot(x_ax, pca['explained_variance_ratio'])
 ```
 
 
     
 ![image alt text]({static}../images/principal_component_analysis_2.png)
+    
 
-<br>
 
 The plot above is a **scree plot**, and it shows the contribution of each principal component to the explained variance (ratio). It displays the principal components in descending order of eigenvalues or explained variance. It is useful to analyze which principal components capture most of the variance of the original data. In this case, it can be observed that beyond 5 principal components, no significant amount of data is explained.
 
@@ -400,6 +400,9 @@ pd.DataFrame(transformed_data_n_components, columns=columns).head()
     The first 5 components explain 0.976% of the original dataset variance
     0.0685% of the original number of columns are kept
     
+
+
+
 
 <div class="table-div">
 <table border="1">
@@ -458,15 +461,17 @@ pd.DataFrame(transformed_data_n_components, columns=columns).head()
 </table>
 </div>
 
-<br>
-   
+
+
+### Resulting Correlation Matrix
+    
 ![image alt text]({static}../images/principal_component_analysis_3.png)
     
-<br>
 
-Finally, the previous Correlogram verifies how PCA has successfully transformed a correlated data matrix into a linearly independent data matrix, i.e. uncorrelated. The question of how many principal components to keep will highly depend on deciding what matters most, the size the matrix takes or the amount of variance explained, according to the requirements of the application.
 
-## Note: Covariance and SVD differences
+The previous Correlogram verifies how PCA has successfully transformed a correlated data matrix into a linearly independent data matrix, i.e. uncorrelated. The question of how many principal components to keep will highly depend on deciding what matters most, the size the matrix takes or the amount of variance explained, according to the requirements of the application.
+
+## Covariance and SVD differences
 
 
 ```python
@@ -481,7 +486,7 @@ assert np.mean(np.isclose(np.abs(covariance_components), np.abs(svd_components))
 print('The absolute values of the components of both approaches match')
 ```
 
-    The absolute values of the components of both approaches match
+The absolute values of the components of both approaches match
     
 
 
@@ -495,8 +500,8 @@ percentage_positive = np.mean(np.isclose(covariance_components, -svd_components)
 print(f'{percentage_positive:.3g}% of the values of SVD have opposite sign than Covariance values')
 ```
 
-    0.63% of the values of SVD are equally signed with Covariance values
-    0.37% of the values of SVD have opposite sign than Covariance values
+0.63% of the values of SVD are equally signed with Covariance values
+0.37% of the values of SVD have opposite sign than Covariance values
     
 
 
@@ -508,22 +513,17 @@ assert np.mean(np.isclose(principal_component_analysis_covariance(dataset)['sing
 print(f'Both approaches have equal explained variance and singular values')
 ```
 
-    Both approaches have equal explained variance and singular values
-    
+Both approaches have equal explained variance and singular values
+
+<br> 
 
 As it can be observed, the principal components of both Covariance and SVD and covariance approaches differ in sign 37% of the times. No further analysis nor examination on the cause of this situation was performed.
 
-<hr>
+# PCA and Classification/Clustering
 
-# Appendix: PCA and Clustering 
+Principal Component Analysis is an unsupervised learning algorithm that, as discussed in the first section, transforms the data maximizing the variance over the projected points. In such process, there is no attempt to separate the data based on their labels, and therefore PCA will fail to divide the data according to which class each point belongs to. 
 
-I found it extremely important not to abbreviate names, but to say the full words. That makes us remember what is *it* that we are discussing, and forces somehow a desire of understanding those words' meaning. Let's review the name of the central topic of this work: Principal Component Analysis. As discussed in the first section, "PCA transforms the data maximizing the variance over the projected points. Each new coordinate is called principal component". It follows that Principal Component Analysis is nothing more than the Analysis of the Principal Components, and Principal Components are new coordinates built by maximizing the variance. This article showed no visualization of the transformed data, as it most of the cases tempts to use Principal Component Analysis as a clustering technique (and sometimes clear clusters indeed can be seen). However, one must keep in mind that Principal Component Analysis is never trying to discern clusters, but instead it seeks to ANALYZE the PRINCIPAL COMPONENTS, which have nothing to do with clusters, but with keeping the maximum possible variability of the original data in the new coordinates.
-
-The Principal-Component-Analysis-like algorithm for clustering is called Linear Discriminant Analysis. For more information of the difference between the two, Gopal Prasad Malakar made an excelent [video](https://www.youtube.com/watch?v=M4HpyJHPYBY&t=43s), from which I borrow the following image to illustrate the case.
-
-<br>
-
-<img src="https://i.stack.imgur.com/Tz5mA.png" style="width: 350px;">
+The Principal-Component-Analysis-like supervised learning algorithm for classification is called Linear Discriminant Analysis. For more information, relate to [Discriminant Analysis](https://gastonamengual.github.io/discriminant-analysis.html){: target="_blank"}.
 
 # References
 
