@@ -130,6 +130,6 @@ It can be observed that a 1st degree polynomial underfits the data, it is not co
 
 # References
 
-https://www.wikiwand.com/en/Polynomial_regression
+[Polynomial Regression - Wikipedia](https://en.wikipedia.org/wiki/Polynomial_regression){: target="_blank"}
 
-https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html#sphx-glr-auto-examples-model-selection-plot-underfitting-overfitting-py
+[Sklearn - Underfitting vs. Overfitting](https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html#sphx-glr-auto-examples-model-selection-plot-underfitting-overfitting-py){: target="_blank"}
