@@ -1,4 +1,6 @@
-# Linear Regression
+Title: Linear Regression
+Date: 2021.01.20
+Summary: Simple Linear Regression. Assumptions. Ordinary Least Squares. Implementation. Application and testing of assumptions. Confidence and prediction intervals. Multiple Linear Regression.
 
 ## Table of Contents
 
@@ -13,6 +15,8 @@ $\quad$ [SLR-Implementation](#SLR-Implementation)
 $\quad$ [SLR-Application](#SLR-Application)
 
 $\quad$ [Confidence and Prediction](#Confidence-and-Prediction)
+
+<br>
 
 [Multiple Linear Regression](#Multiple-Linear-Regression)
 
@@ -36,28 +40,19 @@ from sklearn.metrics import mean_squared_error as mse
 ```
 
 
-```python
-plt.style.use("bmh")
-config = {'figure.figsize': (16, 4), 
-          'axes.titlesize': 18, 
-          'axes.labelsize': 14, 
-          'lines.linewidth': 2, 
-          'lines.markersize': 10, 
-          'xtick.labelsize': 10,
-          'ytick.labelsize': 10, 
-          'axes.prop_cycle': plt.cycler(color=["darkmagenta", "saddlebrown", "darkcyan", "olivedrab", "darkseagreen", "darkkhaki", "darkgoldenrod", "deepskyblue", "firebrick", "palevioletred"]),}
-plt.rcParams.update(config)
-```
-
 # Simple Linear Regression
 
 Linear regression is the simplest regression type. If the linear regression model has only one independent variable, then it is called Simple Linear Regression (SLR). When it has more than one independent variables, it is called Multiple Linear Regression. 
+
+<br>
 
 The **true SLR model** describes the true relationship between independent and dependent variables, and it is achieved by carrying out the regression on the whole population, either with complete data or theoretical calculations. It is described by:
 
 $$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
 
 where $x_i$ is the independent variable, $y_i$ is the true dependent variable, $(x_i, y_i)$ constitute a true data pair or point, $\beta_0$ and $\beta_1$ are the true parameters, and $\epsilon_i$ is the error term. The **errors** are the deviations of the dependent variable observations from an unobservable function that relates the independent variable to the dependent variable.
+
+<br>
 
 However, in most cases the attributes of the whole population cannot be measured, so a sample is taken instead, and an **estimated SLR model** is constructed instead:
 
@@ -81,9 +76,13 @@ To apply the Simple Linear Regression model (and more generally the Linear Regre
 
 There is a linear relationship between the independent variable $x$ and the dependent variable $y$, that is, the expected value of the dependent variable is a straight-line function of the independent variable. 
 
+<br>
+
 **How to test?**
 
 Linearity is usually evident in a plot of the independent variable versus the dependent variable (1), or in a plot of residuals versus the independent variable. In (1) the points should be symmetrically distributed around a diagonal line, while in (2) they should be distributed around a horizontal line, with a roughly constant variance. The latter approach is better, as it removes the visual distraction of a sloping pattern.
+
+<br>
 
 **What if the model is nonlinear?**
 
@@ -93,10 +92,12 @@ If the model is nonlinear, the predictions made are likely to be mistaken, espec
 
 The residuals must be independent.
 
+<br>
 **How to test?**
 
 Independence can be tested with an autocorrelation plot of the residuals. Ideally, most of the residuals should fall within the 95% confidence bands around zero, where $n$ is the sample size. For a more formal and precise test, the [Durbin-Watson Test](https://en.wikipedia.org/wiki/Durbin%E2%80%93Watson_statistic) can be conducted.
 
+<br>
 **What if the residuals are not independent?**
 
 Violations of independence are potentially very serious in time series regression models. To fix the issue, there are several options. For positive serial correlation, add lags of the dependent and/or independent variable to the model. For negative serial correlation, check to make sure that none of the variables are overdifferenced. For seasonal correlation, add seasonal dummy variables to the model.
@@ -105,10 +106,12 @@ Violations of independence are potentially very serious in time series regressio
 
 The residuals must have constant variance at every level of the independent variable.
 
+<br>
 **How to test?**
 
 Formal tests of heteroscedasticity can be studied [here](https://medium.com/@remycanario17/tests-for-heteroskedasticity-in-python-208a0fdb04ab). However, for a simpler way to estimate whether the residuals are heteroscedastic, apply resampling to a partition of continuous values of the residuals, and then construct confidence intervals for each of them. If all such CIs overlap with each other, then it is probable that the residuals are not heteroscedastic.
 
+<br>
 **What if the residuals are not independent?**
 
 Transform the dependent variable, e.g., the log of the dependent variable, redefine the dependent variable, e.g., use a rate rather than the raw value, or use weighted regression.
@@ -117,10 +120,12 @@ Transform the dependent variable, e.g., the log of the dependent variable, redef
 
 The residuals must be normally distributed with mean $0$.
 
+<br>
 **How to test?**
 
 The normality can be checked using statistical tests like Shapiro-Wilk, Kolmogorov-Smironov, Jarque-Barre, or D’Agostino-Pearson. However, they are sensitive to large sample sizes, as they often conclude that the residuals are not normal when the sample size is large. The value of the mean can be tested with the T-test for the mean of ONE group of scores.
 
+<br>
 **What if the residuals are not independent?**
 
 Violations in normality create problems for determining whether model coefficients are significantly different from zero and for calculating confidence intervals for forecasts. Sometimes the residuals distribution is "skewed" by the presence of a few large outliers. To correct this problem, verify that outliers do not have great impact on the distribution, and apply a nonlinear transformation to the independent and/or dependent variable.
@@ -141,6 +146,8 @@ $\frac{\partial }{\partial \hat{\beta_0}}\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} 
 
 $\frac{\partial }{\partial \hat{\beta_1}}\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i)^2 = -2 \sum_{i=1}^{n} x_i(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i)$
 
+<br>
+
 **2. Set the partial derivatives equal to 0.**
 
 $\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i) = 0 \quad (1)$
@@ -148,6 +155,8 @@ $\sum_{i=1}^{n}(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i) = 0 \quad (1)$
 $\sum_{i=1}^{n} x_i(\hat{y_i}-\hat{\beta_0} -\hat{\beta_1} x_i) = 0 \quad (2)$
 
 (Note that $-2$ can be simplified)
+
+<br>
 
 **3. Solve for  $\hat{\beta_0}$ and $\hat{\beta_1}$.**
 
@@ -248,18 +257,12 @@ y_estimated = simple_linear_regression_predict(x, beta_0, beta_1)
 
 ```python
 plt.scatter(x, y)
-plt.plot(x, y_estimated, color='darkblue', label='$\hat{y}$')
-plt.title('Simple Linear Regression - Ordinary Least Squares')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.legend(fontsize=18)
-plt.tight_layout()
-plt.show()
+plt.plot(x, y_estimated)
 ```
 
 
     
-![png](output_20_0.png)
+![image alt text]({static}../images/linear_regression_1.png)
     
 
 
@@ -273,6 +276,7 @@ To know for certain that this model is accurate and precise, the four assumption
 ```python
 residuals = y - y_estimated.flatten()
 ```
+<br>
 
 **Assumption 1: Linearity**
 
@@ -280,51 +284,35 @@ residuals = y - y_estimated.flatten()
 ```python
 fig, axes = plt.subplots(1, 2)
 
-axes[0].scatter(x, y, s=10)
-axes[0].set_title('Independent vs Dependent Variable')
-axes[0].set_xlabel('$x$')
-axes[0].set_ylabel('$y$')
-
-axes[1].scatter(x, residuals, s=10)
-axes[1].set_title('Independent Variable vs Residuals')
-axes[1].set_xlabel('$x$')
-axes[1].set_ylabel('Residuals')
-
-plt.tight_layout()
-plt.show()
+axes[0].scatter(x, y)
+axes[1].scatter(x, residuals)
 ```
 
 
-    
-![png](output_24_0.png)
+![image alt text]({static}../images/linear_regression_2.png)
     
 
 
 A clear linear relationship can be observed between $x$ and $y$, while most of the residuals are distributed around a horizontal line, with a roughly constant variance. 
+
+<br>
 
 **Assumption 2: Independence of errors**
 
 
 ```python
 pd.plotting.autocorrelation_plot(residuals)
-plt.ylim(-0.1, 0.1)
-plt.xlim(0, 100)
-plt.title('Residuals Autocorrelation Plot')
-plt.tight_layout()
-plt.show()
 ```
-
-    C:\anaconda3\lib\site-packages\pandas\plotting\_matplotlib\misc.py:443: MatplotlibDeprecationWarning: Calling gca() with keyword arguments was deprecated in Matplotlib 3.4. Starting two minor releases later, gca() will take no keyword arguments. The gca() function should only be used to get the current axes, or if no axes exist, create new axes with default keyword arguments. To create a new axes with non-default arguments, use plt.axes() or plt.subplot().
-      ax = plt.gca(xlim=(1, n), ylim=(-1.0, 1.0))
     
 
 
     
-![png](output_27_1.png)
-    
+![image alt text]({static}../images/linear_regression_3.png)    
 
 
 It can be seen that the autocorrelation falls between the confidence interval, and I don't know what that means, and what CI we're talking about...
+
+<br>
 
 **Assumption 3: Homoscedasticity**
 
@@ -341,11 +329,8 @@ for i in range(n):
         variances.append(resample.var())
     
     print(f'CI for Sample {i+1}: {np.percentile(variances, 2.5):.2f} - {np.percentile(variances, 97.5):.2f}')
-    plt.hist(variances, alpha=0.6)
+    plt.hist(variances)
     
-plt.title('Histograms for Variance of 3 Contiguous Sets of Residuals')
-plt.tight_layout()
-plt.show()
 ```
 
     CI for Sample 1: 382.43 - 438.31
@@ -355,11 +340,13 @@ plt.show()
 
 
     
-![png](output_30_1.png)
+![image alt text]({static}../images/linear_regression_4.png)
     
 
 
 It can be seen the the three histograms overlap in their CI, show that there is a high probability that the residuals are not heteroscedastic. For the purposes of this work, this conclusion is enough to consider the residuals homoscedastic, while formal testing is encouraged.
+
+<br>
 
 **Assumption 4: Normality**
 
@@ -380,11 +367,15 @@ else:
     print('Null Hypothesis: "the residuals sample comes from a normal distribution" not rejected.')
 ```
 
-    Null Hypothesis: "The CI for the residual population mean contains 0" not rejected.
-    Null Hypothesis: "the residuals sample comes from a normal distribution" not rejected.
+Null Hypothesis: "The CI for the residual population mean contains 0" not rejected.
+
+Null Hypothesis: "the residuals sample comes from a normal distribution" not rejected.
     
+<br>
 
 Both Null Hypothesis were not rejected, and it can be concluded that the residuals follow a normal distribution with mean $0$.
+
+<br>
 
 **In conclusion, the data set meets the four SLR assumptions.**
 
@@ -471,33 +462,25 @@ mean_margin = mean_response_interval(x_new, x, residuals)
 prediction_margin = prediction_interval(x_new, x, residuals)
 
 # Confidence Interval
-plt.plot(x_new, y_estimated_new + mean_margin, ls="--", color="forestgreen", label="Confidence Interval", lw=2)
-plt.plot(x_new, y_estimated_new - mean_margin, ls="--", color="forestgreen", lw=2)
+plt.plot(x_new, y_estimated_new + mean_margin)
+plt.plot(x_new, y_estimated_new - mean_margin,)
 
 # Prediction Interval
-plt.plot(x_new, y_estimated_new + prediction_margin, color="darkmagenta", label="Prediction Interval", lw=1)
-plt.plot(x_new, y_estimated_new - prediction_margin, color="darkmagenta", lw=1)
+plt.plot(x_new, y_estimated_new + prediction_margin)
+plt.plot(x_new, y_estimated_new - prediction_margin)
 
 # Data Points
-plt.scatter(x, y, s=3, color="darkgrey")
+plt.scatter(x, y)
 
 # Fitted Line
-plt.plot(x_new, y_estimated_new, color='darkblue', label='$\hat{y}$', lw=1)
+plt.plot(x_new, y_estimated_new)
 
-plt.xlim(-4, 8)
-plt.xlabel('x')
-plt.ylabel('y')
-plt.title('95% Confidence for Mean and Prediction for Simple Linear Regression')
-plt.legend()
-plt.tight_layout()
-plt.show()
 ```
 
 
     
-![png](output_38_0.png)
+![image alt text]({static}../images/linear_regression_5.png)
     
-
 
 
 ```python
@@ -519,11 +502,15 @@ print(f"Prediction for {x_new_single} => {y_predicted_x_new:.2f} ± {prediction_
 print(f"95% CI for Residuals: {residuals.mean():.2f} ± {residuals.mean() + 2 * residuals.std():.2f}")
 ```
 
-    Prediction for 1 => 10.56 ± 56.52
-    Prediction for 10 => 107.54 ± 402.09
-    Prediction for 30 => 323.07 ± 1199.95
-    95% CI for Residuals: -0.00 ± 40.16
+Prediction for 1 => 10.56 ± 56.52
+
+Prediction for 10 => 107.54 ± 402.09
+
+Prediction for 30 => 323.07 ± 1199.95
+
+95% CI for Residuals: -0.00 ± 40.16
     
+<br>
 
 From the previous analysis, it can be concluded that any prediction constructed must be reported as a value with a confidence interval, rather than as a single number. Moreover, as the value of $x_{new}$ moves away from the center of the explanatory variables (in this case the mean), the prediction interval grows wider, making the model not suitable for extrapolation, but rather for interpolation (with the corresponding CI). Then, interpolated values are much more reliable than are extrapolated values.
 
@@ -604,21 +591,36 @@ for i, c in enumerate(coefficients):
     print(f'β{i+1}: {c:.3f}')
 ```
 
-    β0: 30.247
-    β1: -0.113
-    β2: 0.030
-    β3: 0.040
-    β4: 2.784
-    β5: -17.203
-    β6: 4.439
-    β7: -0.006
-    β8: -1.448
-    β9: 0.262
-    β10: -0.011
-    β11: -0.915
-    β12: 0.012
-    β13: -0.509
+
+$\beta_0: 30.247$
+
+$\beta_1: -0.113$
+
+$\beta_2: 0.030$
+
+$\beta_3: 0.040$
+
+$\beta_4: 2.784$
+
+$\beta_5: -17.203$
+
+$\beta_6: 4.439$
+
+$\beta_7: -0.006$
+
+$\beta_8: -1.448$
+
+$\beta_9: 0.262$
+
+$\beta_10: -0.011$
+
+$\beta_11: -0.915$
+
+$\beta_12: 0.012$
+
+$\beta_13: -0.509$
     
+<br>
 
 **Test**
 
@@ -626,26 +628,26 @@ for i, c in enumerate(coefficients):
 ```python
 y_estimated = multiple_linear_regression_predict(X_test, intercept, coefficients)
 rmse = mse(y_test, y_estimated, squared=False)
-print(f'RMSE: {rmse:.4f}')
 ```
 
-    RMSE: 4.9286
+RMSE: 4.9286
     
+<br>
 
 # References
 
-[Linear Regression - Wikipedia](https://en.wikipedia.org/wiki/Linear_regression)
+[Linear Regression - Wikipedia](https://en.wikipedia.org/wiki/Linear_regression){: target="_blank"}
 
-[Simple Linear Regression - Wikipedia](https://en.wikipedia.org/wiki/Simple_linear_regression)
+[Simple Linear Regression - Wikipedia](https://en.wikipedia.org/wiki/Simple_linear_regression){: target="_blank"}
 
-[Deriving the least squares estimators - jbstatistics](https://www.youtube.com/watch?v=ewnc1cXJmGA)
+[Deriving the least squares estimators - jbstatistics](https://www.youtube.com/watch?v=ewnc1cXJmGA){: target="_blank"}
 
-[The four assumptions of linear regression - statology](https://www.statology.org/linear-regression-assumptions/)
+[The four assumptions of linear regression - statology](https://www.statology.org/linear-regression-assumptions/){: target="_blank"}
 
-[Testing the assumptions of linear regression - people.duke.edu](http://people.duke.edu/~rnau/testing.htm)
+[Testing the assumptions of linear regression - people.duke.edu](http://people.duke.edu/~rnau/testing.htm){: target="_blank"}
 
-[What is wrong with extrapolation? - stats.stackexchange](https://stats.stackexchange.com/questions/219579/what-is-wrong-with-extrapolation)
+[What is wrong with extrapolation? - stats.stackexchange](https://stats.stackexchange.com/questions/219579/what-is-wrong-with-extrapolation){: target="_blank"}
 
-[Confidence and prediction intervals for SLR - stat.duke.edu](http://www2.stat.duke.edu/~tjl13/s101/slides/unit6lec3H.pdf)
+[Confidence and prediction intervals for SLR - stat.duke.edu](http://www2.stat.duke.edu/~tjl13/s101/slides/unit6lec3H.pdf){: target="_blank"}
 
-[Prediction Interval for a New Response - online.stat.psu.edu](https://online.stat.psu.edu/stat501/lesson/3/3.3)
+[Prediction Interval for a New Response - online.stat.psu.edu](https://online.stat.psu.edu/stat501/lesson/3/3.3){: target="_blank"}
