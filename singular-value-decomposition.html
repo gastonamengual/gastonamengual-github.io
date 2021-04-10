@@ -92,14 +92,16 @@
 <p>where <span class="math">\(U \in \mathbb{C}^{n \times n}\)</span> and <span class="math">\(V \in \mathbb{C}^{m \times m}\)</span> are unitary matrices<span class="math">\(_{[1]}\)</span>. When <span class="math">\(n \geq m\)</span> the matrix <span class="math">\(\Sigma\)</span> has at most <span class="math">\(m\)</span> non-zero elements on the diagonal, and may be written as <span class="math">\(\Sigma =\)</span> <span class="math">\(<div class="math">\begin{bmatrix} \hat{\Sigma} \\ 0 \end{bmatrix}</div>\)</span>. Therefore, it is possible to exactly represent <span class="math">\(X\)</span> using the <strong>economy SVD</strong>:</p>
 <div class="math">$$X = U\Sigma V^* = \hat{U} \hat{\Sigma} V^*$$</div>
 <p>where <span class="math">\(\hat{U}\)</span> are the first <span class="math">\(m\)</span> columns of <span class="math">\(U\)</span>. The columns of <span class="math">\(U\)</span> are called <strong>left singular vectors of X</strong> and the columns of V are <strong>right singular vectors</strong>. The diagonal elements of <span class="math">\(\Sigma\)</span>, <span class="math">\(\sigma_i\)</span>, are called <strong>singular values</strong>, and they are ordered so that <span class="math">\(\sigma_{i+1} \leq \sigma_i\)</span>, i.e., from largest to smallest. The rank of <span class="math">\(X\)</span> is equal to the number of non-zero singular values.</p>
+<p><br></p>
 <p>SVD generalizes the eigendecomposition of a square normal matrix to any <span class="math">\(m \times n\)</span> matrix via an extension of the polar decomposition. It is numerically stable and provides a hierarchical representation of the data in terms of a new coordinate system defined by dominant correlations within the data. Moreover, the SVD is guaranteed to exist for any matrix, unlike the eigendecomposition.</p>
+<p><br></p>
 <p><strong>Geometric Interpretation</strong></p>
 <p>If <span class="math">\(M\)</span> is an <span class="math">\(n \times n\)</span> real square matrix, the matrices <span class="math">\(U\)</span> and <span class="math">\(V^T\)</span> can be chosen to be real <span class="math">\(n \times n\)</span>, too, which represent rotations or reflection of the space <span class="math">\(R^n\)</span>, while <span class="math">\(\Sigma\)</span> represents the scaling of each coordinate <span class="math">\(X_i\)</span> by the factor <span class="math">\(\sigma_i\)</span>. Thus the SVD decomposition breaks down any invertible linear transformation of <span class="math">\(R^n\)</span> into a composition of three geometrical transformations: a rotation or reflection (<span class="math">\(V^*\)</span>), a coordinate-by-coordinate scaling (<span class="math">\(\Sigma\)</span>), and a second rotation or reflection (<span class="math">\(U\)</span>).</p>
 <h1>Interpretation as dominant correlations</h1>
 <p>The SVD is related to an eigenvalue problem involving the correlation matrices <span class="math">\(XX^T\)</span> and <span class="math">\(X^TX\)</span>:</p>
-<p><span class="math">\(X^T = V \Sigma U^T\)</span></p>
-<p><span class="math">\(XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T\)</span></p>
-<p><span class="math">\(X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T\)</span></p>
+<div class="math">$$X^T = V \Sigma U^T$$</div>
+<div class="math">$$XX^T = U \Sigma V^T V \Sigma U^T = U \hat{\Sigma^2} U^T$$</div>
+<div class="math">$$X^TX = V \Sigma U^T U \Sigma V^T = V \hat{\Sigma^2} V^T$$</div>
 <p>Recalling that <span class="math">\(U\)</span> and <span class="math">\(V\)</span> are unitary, multiplying each equation's side by <span class="math">\(U\)</span> and <span class="math">\(V\)</span>, respectively, <span class="math">\(U\)</span>; <span class="math">\(\Sigma\)</span>; and <span class="math">\(V\)</span> are solutions to the following eigenvalue problems:</p>
 <p><span class="math">\(X X^T U = U \hat{\Sigma^2} \quad (2)\)</span></p>
 <p><span class="math">\(X^T X V = V \hat{\Sigma^2} \quad (3)\)</span></p>
@@ -117,6 +119,7 @@
 <h3>Notes</h3>
 <p><strong>Conjugate transpose</strong></p>
 <p>The conjugate transpose or Hermitian transpose of an <span class="math">\(n \times m\)</span> matrix <span class="math">\(A\)</span> with complex entries is the <span class="math">\(n \times m\)</span> matrix obtained from <span class="math">\(A\)</span> by taking the transpose and then taking the complex conjugate of each entry (the complex conjugate of <span class="math">\(a+ib\)</span> is <span class="math">\(a-ib\)</span>, for real numbers <span class="math">\(a\)</span> and <span class="math">\(b\)</span>). It is denoted as <span class="math">\(A^H\)</span> or <span class="math">\(A^*\)</span>. For real matrices, the conjugate transpose is just the transpose, <span class="math">\(A^*=A^T\)</span>.</p>
+<p><br></p>
 <p><strong>[1] Unitary vs orthogonal matrix</strong></p>
 <p>In linear algebra, a complex square matrix <span class="math">\(U\)</span> is unitary if its conjugate transpose <span class="math">\(U^*\)</span> is also its inverse, that is, if <span class="math">\(UU^* = U^*U = I\)</span>, where <span class="math">\(I\)</span> is the identity matrix. For real numbers, unitary and orthogonal means the same.</p>
 <h1>Truncated SVD</h1>
