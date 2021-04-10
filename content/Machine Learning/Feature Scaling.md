@@ -1,5 +1,5 @@
 Title: Feature Scaling
-Date: 2021.03.25
+Date: 2021.01.24
 Summary: Definition. Explanation and implementation of min-max normalization, mean normalization, and standardization. Application to data set.
 
 ```python

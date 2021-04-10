@@ -1,5 +1,5 @@
 Title: Polynomial Regression
-Date: 2021.04.06
+Date: 2021.01.16
 Summary: Definition. Application. Train and validation error for different degrees. Predictions for different degrees.
 
 ```python

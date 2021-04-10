@@ -1,5 +1,5 @@
 Title: Discriminant Analysis
-Date: 2021.04.10
+Date: 2021.01.27
 Summary: Linear and Quadratic Discriminant Analysis. Applications of LDA (classification, dimensionality reduction) and differences with PCA. Application of QDA.
 
 ```python

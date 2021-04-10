@@ -1,5 +1,5 @@
 Title: Train-Test Split Evaluation
-Date: 2021.04.08
+Date: 2021.01.10
 Summary. Train-test split procedure. Cross-validation: K-folds, leave-p-out, leave-one-out.
 
 ```python

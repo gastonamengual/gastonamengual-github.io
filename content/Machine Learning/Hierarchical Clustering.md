@@ -1,5 +1,5 @@
 Title: Hierarchical Clustering
-Date: 2021.03.27
+Date: 2021.01.22
 Summary: Definition. Steps. From-Scrath Python implementation. Application on data sets of different shapes. Comparison with <em>k</em>-Means.
 
 

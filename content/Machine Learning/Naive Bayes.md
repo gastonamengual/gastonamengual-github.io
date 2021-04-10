@@ -1,5 +1,5 @@
 Title: Naive Bayes
-Date: 2021.04.05
+Date: 2021.01.17
 Summary: Definition. Implementation. Application.
 
 ```python

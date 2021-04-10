@@ -1,5 +1,5 @@
 Title: Logistic Regression
-Date: 2021.03.19
+Date: 2021.01.19
 Summary: Definition of Logistic Regression. Demonstration and explanation of cost function. Optimization with Gradient Descent. From-scratch implementation in Python. Application on dummy data.
 
 ```python

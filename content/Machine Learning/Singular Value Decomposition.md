@@ -1,5 +1,5 @@
 Title: Singular Value Decomposition
-Date: 2020.12.14 
+Date: 2021.01.12
 Summary: Theoretical explanation of the SVD. From-scratch Python implementation. Application example on an image.
 
 

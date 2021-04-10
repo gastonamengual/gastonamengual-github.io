@@ -1,5 +1,5 @@
 Title: Decision Trees
-Date: 2021.03.30
+Date: 2021.01.28
 Summary: Definition. General steps. Decision tree classifier implementation from scratch. Application of classifier and regressor. Definition of pruning.
 
 ### Table of Contents

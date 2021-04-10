@@ -1,5 +1,5 @@
 Title: Random Forests
-Date: 2021.04.01
+Date: 2021.01.14
 Summary: Definition of Random Forest. Implementation from scratch. Application on classification and regression tasks. Choosing of optimum number of trees. 
 
 ```python

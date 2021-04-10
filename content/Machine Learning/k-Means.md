@@ -1,5 +1,5 @@
 Title: <em>k</em>-Means
-Date: 2021.3.19
+Date: 2021.01.21
 Summary: Definition. Assumptions. Steps. From-Scrath Python implementation. Application on dummy data.
 
 ```python

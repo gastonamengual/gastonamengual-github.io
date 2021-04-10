@@ -1,5 +1,5 @@
 Title: Collaborative Filtering
-Date: 2021.01.07
+Date: 2021.01.29
 Summary: Definition. Data Preparation. Application of Collaborative Filtering with Stochastic Mini-Batch Gradient Descent, L2 Regularization and Cross-validation, using Python.
 
 **Notebook written by Gastón Amengual and <a href="https://elc.github.io" target="_blank">Ezequiel L. Castaño</a> as the base for Watch This! app (see second portfolio project).**

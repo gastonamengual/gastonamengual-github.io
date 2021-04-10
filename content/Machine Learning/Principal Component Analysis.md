@@ -1,5 +1,5 @@
 Title: Principal Component Analysis
-Date: 12.20.2020
+Date: 2021.01.15
 Summary: Theoretical explanation of PCA, including Geometric, Covariance, and SVD approaches. From-scratch Python implementation. Application to real dataset. Why PCA should not be used for clustering.
 
 
