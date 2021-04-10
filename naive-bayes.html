@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+
+    <title>Naive Bayes &ndash; Gastón Amengual</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="https://gastonamengual.github.io/theme/site.webmanifest">
+    <meta name="theme-color" content="#6A1A6A">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://gastonamengual.github.io/theme/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gastonamengual.github.io/theme/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/png" href="https://gastonamengual.github.io/theme/favicon/favicon-32x32.png">
+
+    <!-- Social -->
+    <meta property="article:author" content="Gastón Amengual" />
+    <meta property="article:section" content="Machine Learning" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Naive Bayes"/>
+    <meta property="og:description" content="Definition. Implementation. Application."/>
+    <meta property="og:site_name" content="Gastón Amengual" />
+    <meta property="og:url" content="https://gastonamengual.github.io/naive-bayes.html"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Spartan:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" type="text/css" href="https://gastonamengual.github.io/theme/style.css">
+    <link href='fonts/fonts.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div id="navbar">
+        <a href="../index.html"><img src="https://gastonamengual.github.io/theme/gaston_amengual.svg" id="navbar-logo"></a>
+        <nav id="navbar-menu">
+          <ul>
+            
+              <li class="navbar-li"><a href="/index.html">Home</a></li>
+              <li class="navbar-li"><a href="/pages/about.html">About</a></li>
+              <li class="navbar-li"><a href="/pages/portfolio.html">Portfolio</a></li>
+              <li class="navbar-li"><a href="/categories.html">Articles</a></li>
+          </ul>
+        </nav>
+    </div>
+
+
+
+    <br><br>
+
+    <article class="article-article">
+      <header class="col-main article-header">
+        <h1>Naive Bayes</h1>
+        <a class="article-category" href="https://gastonamengual.github.io/category/machine-learning.html">Machine Learning</a>
+      </header>
+
+      <div class="col-main">
+        <section class="article-content">
+          <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+</code></pre></div>
+
+
+<h1>Definition</h1>
+<p>Naive Bayes classifiers are a set of supervised learning algorithms based on Bayes' theorem. It is especially appropriate when the dimension of the feature space is high.</p>
+<p>Naive Bayes' main assumption is that features are mutually independent. Although this is generally not true (therefore <em>naive</em>), it simplifies the estimation dramatically, as the individual class-conditional marginal densities can be estimated separately.</p>
+<h2>Model</h2>
+<p>Let <span class="math">\(x = (x_1, \cdots, x_n)\)</span> be a feature vector, and <span class="math">\(y\)</span> be a class variable. Bayes' theorem states</p>
+<div class="math">$$P(y | x_1, \cdots, x_n)  = \dfrac{P(y) P(x | y)}{P(x_1, \cdots, x_n)} = \dfrac{\text{posterior} \cdot \text{likelihood}}{\text{prior}}$$</div>
+<p>Then, due to the <strong>naive conditional independence</strong> assumption,</p>
+<div class="math">$$P(x_i | x_1, \cdots, x_{x-1}, x_{i+1}, \cdots, x_n, y) = P(x_i | y)$$</div>
+<p>and the relationship can be simplified</p>
+<div class="math">$$P(y | x_1, \cdots, x_n)  = \dfrac{P(y) \prod_{i=1}^{n} P(x_i|y)}{P(x_1, \cdots, x_n)}$$</div>
+<p>Since <span class="math">\(P(x_1, \cdots, x_n)\)</span> is constant given the input, the following classification rule is defined:</p>
+<div class="math">$$P(y | x_1, \cdots, x_n)  \propto P(y) \prod_{i=1}^{n} P(x_i|y)$$</div>
+<div class="math">$$\hat{y} = \arg \max_{y} P(y) \prod_{i=1}^{n} P(x_i|y)$$</div>
+<p>To minimize computational cost, the logarithm is applied</p>
+<div class="math">$$\hat{y} = \arg \max_{y} \sum_{i=1}^{n} \log({P(x_i|y)}) + \log{P(y)}$$</div>
+<p>To estimate <span class="math">\(P(y)\)</span> and <span class="math">\(P(x_i|y)\)</span> the Maximum a Posteriori can be used.</p>
+<p>The prior distribution <span class="math">\(P(y)\)</span> is calculated as the relative frequency of class <span class="math">\(y\)</span> in the training set.</p>
+<h2>Gaussian Naive Bayes</h2>
+<p>Usually, for continuous features, it is assumed that the continuous values associated with each class <span class="math">\(y_j\)</span> are distributed according to a normal distribution. Therefore, it is equal to the value of the normal probability density distribution at <span class="math">\(x_i\)</span>:</p>
+<div class="math">$$P(x_i | y_j) = f(x_i, \mu_{y_j}, \sigma^2_{y_j}) = \frac{1}{\sqrt{2\pi\sigma^2_{y_j}}} \exp\left(-\frac{(x_i - \mu_{y_j})^2}{2\sigma^2_{y_j}}\right)$$</div>
+<h1>Implementation</h1>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">naive_bayes_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="n">classes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">prior_per_class</span> <span class="o">=</span>  <span class="p">[]</span>
+    <span class="n">mean_per_class</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">variance_per_class</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">class_</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+
+        <span class="n">x_class</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">y</span><span class="o">==</span><span class="n">class_</span><span class="p">]</span>
+
+        <span class="n">prior_per_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_class</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">num_samples</span><span class="p">)</span>
+        <span class="n">mean_per_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_class</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">variance_per_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_class</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">classes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">prior_per_class</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mean_per_class</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">variance_per_class</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">naive_bayes_predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">prior_per_class</span><span class="p">,</span> <span class="n">mean_per_class</span><span class="p">,</span> <span class="n">variance_per_class</span><span class="p">):</span>
+
+    <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
+
+        <span class="n">classes_posterior</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Calculate posterior probability for each class</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)):</span>
+
+            <span class="n">prior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">prior_per_class</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="n">class_mean</span> <span class="o">=</span> <span class="n">mean_per_class</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">class_variance</span> <span class="o">=</span> <span class="n">variance_per_class</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">posterior</span> <span class="o">=</span> <span class="n">prior</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">class_mean</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">class_variance</span><span class="p">))))</span> 
+
+            <span class="n">classes_posterior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">posterior</span><span class="p">)</span>
+
+        <span class="c1"># Predict class with highest posterior probability</span>
+        <span class="n">predicted_class</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">classes_posterior</span><span class="p">)]</span>
+        <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predicted_class</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h1>Application</h1>
+<div class="highlight"><pre><span></span><code><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h3>Train</h3>
+<div class="highlight"><pre><span></span><code><span class="n">classes</span><span class="p">,</span> <span class="n">prior_per_class</span><span class="p">,</span> <span class="n">mean_per_class</span><span class="p">,</span> <span class="n">variance_per_class</span> <span class="o">=</span> <span class="n">naive_bayes_fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h3>Test</h3>
+<div class="highlight"><pre><span></span><code><span class="n">predictions</span> <span class="o">=</span> <span class="n">naive_bayes_predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">prior_per_class</span><span class="p">,</span> <span class="n">mean_per_class</span><span class="p">,</span> <span class="n">variance_per_class</span><span class="p">)</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accuracy = </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="err">Accuracy = 0.833</span>
+</code></pre></div>
+
+
+<h3>Prediction Map</h3>
+<div class="highlight"><pre><span></span><code><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">))</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xx</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">naive_bayes_predict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">prior_per_class</span><span class="p">,</span> <span class="n">mean_per_class</span><span class="p">,</span> <span class="n">variance_per_class</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div>
+
+
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p><img alt="image alt text" src="https://gastonamengual.github.io/images/naive_bayes_1.png"></p>
+<h1>References</h1>
+<p><a href="scikit-learn.org/stable/modules/naive_bayes.html" target="_blank">scikit-learn Naive Bayes</a></p>
+<p><a href="xavierbourretsicotte.github.io/Naive_Bayes_Classifier.html" target="_blank">Gaussian Naive Bayes Classifier: Iris data set</a></p>
+<p><a href="github.com/python-engineer/MLfromscratch/blob/master/mlfromscratch/naivebayes.py" target="_blank">MLfromscratch</a></p>
+<p><a href="en.wikipedia.org/wiki/Naive_Bayes_classifier" target="_blank">Naive Bayes classifier - Wikipedia</a></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </section>
+      </div>
+
+      <br><br>
+
+    </article>
+
+
+    <footer>
+        <p>
+          &copy;
+          2021          Gastón Amengual
+        </p>
+    </footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC62F9717"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());
+  gtag('config', "G-6KC62F9717");</script>  </body>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] },
+    "HTML-CSS": {
+      linebreaks: { automatic: true, width: "container" }
+    }
+    });
+  </script>
+</html>
