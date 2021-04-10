@@ -234,6 +234,6 @@ In conclusion, using one of the methods described, all the features values are o
 
 # References
 
-[Feature Scaling](https://en.wikipedia.org/wiki/Feature_scaling)
+[Feature Scaling](https://en.wikipedia.org/wiki/Feature_scaling){: target="_blank"}
 
-[Feature Scaling for Machine Learning](https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/)
+[Feature Scaling for Machine Learning](https://www.analyticsvidhya.com/blog/2020/04/feature-scaling-machine-learning-normalization-standardization/){: target="_blank"}
